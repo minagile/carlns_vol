@@ -13,6 +13,9 @@ import './assets/css/style.css'
 import vueEventCalendar from 'vue-event-calendar'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import animate from 'animate.css'
+
+Vue.use(animate)
 
 Vue.use(vueEventCalendar, {
   locale: 'en',
@@ -25,6 +28,7 @@ const requireComponent = require.context(
   './components', false, /base-[\w-]+\.vue$/
 )
 requireComponent.keys().forEach(fileName => {
+  console.log(fileName)
   // Get component config
   const componentConfig = requireComponent(fileName)
   // Get PascalCase name of component

@@ -116,12 +116,16 @@ export default {
     return {
       companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
       // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
-      tableData: []
+      tableData: [],
+      demoEvents: []
     }
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    changedMonth (e) {
+    }
+  }
 }
 </script>
 
@@ -134,6 +138,8 @@ export default {
   .el-col {
     border-radius: 4px;
     width: 19.14%;
+    box-shadow:0px 12px 36px 0px rgba(211,215,221,0.4);
+    border-radius:5px;
   }
 }
 .grid-content {

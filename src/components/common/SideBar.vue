@@ -64,6 +64,12 @@ export default {
     if (this.stage === true) {
       this.tabList = this.stagingList
     }
+    let path = this.$router.history.current.fullPath
+    this.tabList.forEach((v, k) => {
+      if (path.split('/')[2] === v.href) {
+        this.num = k
+      }
+    })
   },
   methods: {
     tab (i) {

@@ -4,7 +4,7 @@
     <SideBar/>
     <div class="content">
       <!-- PolicyAd -->
-      <router-view></router-view>
+      <router-view :key="$route.fullpath"></router-view>
     </div>
   </div>
 </template>

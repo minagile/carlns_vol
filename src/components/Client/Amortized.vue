@@ -3,7 +3,7 @@
   <div class="Amortized">
     <SideBar :stage="true"/>
     <div class="content">
-      <router-view></router-view>
+      <router-view :key="$route.fullpath"></router-view>
     </div>
   </div>
 </template>

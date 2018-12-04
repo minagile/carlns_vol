@@ -1,12 +1,14 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    <selector></selector>
+    <selector :all="true"></selector>
+    <chart></chart>
   </div>
 </template>
 
 <script>
 import Selector from '../common/Selector'
+import Chart from './Decision/Chart'
 export default {
   name: 'Decision',
   data () {
@@ -17,7 +19,8 @@ export default {
   },
   methods: {},
   components: {
-    Selector
+    Selector,
+    Chart
   }
 }
 </script>

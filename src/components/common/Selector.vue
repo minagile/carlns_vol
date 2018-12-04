@@ -87,7 +87,7 @@ export default {
       margin-right: 1.98%;
     }
     input {
-      width:455px;
+      width:32.16%;
       height:40px;
       background:rgba(255,255,255,1);
       border:1px solid rgba(217,217,217,1);
@@ -117,6 +117,12 @@ export default {
       border:1px solid rgba(217,217,217,1);
       border-radius:4px;
       margin-left: 10px;
+    }
+    .el-select {
+      width: 16.49%;
+    }
+    .el-date-editor {
+      width: 16.49%;
     }
   }
 }

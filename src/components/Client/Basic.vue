@@ -3,6 +3,12 @@
     <header>
       <div class="tab">
         <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
+        <div class="header-img">
+          <div class="img">
+            <img src="../../assets/logo.png" alt="">
+          </div>
+          <p>蓝途boss</p>
+        </div>
       </div>
     </header>
     <router-view :key="$route.fullpath"></router-view>
@@ -96,6 +102,28 @@ export default {
           padding: 0 40px;
           color: #fff;
           font-size: 20px;
+        }
+      }
+      .header-img {
+        float: right;
+        padding-right: 49px;
+        .img {
+          width:61px;
+          height:61px;
+          border-radius: 50px;
+          background: white;
+          overflow: hidden;
+          display: inline-block;
+          margin-right: 19px;
+          img {
+            width: 100%;
+          }
+        }
+        p {
+          line-height: 61px;
+          display: inline-block;
+          vertical-align: top;
+          color: white;
         }
       }
     }

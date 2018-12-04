@@ -1,11 +1,108 @@
 <template>
   <div class="home_page">
+
     <div class="company">
-      <el-row :gutter="14">
+      <el-row class="home-header">
         <el-col :span="4" v-for="(o, i) in companyList" :key="i">
           <div class="grid-content">
             <p>{{ o }}</p>
           </div>
+        </el-col>
+      </el-row>
+
+      <el-row class="home-body">
+        <el-col :span="12">
+          <div class="home-body-title">
+            首期应付
+          </div>
+           <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="日期"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="地址">
+              </el-table-column>
+            </el-table>
+        </el-col>
+
+        <el-col :span="12">
+          <div class="home-body-title">
+            本周代还
+          </div>
+           <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="日期"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="地址">
+              </el-table-column>
+            </el-table>
+        </el-col>
+      </el-row>
+      <el-row class="home-body">
+        <el-col :span="12">
+          <div class="home-body-title">
+            逾期警告
+          </div>
+           <el-table
+              :data="tableData"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="日期"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="地址">
+              </el-table-column>
+            </el-table>
+        </el-col>
+
+        <el-col :span="12">
+          <div class="home-body-title">
+            还款日历
+          </div>
+            <el-card class="box-card" :body-style="{ padding: '0px' }">
+              <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
+            </el-card>
         </el-col>
       </el-row>
     </div>
@@ -17,7 +114,9 @@ export default {
   name: 'HomePage',
   data () {
     return {
-      companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件']
+      companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
+      // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
+      tableData: []
     }
   },
   mounted () {
@@ -27,16 +126,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-row {
+.home-header {
   margin-bottom: 37px;
-  margin-left: 20px;
   &:last-child {
     margin-bottom: 0;
   }
-}
-.el-col {
-  border-radius: 4px;
-  width: 300px;
+  .el-col {
+    border-radius: 4px;
+    width: 19.14%;
+  }
 }
 .grid-content {
   border-radius: 4px;
@@ -59,5 +157,52 @@ export default {
   border-radius: 16px;
   margin: 0 34px;
   padding-top: 58px;
+}
+.el-row {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.home-body {
+  // .el-col:nth-of-type(1) {
+  //   margin-right: 24px;
+  // }
+  .el-col {
+    background:rgba(255,255,255,1);
+    box-shadow:0px 4px 8px 0px rgba(0, 0, 0, 0.35);
+    border-radius:10px;
+    margin-bottom: 29px;
+    height: 450px;
+    box-sizing: border-box;
+    width: 48.39%;
+    .home-body-title {
+      padding: 9px 18px;
+      font-size:24px;
+      font-family:MicrosoftYaHei;
+      font-weight:400;
+      color:rgba(3,0,0,1);
+      border-bottom: 4px solid #F1F1F1;
+    }
+    .el-table {
+      overflow: auto;
+      height: 390px;
+    }
+  }
+}
+.el-table::before {
+  display: none;
+}
+.cal-wrapper {
+  height: 358px;
+}
+</style>
+
+<style>
+.item {
+  height: 45px;
+}
+.events-wrapper {
+  background-color: #4977FC!important;
 }
 </style>

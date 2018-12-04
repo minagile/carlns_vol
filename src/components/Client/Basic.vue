@@ -61,6 +61,7 @@ export default {
   // background: #EAEFF3;
   background: #4977FC;
   padding: 0 0 48px;
+  overflow: auto;
   header {
     height: 100px;
     background: #4977FC;

@@ -69,6 +69,7 @@ export default {
 
 <style lang="less" scoped>
 .Selector {
+  padding: 25px 3.44% 0 3.44%;
   .Selector-main {
     padding-bottom: 22px;
     .all {

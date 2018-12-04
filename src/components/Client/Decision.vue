@@ -28,7 +28,9 @@ export default {
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  padding: 25px 3.44%;
   box-sizing: border-box;
+  .Selector {
+    border-bottom: 20px solid #F2F2F2;
+  }
 }
 </style>

@@ -1,11 +1,12 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    Decision
+    <selector></selector>
   </div>
 </template>
 
 <script>
+import Selector from '../common/Selector'
 export default {
   name: 'Decision',
   data () {
@@ -14,7 +15,10 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {},
+  components: {
+    Selector
+  }
 }
 </script>
 
@@ -24,6 +28,7 @@ export default {
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  padding-top: 58px;
+  padding: 25px 3.44%;
+  box-sizing: border-box;
 }
 </style>

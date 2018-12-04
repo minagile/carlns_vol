@@ -211,4 +211,8 @@ export default {
 .events-wrapper {
   background-color: #4977FC!important;
 }
+.el-card__body{
+  height: 395px;
+  overflow: auto;
+}
 </style>

@@ -50,6 +50,12 @@ export default {
       if (path.split('/')[1] === v.href) {
         this.num = k
       }
+      if (path.split('/')[1] === 'PolicyAd') {
+        this.num = 1
+      }
+      if (path.split('/')[1] === 'Amortized') {
+        this.num = 2
+      }
     })
   },
   methods: {

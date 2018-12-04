@@ -55,4 +55,44 @@ button {
   border-radius: 0;
   background: rgba(0,0,0,0.01);
 }
+.el-pagination {
+  text-align: center;
+}
+.el-pagination button {
+  border: 1px solid rgba(223,223,223,1);
+  height: 38px;
+  border-radius: 4px;
+}
+.el-pagination .btn-prev, .el-pagination .btn-next {
+  padding: 0 12px;
+  margin: 0 4px;
+}
+.el-pagination .el-pager li {
+  line-height: 38px;
+  border: 1px solid rgba(223,223,223,1);
+  height: 38px;
+  border-radius: 4px;
+  margin: 0 4px;
+  width: 38px;
+  padding: 0;
+}
+.el-pagination .el-pager li.active {
+  background: #4977FC;
+  color: #fff;
+}
+.el-pagination .el-pager li.active+li {
+  border-left: 1px solid rgba(223,223,223,1);
+}
+.el-pager li:hover, .el-pagination button:hover {
+  background: #4977FC;
+  color: #fff;
+}
+.el-pagination button, .el-pagination span:not([class*=suffix]) {
+  line-height: 38px;
+  height: 38px;
+}
+.el-pagination .el-input {
+  height: 38px;
+  line-height: 38px;
+}
 </style>

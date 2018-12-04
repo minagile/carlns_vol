@@ -1,7 +1,7 @@
 <template>
   <div class="Selector">
     <div class="Selector-main">
-      <button class="all">全部时间</button>
+      <button class="all" v-if="all">全部时间</button>
 
       <el-select v-model="value" placeholder="请选择">
         <el-option
@@ -28,7 +28,7 @@
     </div>
 
     <div class="Selector-main">
-      <button class="all">全部渠道</button>
+      <button class="all" v-if="all">全部渠道</button>
 
       <el-select v-model="value" placeholder="请选择">
         <el-option
@@ -63,7 +63,13 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {},
+  props: {
+    all: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 

@@ -2,7 +2,7 @@
   <div class="basic">
     <header>
       <div class="tab">
-        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}"><a>{{ o.label }}</a></li>
+        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
       </div>
     </header>
     <router-view></router-view>
@@ -18,27 +18,27 @@ export default {
         {
           img: '',
           label: '首页',
-          href: ''
+          href: 'HomePage'
         },
         {
           img: '',
           label: '保单管理',
-          href: ''
+          href: 'PolicyAd'
         },
         {
           img: '',
           label: '已分期',
-          href: ''
+          href: 'Amortized'
         },
         {
           img: '',
           label: '决策支持',
-          href: ''
+          href: 'Decision'
         },
         {
           img: '',
           label: '系统设置',
-          href: ''
+          href: 'Setting'
         }
       ],
       num: 0
@@ -46,7 +46,12 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    tab (i) {
+      this.num = i
+      this.$router.push({name: this.tabList[i].href})
+    }
+  }
 }
 </script>
 

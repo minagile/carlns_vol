@@ -17,37 +17,66 @@ export default {
         {
           img: '',
           label: '缴费通知单列表',
-          href: 'HomePage'
+          href: 'DebitNote'
         },
         {
           img: '',
           label: '报价单列表',
-          href: 'HomePage'
+          href: 'Quotation'
         },
         {
           img: '',
           label: '保单首期支付结果列表',
-          href: 'HomePage'
+          href: 'FirstPeriod'
         },
         {
           img: '',
           label: '付款计划表列表',
-          href: 'HomePage'
+          href: 'PaymentSchedule'
         },
         {
           img: '',
           label: '退保保单列表',
-          href: 'HomePage'
+          href: 'InsuranceCancel'
+        }
+      ],
+      stagingList: [
+        {
+          img: '',
+          label: '已分期列表',
+          href: 'StageList'
+        },
+        {
+          img: '',
+          label: '还款明细',
+          href: 'ReimbursementDetail'
+        },
+        {
+          img: '',
+          label: '保单及发票管理',
+          href: 'PolicyAndInvoice'
         }
       ],
       num: 0
     }
   },
   mounted () {
+    if (this.stage === true) {
+      this.tabList = this.stagingList
+    }
   },
   methods: {
     tab (i) {
       this.num = i
+      this.$router.push({name: this.tabList[i].href})
+    }
+  },
+  props: {
+    stage: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   }
 }

@@ -23,12 +23,12 @@ export default {
         {
           img: '',
           label: '保单管理',
-          href: 'PolicyAd'
+          href: 'DebitNote'
         },
         {
           img: '',
           label: '已分期',
-          href: 'Amortized'
+          href: 'StageList'
         },
         {
           img: '',

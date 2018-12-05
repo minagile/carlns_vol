@@ -1,11 +1,13 @@
 <template>
-  <div class="Volbasic">
+  <div class="basic">
     <header>
       <div class="tab">
         <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
         <div class="header-img">
-          <p>用户名</p>
-          <p>退出登录</p>
+          <div class="img">
+            <img src="../../assets/logo.png" alt="">
+          </div>
+          <p>蓝途boss</p>
         </div>
       </div>
     </header>
@@ -15,44 +17,34 @@
 
 <script>
 export default {
-  name: 'VolBasic',
+  name: 'Basic',
   data () {
     return {
       tabList: [
         {
           img: '',
           label: '首页',
-          href: 'VolHomePage'
-        },
-        {
-          img: '',
-          label: '订单申请',
-          href: 'VolOrderApply'
+          href: 'HomePage'
         },
         {
           img: '',
           label: '保单管理',
-          href: 'VolPolicyAd'
+          href: 'DebitNote'
         },
         {
           img: '',
           label: '已分期',
-          href: 'VolAmortized'
+          href: 'StageList'
         },
         {
           img: '',
           label: '决策支持',
-          href: 'VolDecision'
-        },
-        {
-          img: '',
-          label: '黑名单管理',
-          href: 'VolBlackList'
+          href: 'Decision'
         },
         {
           img: '',
           label: '系统设置',
-          href: 'VolSetting'
+          href: 'Setting'
         }
       ],
       num: 0
@@ -82,16 +74,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.Volbasic {
+.basic {
   height: calc(100% - 48px);
   // background: #EAEFF3;
-  background: #F3F1EA;
+  background: #FFC107;
   padding: 0 0 48px;
   overflow: auto;
-  position: relative;
   header {
-    height: 457px;
-    background: #FFC107;
+    height: 100px;
+    background: #4977FC;
     .tab {
       overflow: hidden;
       padding-top: 20px;
@@ -100,34 +91,39 @@ export default {
         float: left;
         line-height: 50px;
         border-radius: 50px;
-        margin-right: 20px;
+        margin-right: 40px;
         &.active {
-          background: black;
-          a {
-            color: #FFC107;
-          }
+          background: #C9D6FE50;
         }
         &:hover {
-          background: black;
-          a {
-            color: #FFC107;
-          }
+          background: #C9D6FE50;
         }
         a {
           padding: 0 40px;
-          color: black;
+          color: #fff;
           font-size: 20px;
         }
       }
       .header-img {
         float: right;
-        padding-right: 38px;
+        padding-right: 49px;
+        .img {
+          width:61px;
+          height:61px;
+          border-radius: 50px;
+          background: white;
+          overflow: hidden;
+          display: inline-block;
+          margin-right: 19px;
+          img {
+            width: 100%;
+          }
+        }
         p {
           line-height: 61px;
           display: inline-block;
           vertical-align: top;
           color: white;
-          margin-left: 43px;
         }
       }
     }

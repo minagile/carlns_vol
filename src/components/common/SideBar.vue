@@ -3,7 +3,7 @@
   <div class="sidebar animated bounceInLeft">
     <div class="img" style="background: #497777;height: 100px;"></div>
     <div class="list">
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)">{{ o.label }}</li>
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
           vhref: 'VolPaymentSchedule'
         },
         {
-          img: '',
+          img: '<i class="iconfont"></i>',
           label: '退保保单列表',
           href: 'InsuranceCancel',
           vhref: 'VolInsuranceCancel'

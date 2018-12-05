@@ -1,5 +1,5 @@
 <template>
-  <div class="Volhome_page">
+  <div class="home_page">
 
     <div class="company">
       <el-row class="home-header">
@@ -100,9 +100,9 @@
           <div class="home-body-title">
             还款日历
           </div>
-          <el-card class="box-card" :body-style="{ padding: '0px' }">
-            <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
-          </el-card>
+            <el-card class="box-card" :body-style="{ padding: '0px' }">
+              <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
+            </el-card>
         </el-col>
       </el-row>
     </div>
@@ -111,23 +111,13 @@
 
 <script>
 export default {
-  name: 'VolHomePage',
+  name: 'HomePage',
   data () {
     return {
       companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
       // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
       tableData: [],
-      demoEvents: [
-        {
-          date: '2018/12/15',
-          title: 'eat',
-          desc: 'longlonglong description'
-        },
-        {
-          date: '2018/12/12',
-          title: 'this is a title'
-        }
-      ]
+      demoEvents: []
     }
   },
   mounted () {
@@ -167,16 +157,12 @@ export default {
     text-indent: 30px;
   }
 }
-.Volhome_page {
+.home_page {
   background: #fff;
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
   padding-top: 58px;
-  position: absolute;
-  width: calc(100% - 68px);
-  top: 80px;
-  // box-sizing: border-box;
 }
 .el-row {
   display: flex;

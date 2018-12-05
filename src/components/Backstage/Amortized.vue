@@ -1,9 +1,8 @@
 <template>
-  <!-- 保单管理 -->
-  <div class="VolPolicyAd">
-    <SideBar :fromVol="true"/>
+  <!-- 已分期 -->
+  <div class="Amortized">
+    <SideBar :stage="true"/>
     <div class="content">
-      <!-- PolicyAd -->
       <router-view :key="$route.fullpath"></router-view>
     </div>
   </div>
@@ -12,10 +11,9 @@
 <script>
 import SideBar from '../common/SideBar'
 export default {
-  name: 'VolPolicyAd',
+  name: 'Amortized',
   data () {
     return {
-      flag: true
     }
   },
   mounted () {
@@ -28,13 +26,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolPolicyAd {
-  // background: #fff;
+.Amortized {
   height: calc(100% - 100px);
   // padding-top: 58px;
-  position: absolute;
-  width: calc(100% - 15px);
-  top: 80px;
+  position: relative;
   .content {
     margin-left: 360px;
     margin-right: 34px;

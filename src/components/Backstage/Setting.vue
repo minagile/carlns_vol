@@ -1,13 +1,13 @@
 <template>
-  <!-- 黑名单管理 -->
-  <div class="VolBlackList">
-    VolBlackList
+  <!-- 系统设置 -->
+  <div class="Setting">
+    Setting
   </div>
 </template>
 
 <script>
 export default {
-  name: 'VolBlackList',
+  name: 'Setting',
   data () {
     return {
     }
@@ -19,14 +19,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolBlackList {
+.Setting {
   background: #fff;
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  position: absolute;
-  width: calc(100% - 68px);
-  top: 80px;
-  // padding-top: 58px;
+  padding-top: 58px;
 }
 </style>

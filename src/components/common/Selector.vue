@@ -24,7 +24,7 @@
         placeholder="选择日期">
       </el-date-picker>
 
-      <span>清除</span>
+      <button class="span" @click="clearTime">清除</button>
     </div>
 
     <div class="Selector-main">
@@ -63,7 +63,11 @@ export default {
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    clearTime () {
+      console.log('1')
+    }
+  },
   props: {
     all: {
       type: Boolean,
@@ -94,12 +98,15 @@ export default {
       border-radius:4px;
       text-indent: 10px;
     }
-    span {
+    .span {
       margin-left: 10px;
       font-size:18px;
       font-family:MicrosoftYaHei;
       font-weight:400;
       color:rgba(73,119,252,1);
+      border: none;
+      background: none;
+      // cursor:pointer;
     }
     .search {
       width:75px;
@@ -123,6 +130,12 @@ export default {
     }
     .el-date-editor {
       width: 16.49%;
+    }
+    button:hover {
+      opacity: 0.5;
+    }
+    button:active {
+      opacity: 1;
     }
   }
 }

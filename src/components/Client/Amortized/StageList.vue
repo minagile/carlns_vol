@@ -26,11 +26,10 @@
       <button>刷新</button>
     </div>
 
-    <div class="Amortized-table">
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 95%; margin: 0 auto;border: 1px solid #eee">
         <el-table-column
           type="selection"
           width="55">
@@ -50,8 +49,17 @@
           label="地址">
         </el-table-column>
       </el-table>
+
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="10"
+      layout="prev, pager, next, total, jumper"
+      :total="400">
+    </el-pagination>
     </div>
-  </div>
 </template>
 
 <script>
@@ -61,6 +69,7 @@ export default {
   data () {
     return {
       options: [],
+      currentPage4: 1,
       value: '',
       tableData: [
         {
@@ -73,7 +82,17 @@ export default {
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    }
+  },
   components: {
     Selector
   }
@@ -88,7 +107,7 @@ export default {
 }
 </style>
 
-<style lang="less">
+<style lang="less" scoped>
 .Amortized-sort {
   padding: 25px 3.44% 23px 3.44%;
   .el-select:nth-of-type(1) {
@@ -109,6 +128,12 @@ export default {
     float: right;
     color: #4977FC;
   }
+}
+.Amortized-table {
+  padding: 0 3.44% 23px 3.44%;
+}
+.el-pagination  {
+  margin-top: 50px;
 }
 .Amortized-table {
     padding: 0 3.44% 23px 3.44%;

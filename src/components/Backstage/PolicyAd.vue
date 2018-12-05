@@ -1,7 +1,7 @@
 <template>
   <!-- 保单管理 -->
-  <div class="VolPolicyAd">
-    <SideBar :fromVol="true"/>
+  <div class="PolicyAd">
+    <SideBar/>
     <div class="content">
       <!-- PolicyAd -->
       <router-view :key="$route.fullpath"></router-view>
@@ -12,7 +12,7 @@
 <script>
 import SideBar from '../common/SideBar'
 export default {
-  name: 'VolPolicyAd',
+  name: 'PolicyAd',
   data () {
     return {
       flag: true
@@ -28,13 +28,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolPolicyAd {
+.PolicyAd {
   // background: #fff;
   height: calc(100% - 100px);
   // padding-top: 58px;
-  position: absolute;
-  width: calc(100% - 15px);
-  top: 80px;
+  position: relative;
   .content {
     margin-left: 360px;
     margin-right: 34px;

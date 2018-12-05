@@ -1,6 +1,6 @@
 <template>
   <!-- 决策支持 -->
-  <div class="VolDecision">
+  <div class="Decision">
     <selector :all="true"></selector>
     <chart></chart>
   </div>
@@ -10,7 +10,7 @@
 import Selector from '../common/Selector'
 import Chart from './Decision/Chart'
 export default {
-  name: 'VolDecision',
+  name: 'Decision',
   data () {
     return {
     }
@@ -26,14 +26,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolDecision {
+.Decision {
   background: #fff;
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  position: absolute;
-  width: calc(100% - 68px);
-  top: 80px;
+  box-sizing: border-box;
   .Selector {
     border-bottom: 20px solid #F2F2F2;
   }

@@ -28,8 +28,9 @@ export default {
 <style lang="less" scoped>
 .VolAmortized {
   height: calc(100% - 100px);
-  // padding-top: 58px;
-  position: relative;
+  position: absolute;
+  width: calc(100% - 15px);
+  top: 80px;
   .content {
     margin-left: 360px;
     margin-right: 34px;

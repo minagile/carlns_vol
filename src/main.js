@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import axios from 'axios'
 import VueResource from 'vue-resource'
 import { post, fetch, put } from './assets/js/http'
+import './assets/css/iconfont.css'
 
 import './assets/css/style.css'
 import vueEventCalendar from 'vue-event-calendar'

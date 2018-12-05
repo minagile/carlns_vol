@@ -1,7 +1,8 @@
 <template>
-  <!-- 保单及发票管理 -->
-  <div class="PolicyAndInvoice">
+  <!-- 已分期列表 -->
+  <div class="StageList">
     <selector :all="true"></selector>
+
     <div class="Amortized-sort">
       <span>排序</span>
       <el-select v-model="value" placeholder="请选择">
@@ -49,7 +50,7 @@
         </el-table-column>
       </el-table>
 
-    <el-pagination
+      <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
@@ -58,18 +59,18 @@
       layout="prev, pager, next, total, jumper"
       :total="400">
     </el-pagination>
-  </div>
+    </div>
 </template>
 
 <script>
 import Selector from '../../common/Selector'
 export default {
-  name: 'PolicyAndInvoice',
+  name: 'StageList',
   data () {
     return {
       options: [],
-      value: '',
       currentPage4: 1,
+      value: '',
       tableData: [
         {
           date: '2016-05-02',
@@ -97,6 +98,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.StageList {
+  .Amortized-table {
+    padding: 0 3.44% 23px 3.44%;
+  }
+}
+</style>
 
 <style lang="less" scoped>
 .Amortized-sort {

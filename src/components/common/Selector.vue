@@ -1,7 +1,7 @@
 <template>
   <div class="Selector">
     <div class="Selector-main">
-      <button class="all" v-if="all">全部时间</button>
+      <button class="all" :class="{isVol : vol == 1}" v-if="all">全部时间</button>
 
       <el-select v-model="value" placeholder="请选择">
         <el-option
@@ -28,7 +28,7 @@
     </div>
 
     <div class="Selector-main">
-      <button class="all" v-if="all">全部渠道</button>
+      <button class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
 
       <el-select v-model="value" placeholder="请选择">
         <el-option
@@ -40,7 +40,7 @@
       </el-select>
       -
       <input type="text">
-      <button class="search">查询</button>
+      <button class="search" :class="{isVolS : vol == 1}">查询</button>
       <button class="clear">清空</button>
     </div>
   </div>
@@ -68,25 +68,21 @@ export default {
       console.log('1')
     }
   },
-  watch: {
-    color (val) {
-      console.log(val)
-    }
-  },
   props: {
     all: {
       type: Boolean,
       default: false
     },
-    color: {
-      type: String
+    vol: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-@bgColor: #4977FC;
+@bgcolor: #FFC107;
 .Selector {
   padding: 25px 3.44% 0 3.44%;
   .Selector-main {
@@ -95,7 +91,7 @@ export default {
       width:122px;
       color: white;
       height:40px;
-      background: @bgColor;
+      background:rgba(73,119,252,1);
       border-radius:4px;
       margin-right: 1.98%;
     }
@@ -112,7 +108,7 @@ export default {
       font-size:18px;
       font-family:MicrosoftYaHei;
       font-weight:400;
-      color:#4977FC;;
+      color:rgba(73,119,252,1);
       border: none;
       background: none;
       // cursor:pointer;
@@ -120,9 +116,9 @@ export default {
     .search {
       width:75px;
       height:40px;
-      border:1px solid @bgColor;
+      border:1px solid rgba(73,119,252,1);
       border-radius:4px;
-      color: @bgColor;
+      color: #4977FC;
       background: white;
       margin-left: 10px;
     }
@@ -145,6 +141,14 @@ export default {
     }
     button:active {
       opacity: 1;
+    }
+    .isVol {
+      background: @bgcolor;
+      color: black;
+    }
+    .isVolS {
+      border: 1px solid #282828;
+      color: #282828;
     }
   }
 }

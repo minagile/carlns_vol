@@ -1,7 +1,7 @@
 <template>
   <!-- 缴费通知单列表 -->
   <div class="VolDebitNote">
-    <Selector />
+    <Selector :vol="true"/>
 
     <div class="header" style="width: 95%; margin: 0 auto">
       <span>排序</span>

@@ -1,7 +1,7 @@
 <template>
   <!-- 付款计划表列表 -->
   <div class="VolPaymentSchedule">
-     <Selector />
+     <Selector :vol="true"/>
 
     <div class="header" style="width: 95%; margin: 0 auto">
       <span>排序</span>

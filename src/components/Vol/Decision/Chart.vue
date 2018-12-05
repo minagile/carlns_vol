@@ -129,14 +129,15 @@ export default {
       width:135px;
       height:44px;
       background:rgba(255,255,255,1);
-      border:1px solid rgba(73,119,252,1);
+      border:1px solid black;
       border-radius:4px;
-      color: #4977FC;
+      color: black;
       margin-right: 45px;
     }
     .active {
-      background: #4977FC;
-      color: white;
+      background: #FFC107;
+      color: black;
+      border: #FFC107;
     }
   }
   .change {

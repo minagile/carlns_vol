@@ -1,7 +1,7 @@
 <template>
   <!-- 还款明细 -->
   <div class="VolReimbursementDetail">
-    <selector :all="true"></selector>
+    <selector :all="true" :vol="true"></selector>
 
     <div class="Amortized-sort">
       <span>排序</span>

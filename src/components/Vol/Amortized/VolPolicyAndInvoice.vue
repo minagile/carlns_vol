@@ -1,7 +1,7 @@
 <template>
   <!-- 保单及发票管理 -->
   <div class="VolPolicyAndInvoice">
-    <selector :all="true"></selector>
+    <selector :all="true" :vol="true"></selector>
     <div class="Amortized-sort">
       <span>排序</span>
       <el-select v-model="value" placeholder="请选择">

@@ -1,7 +1,7 @@
 <template>
   <!-- 保单首期支付结果列表 -->
   <div class="VolFirstPeriod">
-     <Selector />
+     <Selector :vol="true"/>
 
     <div class="header" style="width: 95%; margin: 0 auto">
       <span>排序</span>

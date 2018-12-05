@@ -1,7 +1,7 @@
 <template>
   <!-- 退保保单列表 -->
   <div class="VolInsuranceCancel">
-    <Selector />
+    <Selector :vol="true"/>
 
     <div class="header" style="width: 95%; margin: 0 auto">
       <span>排序</span>

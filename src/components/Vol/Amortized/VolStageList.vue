@@ -1,7 +1,7 @@
 <template>
   <!-- 已分期列表 -->
   <div class="VolStageList">
-    <selector :all="true"></selector>
+    <selector :all="true" :vol="true"></selector>
 
     <div class="Amortized-sort">
       <span>排序</span>

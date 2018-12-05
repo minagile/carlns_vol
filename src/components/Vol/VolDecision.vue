@@ -1,7 +1,7 @@
 <template>
   <!-- 决策支持 -->
   <div class="VolDecision">
-    <selector :all="true"></selector>
+    <selector :all="true" :vol="true"></selector>
     <chart></chart>
   </div>
 </template>

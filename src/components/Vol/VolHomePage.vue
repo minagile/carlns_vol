@@ -178,9 +178,6 @@ export default {
   border-radius: 16px;
   margin: 0 34px;
   padding-top: 23px;
-  position: absolute;
-  width: calc(100% - 68px);
-  top: 80px;
   .xuanze {
     width:353px;
     height:56px;

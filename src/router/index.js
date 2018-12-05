@@ -37,6 +37,9 @@ import VolStageList from '@/components/Vol/Amortized/VolStageList'
 import VolReimbursementDetail from '@/components/Vol/Amortized/VolReimbursementDetail'
 import VolPolicyAndInvoice from '@/components/Vol/Amortized/VolPolicyAndInvoice'
 
+import Calculater from '@/components/Vol/Decision/Calculater'
+import Chart from '@/components/Vol/Decision/Chart'
+
 Vue.use(Router)
 
 export default new Router({
@@ -190,7 +193,19 @@ export default new Router({
         {
           path: '/vol/VolDecision',
           name: 'VolDecision',
-          component: VolDecision
+          component: VolDecision,
+          children: [
+            {
+              path: '/vol/VolDecision/Calculater',
+              name: 'Calculater',
+              component: Calculater
+            },
+            {
+              path: '/vol/VolDecision/Chart',
+              name: 'Chart',
+              component: Chart
+            }
+          ]
         },
         {
           path: '/vol/VolBlackList',

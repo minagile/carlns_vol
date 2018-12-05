@@ -31,10 +31,6 @@ export default {
 .VolPolicyAd {
   // background: #fff;
   height: calc(100% - 100px);
-  // padding-top: 58px;
-  position: absolute;
-  width: calc(100% - 15px);
-  top: 80px;
   .content {
     margin-left: 360px;
     margin-right: 34px;

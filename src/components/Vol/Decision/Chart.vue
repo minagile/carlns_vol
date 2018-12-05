@@ -1,24 +1,28 @@
 <template>
-  <div class="chart">
-    <div class="btn">
-      <button
-        v-for="(btn, index) in btnList"
-        :key="index"
-        :class="{active : num == index}"
-        @click="tab(index)"
-      >
-        {{btn}}
-      </button>
+  <div class="chart animated flipInY">
+    <selector :all="true" :vol="true"></selector>
+    <div class="con">
+      <div class="btn">
+        <button
+          v-for="(btn, index) in btnList"
+          :key="index"
+          :class="{active : num == index}"
+          @click="tab(index)"
+        >
+          {{btn}}
+        </button>
+      </div>
+      <div class="change">
+        <button :class="{active : num1 === 0}" @click="changeChart(0)">ss</button>
+        <button :class="{active : num1 === 1}" @click="changeChart(1)">ss</button>
+      </div>
+      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
     </div>
-    <div class="change">
-      <button :class="{active : num1 === 0}" @click="changeChart(0)">ss</button>
-      <button :class="{active : num1 === 1}" @click="changeChart(1)">ss</button>
-    </div>
-    <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
 <script>
+import Selector from '../../common/Selector'
 var echarts = require('echarts/lib/echarts')
 // 引入柱状图
 require('echarts/lib/chart/bar')
@@ -116,13 +120,35 @@ export default {
         ]
       })
     }
+  },
+  components: {
+    Selector
   }
 }
 </script>
 
 <style lang="less" scoped>
 .chart {
-  padding: 25px 3.44% 0 3.44%;
+  background: #fff;
+  height: 100%;
+  .Selector {
+    border-bottom: 20px solid #F2F2F2;
+  }
+  .circle {
+    position: absolute;
+    width: 81px;
+    height: 81px;
+    border-radius: 50%;
+    background: #FFC107;
+    line-height: 81px;
+    text-align: center;
+    top: 37px;
+    right: 155px;
+    cursor: pointer;
+  }
+  .con {
+    padding: 25px 3.44% 0 3.44%;
+  }
   .btn {
     margin-bottom: 45px;
     button {

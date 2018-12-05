@@ -1,7 +1,7 @@
 <template>
   <!-- 已分期 -->
   <div class="VolAmortized">
-    <SideBar :stage="true" :fromVol="true"/>
+    <SideBar :stage="'staging'" :fromVol="true"/>
     <div class="content">
       <router-view :key="$route.fullpath"></router-view>
     </div>

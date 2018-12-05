@@ -1,11 +1,15 @@
 <template>
   <!-- 订单申请 -->
   <div class="VolOrderApply">
-    VolOrderApply
+    <SideBar :stage="'order'" :fromVol="true"/>
+    <div class="content">
+      <router-view :key="$route.fullpath"></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+import SideBar from '../common/SideBar'
 export default {
   name: 'VolOrderApply',
   data () {
@@ -14,19 +18,30 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {},
+  components: {
+    SideBar
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .VolOrderApply {
-  background: #fff;
-  min-height: calc(100% - 100px);
-  border-radius: 16px;
-  margin: 0 34px;
+  height: calc(100% - 100px);
   position: absolute;
-  width: calc(100% - 68px);
+  width: calc(100% - 15px);
   top: 80px;
-  // padding-top: 58px;
+  .content {
+    margin-left: 360px;
+    margin-right: 34px;
+    background: #fff;
+    border-radius: 16px;
+    height: 100%;
+    animation: mymove 1s cubic-bezier(.28,1.41,1,1.1) normal;
+  }
+}
+@keyframes mymove {
+  from { margin-left: 34px;}
+  to { margin-left: 360px;}
 }
 </style>

@@ -32,12 +32,12 @@ export default {
         {
           img: '',
           label: '保单管理',
-          href: 'VolPolicyAd'
+          href: 'VolDebitNote'
         },
         {
           img: '',
           label: '已分期',
-          href: 'VolAmortized'
+          href: 'VolStageList'
         },
         {
           img: '',
@@ -61,14 +61,14 @@ export default {
   mounted () {
     let path = this.$router.history.current.fullPath
     this.tabList.forEach((v, k) => {
-      if (path.split('/')[1] === v.href) {
+      if (path.split('/')[2] === v.href || path.split('/')[3] === v.href) {
         this.num = k
       }
-      if (path.split('/')[1] === 'PolicyAd') {
-        this.num = 1
-      }
-      if (path.split('/')[1] === 'Amortized') {
+      if (path.split('/')[2] === 'VolPolicyAd') {
         this.num = 2
+      }
+      if (path.split('/')[2] === 'VolAmortized') {
+        this.num = 3
       }
     })
   },

@@ -95,4 +95,13 @@ button {
   height: 38px;
   line-height: 38px;
 }
+
+.Volbasic .el-pagination .el-pager li.active {
+  background: #000000;
+  color: #fff;
+}
+.Volbasic .el-pager li:hover, .el-pagination button:hover {
+  background: #000000;
+  color: #fff;
+}
 </style>

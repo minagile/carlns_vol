@@ -2,7 +2,10 @@
   <!-- 侧边栏 -->
   <div class="sidebar animated bounceInLeft">
     <div class="img" style="background: #497777;height: 100px;"></div>
-    <div class="list">
+    <div class="list" v-if="!fromVol">
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
+    </div>
+    <div class="list vol" v-if="fromVol">
       <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
     </div>
   </div>
@@ -65,16 +68,38 @@ export default {
           vhref: 'VolPolicyAndInvoice'
         }
       ],
+      orderList: [
+        {
+          img: '',
+          label: '123',
+          // href: 'StageList',
+          vhref: 'VolStageList'
+        },
+        {
+          img: '',
+          label: '123',
+          // href: 'ReimbursementDetail',
+          vhref: 'VolReimbursementDetail'
+        },
+        {
+          img: '',
+          label: '123',
+          // href: 'PolicyAndInvoice',
+          vhref: 'VolPolicyAndInvoice'
+        }
+      ],
       num: 0
     }
   },
   mounted () {
-    if (this.stage === true) {
+    if (this.stage === 'staging') {
       this.tabList = this.stagingList
+    } else if (this.stage === 'order') {
+      this.tabList = this.orderList
     }
     let path = this.$router.history.current.fullPath
     this.tabList.forEach((v, k) => {
-      if (path.split('/')[2] === v.href) {
+      if (path.split('/')[2] === v.href || path.split('/')[3] === v.vhref) {
         this.num = k
       }
     })
@@ -88,9 +113,9 @@ export default {
   },
   props: {
     stage: {
-      type: Boolean,
+      type: String,
       default () {
-        return false
+        return 'DebitNote'
       }
     },
     fromVol: {
@@ -113,8 +138,8 @@ export default {
     padding-left: 16px;
     li {
       font-size: 19px;
-      font-family:MicrosoftYaHei;
-      font-weight:400;
+      font-family: "MicrosoftYaHei";
+      font-weight: 400;
       color:rgba(89,89,89,1);
       line-height: 60px;
       text-indent: 72px;
@@ -129,6 +154,19 @@ export default {
         color:rgba(73,119,252,1);
         background:rgba(73,119,252,0.1);
         border-radius:26px 0px 0px 26px;
+      }
+    }
+  }
+  .vol {
+    li {
+      color: #606060;
+      &.active {
+        color:#000000;
+        background:rgba(255,193,7,0.49);
+      }
+      &:hover {
+        color:#000000;
+        background:rgba(255,193,7,0.49);
       }
     }
   }

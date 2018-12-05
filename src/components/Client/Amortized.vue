@@ -1,7 +1,7 @@
 <template>
   <!-- 已分期 -->
   <div class="Amortized">
-    <SideBar :stage="true"/>
+    <SideBar :stage="'staging'"/>
     <div class="content">
       <router-view :key="$route.fullpath"></router-view>
     </div>

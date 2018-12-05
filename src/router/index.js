@@ -17,6 +17,16 @@ import StageList from '@/components/Client/Amortized/StageList'
 import ReimbursementDetail from '@/components/Client/Amortized/ReimbursementDetail'
 import PolicyAndInvoice from '@/components/Client/Amortized/PolicyAndInvoice'
 
+// 后台
+import VolBasic from '@/components/Vol/VolBasic'
+import VolHomePage from '@/components/Vol/VolHomePage'
+import VolOrderApply from '@/components/Vol/VolOrderApply'
+import VolPolicyAd from '@/components/Vol/VolPolicyAd'
+import VolAmortized from '@/components/Vol/VolAmortized'
+import VolDecision from '@/components/Vol/VolDecision'
+import VolBlackList from '@/components/Vol/VolBlackList'
+import VolSetting from '@/components/Vol/VolSetting'
+
 Vue.use(Router)
 
 export default new Router({
@@ -95,6 +105,48 @@ export default new Router({
           path: '/Setting',
           name: 'Setting',
           component: Setting
+        }
+      ]
+    },
+    {
+      path: '/vol',
+      name: 'VolBasic',
+      component: VolBasic,
+      children: [
+        {
+          path: '/vol/VolHomePage',
+          name: 'VolHomePage',
+          component: VolHomePage
+        },
+        {
+          path: '/vol/VolOrderApply',
+          name: 'VolOrderApply',
+          component: VolOrderApply
+        },
+        {
+          path: '/vol/VolPolicyAd',
+          name: 'VolPolicyAd',
+          component: VolPolicyAd
+        },
+        {
+          path: '/vol/VolAmortized',
+          name: 'VolAmortized',
+          component: VolAmortized
+        },
+        {
+          path: '/vol/VolDecision',
+          name: 'VolDecision',
+          component: VolDecision
+        },
+        {
+          path: '/vol/VolBlackList',
+          name: 'VolBlackList',
+          component: VolBlackList
+        },
+        {
+          path: '/vol/VolSetting',
+          name: 'VolSetting',
+          component: VolSetting
         }
       ]
     }

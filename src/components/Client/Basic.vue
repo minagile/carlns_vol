@@ -91,7 +91,7 @@ export default {
         float: left;
         line-height: 50px;
         border-radius: 50px;
-        margin-right: 40px;
+        margin-right: 20px;
         &.active {
           background: #C9D6FE50;
         }

@@ -19,7 +19,7 @@ Vue.use(animate)
 
 Vue.use(vueEventCalendar, {
   locale: 'en',
-  color: 'rgb(158, 123, 255)'
+  color: '#4977FC'
 })
 
 // 组件免注册

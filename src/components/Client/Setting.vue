@@ -24,6 +24,6 @@ export default {
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  padding-top: 58px;
+  // padding-top: 58px;
 }
 </style>

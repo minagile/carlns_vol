@@ -17,44 +17,52 @@ export default {
         {
           img: '',
           label: '缴费通知单列表',
-          href: 'DebitNote'
+          href: 'DebitNote',
+          vhref: 'VolDebitNote'
         },
         {
           img: '',
           label: '报价单列表',
-          href: 'Quotation'
+          href: 'Quotation',
+          vhref: 'VolQuotation'
         },
         {
           img: '',
           label: '保单首期支付结果列表',
-          href: 'FirstPeriod'
+          href: 'FirstPeriod',
+          vhref: 'VolFirstPeriod'
         },
         {
           img: '',
           label: '付款计划表列表',
-          href: 'PaymentSchedule'
+          href: 'PaymentSchedule',
+          vhref: 'VolPaymentSchedule'
         },
         {
           img: '',
           label: '退保保单列表',
-          href: 'InsuranceCancel'
+          href: 'InsuranceCancel',
+          vhref: 'VolInsuranceCancel'
         }
       ],
       stagingList: [
         {
           img: '',
           label: '已分期列表',
-          href: 'StageList'
+          href: 'StageList',
+          vhref: 'VolStageList'
         },
         {
           img: '',
           label: '还款明细',
-          href: 'ReimbursementDetail'
+          href: 'ReimbursementDetail',
+          vhref: 'VolReimbursementDetail'
         },
         {
           img: '',
           label: '保单及发票管理',
-          href: 'PolicyAndInvoice'
+          href: 'PolicyAndInvoice',
+          vhref: 'VolPolicyAndInvoice'
         }
       ],
       num: 0
@@ -74,7 +82,8 @@ export default {
   methods: {
     tab (i) {
       this.num = i
-      this.$router.push({name: this.tabList[i].href})
+      if (this.fromVol === false) this.$router.push({name: this.tabList[i].href})
+      if (this.fromVol === true) this.$router.push({name: this.tabList[i].vhref})
     }
   },
   props: {
@@ -83,6 +92,10 @@ export default {
       default () {
         return false
       }
+    },
+    fromVol: {
+      type: Boolean,
+      default: false
     }
   }
 }

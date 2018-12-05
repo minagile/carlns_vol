@@ -1,6 +1,6 @@
 <template>
-  <!-- 保单首期支付结果列表 -->
-  <div class="FirstPeriod">
+  <!-- 报价单列表 -->
+  <div class="VolQuotation">
      <Selector />
 
     <div class="header" style="width: 95%; margin: 0 auto">
@@ -67,7 +67,7 @@
 <script>
 import Selector from '../../common/Selector'
 export default {
-  name: 'FirstPeriod',
+  name: 'VolQuotation',
   data () {
     return {
       currentPage4: 1,
@@ -142,7 +142,7 @@ export default {
 .el-pagination  {
   margin-top: 50px;
 }
-.FirstPeriod {
+.VolQuotation {
   .header {
     padding-bottom: 20px;
   }

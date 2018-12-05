@@ -1,6 +1,6 @@
 <template>
-  <!-- 缴费通知单列表 -->
-  <div class="DebitNote">
+  <!-- 退保保单列表 -->
+  <div class="VolInsuranceCancel">
     <Selector />
 
     <div class="header" style="width: 95%; margin: 0 auto">
@@ -67,7 +67,7 @@
 <script>
 import Selector from '../../common/Selector'
 export default {
-  name: 'DebitNote',
+  name: 'VolInsuranceCancel',
   data () {
     return {
       currentPage4: 1,
@@ -142,7 +142,7 @@ export default {
 .el-pagination  {
   margin-top: 50px;
 }
-.DebitNote {
+.VolInsuranceCancel {
   .header {
     padding-bottom: 20px;
   }

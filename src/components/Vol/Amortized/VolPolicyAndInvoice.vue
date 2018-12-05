@@ -1,8 +1,7 @@
 <template>
-  <!-- 还款明细 -->
-  <div class="ReimbursementDetail">
+  <!-- 保单及发票管理 -->
+  <div class="VolPolicyAndInvoice">
     <selector :all="true"></selector>
-
     <div class="Amortized-sort">
       <span>排序</span>
       <el-select v-model="value" placeholder="请选择">
@@ -57,7 +56,7 @@
 <script>
 import Selector from '../../common/Selector'
 export default {
-  name: 'ReimbursementDetail',
+  name: 'VolPolicyAndInvoice',
   data () {
     return {
       options: [],
@@ -81,6 +80,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ReimbursementDetail {
+.VolPolicyAndInvoice {
 }
 </style>

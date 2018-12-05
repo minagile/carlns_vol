@@ -1,7 +1,7 @@
 <template>
   <!-- 保单管理 -->
   <div class="VolPolicyAd">
-    <SideBar/>
+    <SideBar :fromVol="true"/>
     <div class="content">
       <!-- PolicyAd -->
       <router-view :key="$route.fullpath"></router-view>

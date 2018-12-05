@@ -27,6 +27,16 @@ import VolDecision from '@/components/Vol/VolDecision'
 import VolBlackList from '@/components/Vol/VolBlackList'
 import VolSetting from '@/components/Vol/VolSetting'
 
+import VolDebitNote from '@/components/Vol/Policy/VolDebitNote'
+import VolQuotation from '@/components/Vol/Policy/VolQuotation'
+import VolFirstPeriod from '@/components/Vol/Policy/VolFirstPeriod'
+import VolPaymentSchedule from '@/components/Vol/Policy/VolPaymentSchedule'
+import VolInsuranceCancel from '@/components/Vol/Policy/VolInsuranceCancel'
+
+import VolStageList from '@/components/Vol/Amortized/VolStageList'
+import VolReimbursementDetail from '@/components/Vol/Amortized/VolReimbursementDetail'
+import VolPolicyAndInvoice from '@/components/Vol/Amortized/VolPolicyAndInvoice'
+
 Vue.use(Router)
 
 export default new Router({
@@ -126,12 +136,56 @@ export default new Router({
         {
           path: '/vol/VolPolicyAd',
           name: 'VolPolicyAd',
-          component: VolPolicyAd
+          component: VolPolicyAd,
+          children: [
+            {
+              path: '/vol/VolPolicyAd/VolDebitNote',
+              name: 'VolDebitNote',
+              component: VolDebitNote
+            },
+            {
+              path: '/vol/VolPolicyAd/VolQuotation',
+              name: 'VolQuotation',
+              component: VolQuotation
+            },
+            {
+              path: '/vol/VolPolicyAd/VolFirstPeriod',
+              name: 'VolFirstPeriod',
+              component: VolFirstPeriod
+            },
+            {
+              path: '/vol/VolPolicyAd/VolPaymentSchedule',
+              name: 'VolPaymentSchedule',
+              component: VolPaymentSchedule
+            },
+            {
+              path: '/vol/VolPolicyAd/VolInsuranceCancel',
+              name: 'VolInsuranceCancel',
+              component: VolInsuranceCancel
+            }
+          ]
         },
         {
           path: '/vol/VolAmortized',
           name: 'VolAmortized',
-          component: VolAmortized
+          component: VolAmortized,
+          children: [
+            {
+              path: '/vol/VolAmortized/VolStageList',
+              name: 'VolStageList',
+              component: VolStageList
+            },
+            {
+              path: '/vol/VolAmortized/VolReimbursementDetail',
+              name: 'VolReimbursementDetail',
+              component: VolReimbursementDetail
+            },
+            {
+              path: '/vol/VolAmortized/VolPolicyAndInvoice',
+              name: 'VolPolicyAndInvoice',
+              component: VolPolicyAndInvoice
+            }
+          ]
         },
         {
           path: '/vol/VolDecision',

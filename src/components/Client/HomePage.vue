@@ -13,7 +13,7 @@
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
-            首期应付
+            首期应付款
           </div>
            <el-table
               :data="tableData"
@@ -41,7 +41,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
-            本周代还
+            本周待还
           </div>
            <el-table
               :data="tableData"

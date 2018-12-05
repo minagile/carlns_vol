@@ -80,6 +80,31 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolPolicyAndInvoice {
+.Amortized-sort {
+  padding: 25px 3.44% 23px 3.44%;
+  .el-select:nth-of-type(1) {
+    width: 138px;
+    margin-left: 10px;
+    margin-right: 40px;
+  }
+  .el-select:nth-of-type(2) {
+    width: 138px;
+    margin: 0 10px;
+  }
+  button {
+    width:88px;
+    height:35px;
+    background:rgba(255,255,255,1);
+    border:1px solid rgba(232,232,232,1);
+    border-radius:4px;
+    float: right;
+    color: #4977FC;
+  }
+}
+.Amortized-table {
+  padding: 0 3.44% 23px 3.44%;
+}
+.el-pagination  {
+  margin-top: 50px;
 }
 </style>

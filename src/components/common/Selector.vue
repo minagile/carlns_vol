@@ -68,16 +68,25 @@ export default {
       console.log('1')
     }
   },
+  watch: {
+    color (val) {
+      console.log(val)
+    }
+  },
   props: {
     all: {
       type: Boolean,
       default: false
+    },
+    color: {
+      type: String
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+@bgColor: #4977FC;
 .Selector {
   padding: 25px 3.44% 0 3.44%;
   .Selector-main {
@@ -86,7 +95,7 @@ export default {
       width:122px;
       color: white;
       height:40px;
-      background:rgba(73,119,252,1);
+      background: @bgColor;
       border-radius:4px;
       margin-right: 1.98%;
     }
@@ -103,7 +112,7 @@ export default {
       font-size:18px;
       font-family:MicrosoftYaHei;
       font-weight:400;
-      color:rgba(73,119,252,1);
+      color:#4977FC;;
       border: none;
       background: none;
       // cursor:pointer;
@@ -111,9 +120,9 @@ export default {
     .search {
       width:75px;
       height:40px;
-      border:1px solid rgba(73,119,252,1);
+      border:1px solid @bgColor;
       border-radius:4px;
-      color: #4977FC;
+      color: @bgColor;
       background: white;
       margin-left: 10px;
     }

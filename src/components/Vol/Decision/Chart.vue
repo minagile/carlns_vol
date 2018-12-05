@@ -10,6 +10,10 @@
         {{btn}}
       </button>
     </div>
+    <div class="change">
+      <button :class="{active : num1 === 0}" @click="changeChart(0)">ss</button>
+      <button :class="{active : num1 === 1}" @click="changeChart(1)">ss</button>
+    </div>
     <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
@@ -29,7 +33,8 @@ export default {
   data () {
     return {
       btnList: ['分期总金额', '还款总金额', '渠道占比', '还款率', '逾期率', '退保率', '险种占比'],
-      num: 0
+      num: 0,
+      num1: 0
     }
   },
   mounted () {
@@ -38,6 +43,9 @@ export default {
   methods: {
     tab (e) {
       this.num = e
+    },
+    changeChart (e) {
+      this.num1 = e
     },
     getEchart () {
       var myChart = echarts.init(document.getElementById('main'))
@@ -129,6 +137,29 @@ export default {
     .active {
       background: #4977FC;
       color: white;
+    }
+  }
+  .change {
+    float: right;
+    font-size: 0;
+    button {
+      width: 60px;
+      border:1px solid rgba(219,219,219,1);
+      height: 30px;
+      background: none;
+    }
+    button:nth-of-type(1){
+      border-right: none;
+      border-radius: 5px 0 0 5px;
+    }
+    button:nth-of-type(2){
+      border-left: none;
+      border-radius: 0px 5px 5px 0px;
+    }
+    .active {
+      background: #FF9494;
+      color: white;
+      border: none;
     }
   }
 }

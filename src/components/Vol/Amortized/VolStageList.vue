@@ -81,14 +81,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.VolStageList {
-  .Amortized-table {
-    padding: 0 3.44% 23px 3.44%;
-  }
-}
-</style>
-
-<style lang="less">
 .Amortized-sort {
   padding: 25px 3.44% 23px 3.44%;
   .el-select:nth-of-type(1) {
@@ -111,6 +103,9 @@ export default {
   }
 }
 .Amortized-table {
-    padding: 0 3.44% 23px 3.44%;
-  }
+  padding: 0 3.44% 23px 3.44%;
+}
+.el-pagination  {
+  margin-top: 50px;
+}
 </style>

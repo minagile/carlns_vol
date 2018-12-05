@@ -2,11 +2,22 @@
   <div class="Volhome_page">
 
     <div class="company">
+      <div class="xuanze">
+        <span>选择渠道：</span>
+        <el-select v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
 
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
-            首期应付
+            首期应付款
           </div>
            <el-table
               :data="tableData"
@@ -34,7 +45,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
-            本周代还
+            本周待还
           </div>
            <el-table
               :data="tableData"
@@ -108,7 +119,8 @@ export default {
   data () {
     return {
       companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
-      // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
+      options: [],
+      value: '',
       tableData: [],
       demoEvents: [
         {
@@ -161,15 +173,29 @@ export default {
   }
 }
 .Volhome_page {
-  background: #fff;
+  background:rgba(255,240,193,1);
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
-  padding-top: 58px;
+  padding-top: 23px;
   position: absolute;
   width: calc(100% - 68px);
   top: 80px;
-  // box-sizing: border-box;
+  .xuanze {
+    width:353px;
+    height:56px;
+    background:rgba(255,255,255,1);
+    border-radius:28px;
+    margin: 0 35px 23px 34px;
+    padding: 0 12px 0 17px;
+    box-sizing: border-box;
+    span {
+      line-height: 56px;
+    }
+    .el-select {
+      // width: 227px;
+    }
+  }
 }
 .el-row {
   display: flex;

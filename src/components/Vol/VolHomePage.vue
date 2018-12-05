@@ -2,13 +2,6 @@
   <div class="Volhome_page">
 
     <div class="company">
-      <el-row class="home-header">
-        <el-col :span="4" v-for="(o, i) in companyList" :key="i">
-          <div class="grid-content">
-            <p>{{ o }}</p>
-          </div>
-        </el-col>
-      </el-row>
 
       <el-row class="home-body">
         <el-col :span="12">

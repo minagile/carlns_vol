@@ -125,6 +125,10 @@ export default {
       border-radius:4px;
       color: #4977FC;
       margin-right: 45px;
+      &:hover {
+        background: #4977FC;
+        color: white;
+      }
     }
     .active {
       background: #4977FC;

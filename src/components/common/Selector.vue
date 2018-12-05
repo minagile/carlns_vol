@@ -3,7 +3,7 @@
     <div class="Selector-main">
       <button class="all" :class="{isVol : vol == 1}" v-if="all">全部时间</button>
 
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="订单时间">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -30,7 +30,7 @@
     <div class="Selector-main">
       <button class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
 
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="选择渠道">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -58,7 +58,7 @@ export default {
         }
       ],
       value1: '',
-      value: 's'
+      value: ''
     }
   },
   mounted () {

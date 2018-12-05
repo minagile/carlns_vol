@@ -159,6 +159,11 @@ export default {
       border-radius:4px;
       color: black;
       margin-right: 45px;
+      &:hover {
+        background: #FFC107;
+        color: black;
+        border: #FFC107;
+      }
     }
     .active {
       background: #FFC107;

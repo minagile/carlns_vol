@@ -6,6 +6,7 @@ import PolicyAd from '@/components/Client/PolicyAd'
 import Amortized from '@/components/Client/Amortized'
 import Decision from '@/components/Client/Decision'
 import Setting from '@/components/Client/Setting'
+import Login from '@/components/Client/Login'
 
 import DebitNote from '@/components/Client/Policy/DebitNote'
 import Quotation from '@/components/Client/Policy/Quotation'
@@ -46,7 +47,7 @@ export default new Router({
   // mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/Basic',
       name: 'Basic',
       component: Basic,
       children: [
@@ -218,6 +219,11 @@ export default new Router({
           component: VolSetting
         }
       ]
+    },
+    {
+      path: '/',
+      name: 'Login',
+      component: Login
     }
   ]
 })

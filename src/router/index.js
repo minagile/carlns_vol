@@ -41,6 +41,14 @@ import VolPolicyAndInvoice from '@/components/Vol/Amortized/VolPolicyAndInvoice'
 import Calculater from '@/components/Vol/Decision/Calculater'
 import Chart from '@/components/Vol/Decision/Chart'
 
+import QuotationOrder from '@/components/Vol/Order/QuotationOrder'
+import MakePayment from '@/components/Vol/Order/MakePayment'
+
+import BlackList from '@/components/Vol/Black/BlackList'
+
+import ChannelManagement from '@/components/Vol/Setting/ChannelManagement'
+import AccountManagement from '@/components/Vol/Setting/AccountManagement'
+
 Vue.use(Router)
 
 export default new Router({
@@ -135,7 +143,19 @@ export default new Router({
         {
           path: '/vol/VolOrderApply',
           name: 'VolOrderApply',
-          component: VolOrderApply
+          component: VolOrderApply,
+          children: [
+            {
+              path: '/vol/VolOrderApply/QuotationOrder',
+              name: 'QuotationOrder',
+              component: QuotationOrder
+            },
+            {
+              path: '/vol/VolOrderApply/MakePayment',
+              name: 'MakePayment',
+              component: MakePayment
+            }
+          ]
         },
         {
           path: '/vol/VolPolicyAd',
@@ -211,12 +231,31 @@ export default new Router({
         {
           path: '/vol/VolBlackList',
           name: 'VolBlackList',
-          component: VolBlackList
+          component: VolBlackList,
+          children: [
+            {
+              path: '/vol/VolBlackList/BlackList',
+              name: 'BlackList',
+              component: BlackList
+            }
+          ]
         },
         {
           path: '/vol/VolSetting',
           name: 'VolSetting',
-          component: VolSetting
+          component: VolSetting,
+          children: [
+            {
+              path: '/vol/VolSetting/ChannelManagement',
+              name: 'ChannelManagement',
+              component: ChannelManagement
+            },
+            {
+              path: '/vol/VolSetting/AccountManagement',
+              name: 'AccountManagement',
+              component: AccountManagement
+            }
+          ]
         }
       ]
     },

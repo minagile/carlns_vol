@@ -74,21 +74,32 @@ export default {
       orderList: [
         {
           img: '',
-          label: '123',
-          // href: 'StageList',
-          vhref: 'VolStageList'
+          label: '生成报价单',
+          vhref: 'QuotationOrder'
         },
         {
           img: '',
-          label: '123',
-          // href: 'ReimbursementDetail',
-          vhref: 'VolReimbursementDetail'
+          label: '制作付款计划表',
+          vhref: 'MakePayment'
+        }
+      ],
+      blackList: [
+        {
+          img: '',
+          label: '黑名单列表',
+          vhref: 'BlackList'
+        }
+      ],
+      settingList: [
+        {
+          img: '',
+          label: '渠道管理',
+          vhref: 'ChannelManagement'
         },
         {
           img: '',
-          label: '123',
-          // href: 'PolicyAndInvoice',
-          vhref: 'VolPolicyAndInvoice'
+          label: '帐号管理',
+          vhref: 'AccountManagement'
         }
       ],
       num: 0
@@ -99,6 +110,10 @@ export default {
       this.tabList = this.stagingList
     } else if (this.stage === 'order') {
       this.tabList = this.orderList
+    } else if (this.stage === 'black') {
+      this.tabList = this.blackList
+    } else if (this.stage === 'setting') {
+      this.tabList = this.settingList
     }
     let path = this.$router.history.current.fullPath
     this.tabList.forEach((v, k) => {

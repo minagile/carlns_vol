@@ -27,7 +27,7 @@ export default {
         {
           img: '',
           label: '订单申请',
-          href: 'VolOrderApply'
+          href: 'QuotationOrder'
         },
         {
           img: '',
@@ -47,12 +47,12 @@ export default {
         {
           img: '',
           label: '黑名单管理',
-          href: 'VolBlackList'
+          href: 'BlackList'
         },
         {
           img: '',
           label: '系统设置',
-          href: 'VolSetting'
+          href: 'ChannelManagement'
         }
       ],
       num: 0
@@ -64,11 +64,20 @@ export default {
       if (path.split('/')[2] === v.href || path.split('/')[3] === v.href) {
         this.num = k
       }
+      if (path.split('/')[2] === 'VolOrderApply') {
+        this.num = 1
+      }
       if (path.split('/')[2] === 'VolPolicyAd') {
         this.num = 2
       }
       if (path.split('/')[2] === 'VolAmortized') {
         this.num = 3
+      }
+      if (path.split('/')[2] === 'VolBlackList') {
+        this.num = 5
+      }
+      if (path.split('/')[2] === 'VolSetting') {
+        this.num = 6
       }
     })
   },

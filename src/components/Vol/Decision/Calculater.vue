@@ -187,6 +187,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.animated {
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+}
 .calculater {
   background: #fff;
   height: 100%;

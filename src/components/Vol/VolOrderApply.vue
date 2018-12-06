@@ -28,6 +28,7 @@ export default {
 <style lang="less" scoped>
 .VolOrderApply {
   height: calc(100% - 100px);
+  position: relative;
   .content {
     margin-left: 360px;
     margin-right: 34px;

@@ -1,7 +1,10 @@
 <template>
   <!-- 侧边栏 -->
   <div class="sidebar animated bounceInLeft">
-    <div class="img" style="background: #497777;height: 100px;"></div>
+    <div class="img"  v-if="!fromVol">
+      <img src="../../assets/img/barheader.png" alt="">
+    </div>
+    <div class="img"  v-if="fromVol" style="height: 100px;background: #FFC107;"></div>
     <div class="list" v-if="!fromVol">
       <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
     </div>

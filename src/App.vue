@@ -83,7 +83,7 @@ button {
 .el-pagination .el-pager li.active+li {
   border-left: 1px solid rgba(223,223,223,1);
 }
-.el-pager li:hover, .el-pagination button:hover {
+.el-pagination .el-pager li:hover, .el-pagination button:hover {
   background: #4977FC;
   color: #fff;
 }
@@ -100,7 +100,7 @@ button {
   background: #000000;
   color: #fff;
 }
-.Volbasic .el-pager li:hover, .el-pagination button:hover {
+.Volbasic .el-pagination .el-pager li:hover, .el-pagination button:hover {
   background: #000000;
   color: #fff;
 }

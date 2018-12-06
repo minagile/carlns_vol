@@ -2,7 +2,9 @@
   <div class="basic">
     <header>
       <div class="tab">
-        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
+        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)">
+          <a><img :src="o.img" alt="">{{ o.label }}</a>
+        </li>
         <div class="header-img">
           <div class="img">
             <img src="../../assets/logo.png" alt="">
@@ -16,33 +18,34 @@
 </template>
 
 <script>
+import { Topbar } from '../../assets/js/img.js'
 export default {
   name: 'Basic',
   data () {
     return {
       tabList: [
         {
-          img: '',
+          img: Topbar.home,
           label: '首页',
           href: 'HomePage'
         },
         {
-          img: '',
+          img: Topbar.policy,
           label: '保单管理',
           href: 'DebitNote'
         },
         {
-          img: '',
+          img: Topbar.stage,
           label: '已分期',
           href: 'StageList'
         },
         {
-          img: '',
+          img: Topbar.decision,
           label: '决策支持',
           href: 'Decision'
         },
         {
-          img: '',
+          img: Topbar.setting,
           label: '系统设置',
           href: 'Setting'
         }
@@ -75,14 +78,18 @@ export default {
 
 <style lang="less" scoped>
 .basic {
+  .el-pagination .el-pager li:hover, .el-pagination button:hover {
+    background: #4977FC;
+    color: #fff;
+  }
   height: calc(100% - 48px);
-  // background: #EAEFF3;
-  background: #4977FC;
+  background: #EAEFF3 url(../../assets/img/homebg.png) no-repeat;
+  // background: #4977FC;
   padding: 0 0 48px;
   overflow: auto;
   header {
     height: 100px;
-    background: #4977FC;
+    // background: #4977FC;
     .tab {
       overflow: hidden;
       padding-top: 20px;
@@ -91,7 +98,7 @@ export default {
         float: left;
         line-height: 50px;
         border-radius: 50px;
-        margin-right: 20px;
+        margin-right: 10px;
         &.active {
           background: #C9D6FE50;
         }
@@ -102,6 +109,11 @@ export default {
           padding: 0 40px;
           color: #fff;
           font-size: 20px;
+          img {
+            vertical-align: middle;
+            margin-right: 4px;
+            margin-top: -4px;
+          }
         }
       }
       .header-img {

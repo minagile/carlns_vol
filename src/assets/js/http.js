@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 
 axios.defaults.timeout = 10000
 // axios.defaults.baseURL = 'http://192.168.1.136:80'
-axios.defaults.baseURL = 'http://192.168.1.145:80'
+axios.defaults.baseURL = 'http://192.168.1.136:80'
 // axios.defaults.baseURL = 'http://www.easyfq.com/carins'
 
 // http request 拦截器
@@ -16,6 +16,10 @@ axios.interceptors.request.use(
     config.headers = {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'token': '88C918CC2D6853466281A2F36EBB90BA'
+      // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      // 'token': token
+      // 'Accept': '*/*',
+      // 'token': token
     }
     // if (token) {
     //   config.params = { 'token': token }

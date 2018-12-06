@@ -131,7 +131,8 @@ export default {
     }
   },
   mounted () {
-    // this.getHomePage()
+    this.getHomePage()
+    // console.log(sessionStorage.getItem('token'))
   },
   methods: {
     changedMonth (e) {

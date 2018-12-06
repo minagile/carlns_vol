@@ -1,6 +1,19 @@
 <template>
   <!-- 黑名单列表 -->
   <div class="BlackList">
+    <div class="blackList-input">
+      <el-select v-model="value" placeholder="订单时间">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <input type="text">
+      <button>查询</button>
+      <button>清空</button>
+    </div>
     <div class="Amortized-sort">
       <span>排序</span>
       <el-select v-model="value" placeholder="请选择">
@@ -89,13 +102,11 @@ export default {
       margin: 0 10px;
     }
     button {
-      width:88px;
-      height:35px;
-      background:rgba(255,255,255,1);
-      border:1px solid rgba(232,232,232,1);
+      width:99px;
+      height:40px;
+      background:rgba(255,193,7,1);
       border-radius:4px;
       float: right;
-      color: #4977FC;
     }
   }
   .Amortized-table {
@@ -103,6 +114,30 @@ export default {
   }
   .el-pagination  {
     margin-top: 50px;
+  }
+  .blackList-input{
+    padding: 23px 3.44% 0 3.44%;
+    input {
+      width:32.16%;
+      height:40px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      border-radius:4px;
+      text-indent: 10px;
+    }
+    button:nth-of-type(1){
+      width:75px;
+      height:40px;
+      background:rgba(255,193,7,1);
+      border-radius:4px;
+    }
+    button:nth-of-type(2){
+      width:75px;
+      height:40px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      border-radius:4px;
+    }
   }
 }
 </style>

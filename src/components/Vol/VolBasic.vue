@@ -2,7 +2,9 @@
   <div class="Volbasic">
     <header>
       <div class="tab">
-        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
+        <ul>
+          <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
+        </ul>
         <div class="header-img">
           <p>用户名</p>
           <p>退出登录</p>
@@ -104,12 +106,18 @@ export default {
     .tab {
       overflow: hidden;
       padding-top: 20px;
-      padding-left: 340px;
+      // padding-left: 340px;
+      ul {
+        width: 880px;
+        margin: 0 auto;
+      }
       li {
         float: left;
         line-height: 50px;
         border-radius: 50px;
         margin-right: 20px;
+        width: 105px;
+        text-align: center;
         &.active {
           background: black;
           a {
@@ -123,7 +131,6 @@ export default {
           }
         }
         a {
-          padding: 0 40px;
           color: black;
           font-size: 20px;
         }

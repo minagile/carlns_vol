@@ -3,9 +3,9 @@
   <div class="VolInsuranceCancel">
     <Selector :vol="true"/>
 
-    <div class="header" style="width: 95%; margin: 0 auto">
+    <div class="header">
       <span>排序</span>
-      <el-select v-model="value" size="small" placeholder="请选择">
+      <el-select v-model="value" size="small" placeholder="序号正序">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -13,8 +13,8 @@
           :value="item.value">
         </el-option>
       </el-select>
-      <span>显示</span>
-      <el-select v-model="value" size="small" placeholder="请选择">
+      <span style="margin-left: 40px;margin-right: 20px;">显示</span>
+      <el-select v-model="value" size="small">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -23,33 +23,23 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <el-button size="small">刷新</el-button>
+      <el-button size="small">+ 新增退保</el-button>
     </div>
+
     <el-table
       ref="multipleTable"
       :data="tableData3"
       tooltip-effect="dark"
+      border
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
-      <el-table-column
-        label="日期"
-        width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-        show-overflow-tooltip>
-      </el-table-column>
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="date" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="name" label="车牌" width="180"></el-table-column>
+      <el-table-column prop="name" label="公司"></el-table-column>
+      <el-table-column prop="date" label="险种"></el-table-column>
+      <el-table-column prop="name" label="投保时间"></el-table-column>
+      <el-table-column prop="name" label="退保原因"></el-table-column>
     </el-table>
 
     <el-pagination
@@ -75,47 +65,8 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
       }],
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: [],
       value: ''
     }
   },
@@ -144,7 +95,14 @@ export default {
 }
 .VolInsuranceCancel {
   .header {
-    padding-bottom: 20px;
+    padding: 10px 0 30px 2.5%;
+    .el-button {
+      float: right;
+      margin-right: 2.5%;
+      background:rgba(255,193,7,1);
+      border-color:rgba(255,193,7,1);
+      border-radius:4px;
+    }
   }
 }
 </style>

@@ -14,18 +14,91 @@
     </table>
 
     <!-- 权限设置 -->
-    <el-dialog :visible.sync="childDialogVisible" width="770px">
+    <el-dialog :visible.sync="childDialogVisible" width="1000px">
       <div class="dialog-header">权限设置</div>
+      <div class="top">
+        <span>账号：123</span>
+        <el-button class="setBtn" size="small"  @click="childDialogVisible = false">返回</el-button>
+        <el-button class="setBtn" size="small">确定</el-button>
+      </div>
+      <el-table :data="tableData5" style="width: 100%">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-table :data="tableData5" style="width: 100%" :show-header="false">
+              <el-table-column>
+                <template slot-scope="scope">
+                  全部渠道
+                </template>
+              </el-table-column>
+              <el-table-column label="查看">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="checked"></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="添加">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="checked"></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="编辑">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="checked"></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="删除">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="checked"></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="全选">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="checked"></el-checkbox>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            全部渠道
+          </template>
+        </el-table-column>
+        <el-table-column label="查看">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checked"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="添加">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checked"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="编辑">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checked"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="删除">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checked"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="全选">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checked"></el-checkbox>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-dialog>
 
     <!-- 添加账号 -->
-    <el-dialog :visible.sync="centerDialogVisible" width="770px">
+    <el-dialog :visible.sync="centerDialogVisible" width="683px">
       <div class="dialog-header">添加账号</div>
       <el-form :model="form">
-        <el-form-item label="账号：" :label-width="formLabelWidth">
+        <el-form-item label="账号：" label-width="150px">
           <el-input v-model="form.name" autocomplete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
-        <el-form-item label="密码：" :label-width="formLabelWidth">
+        <el-form-item label="密码：" label-width="150px">
           <el-input v-model="form.name" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
@@ -43,6 +116,21 @@ export default {
   name: 'AccountManagement',
   data () {
     return {
+      checked: false,
+      tableData5: [
+        {
+          id: '12987122'
+        },
+        {
+          id: '12987122'
+        },
+        {
+          id: '12987122'
+        },
+        {
+          id: '12987122'
+        }
+      ],
       list: [
         {
           cont: '1234566'
@@ -106,6 +194,19 @@ export default {
         font-weight: normal;
         color: #fff;
         margin: 0 19px 0 31px;
+      }
+    }
+  }
+  .el-dialog {
+    .top {
+      overflow: hidden;
+      line-height: 32px;
+      .setBtn {
+        background: #282828;
+        color: #fff;
+        border-color: #282828;
+        float: right;
+        margin-left: 30px;
       }
     }
   }

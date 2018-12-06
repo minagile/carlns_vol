@@ -5,7 +5,7 @@
 
     <!-- table -->
     <table>
-      <tr v-for="(item, index) in list" :key="index">
+      <tr v-for="(item, index) in list" :key="index" class="tabletr">
         <td><div class="index">{{ index + 1 }}</div></td>
         <td>公司名称：{{ item.name }}</td>
         <td>地址：{{ item.adress }}</td>
@@ -15,8 +15,8 @@
         <td><el-button type="text" @click="childDialogVisible = true">添加子公司</el-button></td>
         <td><el-button type="text">编辑</el-button></td>
         <td>
-          <div class="zhankai" v-if="!item.expand" @click="item.expand = !item.expand">展开 <span></span></div>
-          <div class="shouqi" v-if="item.expand" @click="item.expand = !item.expand">收起 <span></span></div>
+          <div class="zhankai" v-if="!item.expand" @click="expand(item, index)">展开 <span></span></div>
+          <div class="shouqi" v-if="item.expand" @click="expand(item, index)">收起 <span></span></div>
         </td>
       </tr>
     </table>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import $ from 'jquery'
 export default {
   name: 'ChannelManagement',
   data () {
@@ -99,6 +100,22 @@ export default {
           expand: false
         }
       ],
+      childlist: [
+        {
+          name: 'xxx公司',
+          adress: '津滨大道',
+          people: '忘而',
+          phone: '1234566',
+          expand: false
+        },
+        {
+          name: 'xxx公司',
+          adress: '津滨大道',
+          people: '忘而',
+          phone: '1234566',
+          expand: false
+        }
+      ],
       childDialogVisible: false,
       centerDialogVisible: false,
       form: {
@@ -111,12 +128,42 @@ export default {
         resource: '',
         desc: ''
       },
-      formLabelWidth: '209px'
+      formLabelWidth: '209px',
+      num: 0
     }
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    expand (item, index) {
+      // this.num = index
+      var tr = $('.tabletr')
+      console.log(tr[index])
+      var element = `<tr class="childrenTr${index}">
+        <td></td>
+        <td>公司名称：</td>
+        <td>地址：</td>
+        <td>负责人：</td>
+        <td>联系方式：</td>
+        <td>账号：</td>
+        <td><el-button type="text">删除</el-button></td>
+        <td><el-button type="text">编辑</el-button></td>
+      </tr>`
+      if (item.expand === false) {
+        item.expand = true
+        tr[index].classList.add('tractive' + index)
+        $('.tractive' + index).after(element)
+      } else {
+        tr[index].classList.remove('tractive')
+        item.expand = false
+        $('.childrenTr').remove()
+      }
+      // tr[0].addclass
+      // console.log($('.qwe'))
+      // console.log(tr[0])
+      // $('.tractive').after('<b>Hello</b>')
+    }
+  }
 }
 </script>
 

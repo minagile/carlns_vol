@@ -114,6 +114,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import vueEventCalendar from 'vue-event-calendar'
+Vue.use(vueEventCalendar, {
+  locale: 'en',
+  color: '#FFC107'
+})
 export default {
   name: 'VolHomePage',
   data () {
@@ -237,9 +243,6 @@ export default {
 <style>
 .item {
   height: 45px;
-}
-.events-wrapper {
-  background-color: #4977FC!important;
 }
 .el-card__body{
   height: 395px;

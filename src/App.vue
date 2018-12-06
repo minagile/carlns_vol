@@ -57,6 +57,9 @@ button {
 }
 .el-pagination {
   text-align: center;
+  position: absolute;
+  width: 100%;
+  bottom: 20px;
 }
 .el-pagination button {
   border: 1px solid rgba(223,223,223,1);

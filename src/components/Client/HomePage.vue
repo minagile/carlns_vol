@@ -131,9 +131,16 @@ export default {
     }
   },
   mounted () {
+    this.getHomePage()
+    console.log(sessionStorage.getItem('token'))
   },
   methods: {
     changedMonth (e) {
+    },
+    getHomePage () {
+      this.$post('/admin/insertAdmin?phone=admin1&password=123456').then(res => {
+        console.log(res)
+      })
     }
   }
 }

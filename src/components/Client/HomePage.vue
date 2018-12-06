@@ -5,7 +5,9 @@
       <el-row class="home-header">
         <el-col :span="4" v-for="(o, i) in companyList" :key="i">
           <div class="grid-content">
-            <p>{{ o }}</p>
+            <p>{{ o.name }}</p>
+            <p>{{o.number}}<span>辆</span></p>
+            <p>查看全部</p>
           </div>
         </el-col>
       </el-row>
@@ -23,18 +25,29 @@
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
               </el-table-column>
             </el-table>
         </el-col>
@@ -44,25 +57,36 @@
             本周待还
           </div>
            <el-table
-              :data="tableData"
+              :data="tableData1"
               style="width: 100%">
               <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
               </el-table-column>
             </el-table>
         </el-col>
@@ -73,25 +97,40 @@
             逾期警告
           </div>
            <el-table
-              :data="tableData"
+              :data="tableData2"
               style="width: 100%">
               <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
+              </el-table-column>
+              <el-table-column
+                prop="daysOverdue"
+                label="逾期天数">
               </el-table-column>
             </el-table>
         </el-col>
@@ -117,6 +156,9 @@ export default {
       companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
       // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
       tableData: [],
+      tableData1: [],
+      tableData2: [],
+      channel: [],
       demoEvents: [
         {
           date: '2018/12/15',
@@ -138,11 +180,26 @@ export default {
     changedMonth (e) {
     },
     getHomePage () {
-      this.$post('/admin/insertAdmin', {
-        phone: 'admin1',
-        password: '123456'
+      this.$fetch('/homePage_c/accountPayable', {
+        'channelId': '1'
       }).then(res => {
-        console.log(res)
+        this.tableData = res.data
+      })
+      this.$fetch('/homePage_c/thisWeek', {
+        'channelId': '1'
+      }).then(res => {
+        this.tableData1 = res.data
+      })
+      this.$fetch('/homePage_c/overdue', {
+        'channelId': '1'
+      }).then(res => {
+        this.tableData2 = res.data
+      })
+      this.$fetch('/homePage_c/vehicle', {
+        'channelId': '1'
+      }).then(res => {
+        this.companyList = res.data
+        console.log(this.tableData2)
       })
     }
   }
@@ -171,11 +228,24 @@ export default {
   box-shadow:0px 12px 36px 0px rgba(211,215,221,0.4);
   border-radius:5px;
   color: #1C1A1D;
-  p {
-    line-height: 50px;
+  p:nth-of-type(1) {
+    padding-top: 20px;
     font-size: 16px;
     text-indent: 30px;
   }
+  p:nth-of-type(2) {
+    font-size: 16px;
+    text-indent: 30px;
+    font-size: 45px;
+    span {
+      font-size: 16px;
+    }
+  }
+  p:nth-of-type(3) {
+    float: right;
+    padding-right: 10px;
+  }
+  
 }
 .home_page {
   background: #fff;

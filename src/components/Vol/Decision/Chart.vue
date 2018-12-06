@@ -16,7 +16,27 @@
         <button :class="{active : num1 === 0}" @click="changeChart(0)">ss</button>
         <button :class="{active : num1 === 1}" @click="changeChart(1)">ss</button>
       </div>
-      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0"></div>
+
+      <el-table
+        :data="tableData"
+        height="250"
+        border
+        style="width: 60.38%;margin: 100px auto 0 auto;"
+        v-show="num1 === 1">
+        <el-table-column
+          prop="date"
+          label="渠道">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="销售额">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="合计">
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -38,7 +58,8 @@ export default {
     return {
       btnList: ['分期总金额', '还款总金额', '渠道占比', '还款率', '逾期率', '退保率', '险种占比'],
       num: 0,
-      num1: 0
+      num1: 0,
+      tableData: []
     }
   },
   mounted () {

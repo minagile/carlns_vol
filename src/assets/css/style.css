@@ -246,3 +246,39 @@
   padding:0
 }
 /*# sourceMappingURL=style.css.map*/
+
+
+.el-dialog {
+  position: relative;
+}
+.el-dialog .dialog-header {
+  background: #FFC107;
+  position: absolute;
+  width: 100%;
+  height: 38px;
+  line-height: 38px;
+  left: 0;
+  top: 0;
+  font-size:18px;
+  font-family:MicrosoftYaHei-Bold;
+  font-weight:bold;
+  color:rgba(40,40,40,1);
+  text-indent: 20px;
+}
+.el-dialog .el-input {
+  width: 405px;
+}
+.el-dialog .dialog-footer {
+  text-align: center;
+}
+.el-dialog .dialog-footer .cancel {
+  color: #282828;
+  background: #fff;
+  border-color: #282828;
+}
+.el-dialog .dialog-footer .submit {
+  background: #282828;
+  color: #fff;
+  margin-left: 166px;
+  border-color:#282828;
+}

@@ -2,9 +2,11 @@
   <div class="basic">
     <header>
       <div class="tab">
-        <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)">
-          <a><img :src="o.img" alt="">{{ o.label }}</a>
-        </li>
+        <ul>
+          <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)">
+            <a><img :src="o.img" alt="">{{ o.label }}</a>
+          </li>
+        </ul>
         <div class="header-img">
           <div class="img">
             <img src="../../assets/logo.png" alt="">
@@ -93,7 +95,11 @@ export default {
     .tab {
       overflow: hidden;
       padding-top: 20px;
-      padding-left: 340px;
+      // padding-left: 340px;
+      ul {
+        width: 950px;
+        margin: 0 auto;
+      }
       li {
         float: left;
         line-height: 50px;

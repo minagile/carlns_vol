@@ -25,20 +25,22 @@
       <button>刷新</button>
     </div>
 
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="date" label="车牌" width="180"></el-table-column>
-      <el-table-column prop="name" label="批次"></el-table-column>
-      <el-table-column prop="date" label="公司名称"></el-table-column>
-      <el-table-column prop="name" label="投保时间"></el-table-column>
-      <el-table-column prop="name" label="保单"></el-table-column>
-      <el-table-column prop="name" label="发票"></el-table-column>
-      <el-table-column>
-        <template slot-scope="scope">
-          <el-button type="text">查看详情</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="Amortized-table">
+      <el-table :data="tableData" border style="width: 100%">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="date" label="车牌" width="180"></el-table-column>
+        <el-table-column prop="name" label="批次"></el-table-column>
+        <el-table-column prop="date" label="公司名称"></el-table-column>
+        <el-table-column prop="name" label="投保时间"></el-table-column>
+        <el-table-column prop="name" label="保单"></el-table-column>
+        <el-table-column prop="name" label="发票"></el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <el-button type="text">查看详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <el-pagination
       @size-change="handleSizeChange"

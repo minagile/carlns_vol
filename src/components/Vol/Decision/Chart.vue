@@ -24,18 +24,9 @@
         border
         style="width: 60.38%;margin: 100px auto 0 auto;"
         v-show="num1 === 1">
-        <el-table-column
-          prop="date"
-          label="渠道">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="销售额">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="合计">
-        </el-table-column>
+        <el-table-column prop="date" label="渠道"></el-table-column>
+        <el-table-column prop="name" label="销售额"></el-table-column>
+        <el-table-column prop="address" label="合计"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -66,6 +57,11 @@ export default {
     this.getEchart()
   },
   methods: {
+    getData () {
+      this.$fetch('/CoverageOf').then(res => {
+        console.log(res)
+      })
+    },
     tab (e) {
       this.num = e
     },

@@ -18,6 +18,7 @@
           <div class="zhankai" v-if="!item.expand" @click="expand(item, index)">展开 <span></span></div>
           <div class="shouqi" v-if="item.expand" @click="expand(item, index)">收起 <span></span></div>
         </td>
+        <div>fdgjdgjfdjgbf;od</div>
       </tr>
     </table>
 

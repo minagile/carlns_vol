@@ -130,7 +130,8 @@
               </el-table-column>
               <el-table-column
                 prop="daysOverdue"
-                label="逾期天数">
+                label="逾期天数"
+                class-name="yuqi">
               </el-table-column>
             </el-table>
         </el-col>
@@ -245,7 +246,6 @@ export default {
     float: right;
     padding-right: 10px;
   }
-  
 }
 .home_page {
   background: #fff;
@@ -304,5 +304,8 @@ export default {
 .el-card__body{
   height: 395px;
   overflow: auto;
+}
+.yuqi {
+  color: red;
 }
 </style>

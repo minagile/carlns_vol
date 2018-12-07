@@ -201,6 +201,7 @@ export default {
     .top {
       overflow: hidden;
       line-height: 32px;
+      padding: 0 20px;
       .setBtn {
         background: #282828;
         color: #fff;

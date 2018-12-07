@@ -113,39 +113,6 @@ export default {
       orderList: [
         {
           name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
-        },
-        {
-          name: 123
         }
       ]
     }

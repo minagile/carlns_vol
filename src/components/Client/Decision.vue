@@ -1,8 +1,8 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    <selector :all="true"></selector>
-    <chart></chart>
+    <selector :all="true" @giveParams="allTime" :channelList="channelList"></selector>
+    <chart @getChartData="getChartData" :chartData="chartData"></chart>
   </div>
 </template>
 
@@ -13,11 +13,49 @@ export default {
   name: 'Decision',
   data () {
     return {
+      selectData: {},
+      chartData: [],
+      channelList: []
     }
   },
-  mounted () {
+  created () {
+    this.getChartData('TotalAmountInStages', this.selectData)
+    this.getChannelList()
   },
-  methods: {},
+  methods: {
+    allTime (data) {
+      if (data.selectChannel === '' && data.startTime !== '') {
+        this.selectData = {
+          startTime: data.startTime,
+          endTime: data.endTime
+        }
+      } else if (data.startTime === '' && data.selectChannel !== '') {
+        this.selectData = {
+          channelId: data.selectChannel
+        }
+      } else if (data.startTime && data.selectChannel !== '') {
+        this.selectData = {
+          startTime: data.startTime,
+          endTime: data.endTime,
+          channelId: data.selectChannel
+        }
+      } else {
+        this.selectData = {}
+      }
+      this.getChartData(this.url, this.selectData)
+    },
+    getChartData (data, params) {
+      this.url = data
+      this.$post(`/user/report/${data}`, params).then(res => {
+        this.chartData = res
+      })
+    },
+    getChannelList () {
+      this.$fetch('/user/report/getChannelName').then(res => {
+        this.channelList = res
+      })
+    }
+  },
   components: {
     Selector,
     Chart

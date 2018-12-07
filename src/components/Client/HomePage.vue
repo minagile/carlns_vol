@@ -159,7 +159,7 @@ export default {
       tableData: [],
       tableData1: [],
       tableData2: [],
-      channel: [],
+      channel: '1',
       demoEvents: [
         {
           date: '2018/12/15',
@@ -182,22 +182,22 @@ export default {
     },
     getHomePage () {
       this.$fetch('/homePage_c/accountPayable', {
-        'channelId': '1'
+        'channelId': this.channel
       }).then(res => {
         this.tableData = res.data
       })
       this.$fetch('/homePage_c/thisWeek', {
-        'channelId': '1'
+        'channelId': this.channel
       }).then(res => {
         this.tableData1 = res.data
       })
       this.$fetch('/homePage_c/overdue', {
-        'channelId': '1'
+        'channelId': this.channel
       }).then(res => {
         this.tableData2 = res.data
       })
       this.$fetch('/homePage_c/vehicle', {
-        'channelId': '1'
+        'channelId': this.channel
       }).then(res => {
         this.companyList = res.data
         console.log(this.tableData2)

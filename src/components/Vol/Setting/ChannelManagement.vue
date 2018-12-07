@@ -119,49 +119,59 @@ export default {
       childDialogVisible: false,
       centerDialogVisible: false,
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        name: ''
       },
-      formLabelWidth: '209px',
-      num: 0
+      formLabelWidth: '209px'
     }
   },
   mounted () {
   },
   methods: {
+    // 展开收起
     expand (item, index) {
       // this.num = index
       var tr = $('.tabletr')
-      console.log(tr[index])
-      var element = `<tr class="childrenTr${index}">
+      // console.log(tr[index])
+      var element = `<tr class="sonList childrenTr${index}" style="height: 50px;border-bottom:2px solid #f2f2f2;color:#666;">
         <td></td>
         <td>公司名称：</td>
-        <td>地址：</td>
-        <td>负责人：</td>
+        <td colspan="2" style="text-align:center;">负责人：</td>
+        <td style="text-align:center;">地址：</td>
         <td>联系方式：</td>
-        <td>账号：</td>
-        <td><el-button type="text">删除</el-button></td>
-        <td><el-button type="text">编辑</el-button></td>
+        <td><button style="background: #fff;color:#4977FC;">删除</button></td>
+        <td><button style="background: #fff;color:#4977FC;">编辑</button></td>
+        <td></td>
       </tr>`
       if (item.expand === false) {
         item.expand = true
         tr[index].classList.add('tractive' + index)
         $('.tractive' + index).after(element)
+        $('button').on('click', e => {
+          console.log(e)
+          this.delt()
+        })
       } else {
-        tr[index].classList.remove('tractive')
+        // tr[index].classList.remove('childrenTr')
         item.expand = false
-        $('.childrenTr').remove()
+        $('.childrenTr' + index).remove()
       }
-      // tr[0].addclass
-      // console.log($('.qwe'))
-      // console.log(tr[0])
-      // $('.tractive').after('<b>Hello</b>')
+    },
+    delt () {
+      this.$confirm('是否删除这个子公司？', '删除子公司', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '删除',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.$message({
+          type: 'info',
+          message: '已删除成功'
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: '取消删除'
+        })
+      })
     }
   }
 }

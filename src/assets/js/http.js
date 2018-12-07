@@ -15,10 +15,10 @@ axios.interceptors.request.use(
     const token = sessionStorage.getItem('token')
     // config.data = JSON.stringify(config.data)
     config.headers = {
-      'Content-Type': 'application/json;charset=UTF-8',
+      // 'Content-Type': 'application/json;charset=UTF-8',
       'token': token,
-      'Accept': '*/*'
-      // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Accept': '*/*',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       // 'token': token
       // 'Accept': '*/*',
       // 'token': token

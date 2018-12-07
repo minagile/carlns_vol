@@ -42,11 +42,11 @@ export default {
       } else {
         this.selectData = {}
       }
-      this.getChartData(this.url, this.selectData)
+      this.getChartData(this.url)
     },
-    getChartData (data, params) {
+    getChartData (data) {
       this.url = data
-      this.$post(`/user/report/${data}`, params).then(res => {
+      this.$post(`/user/report/${data}`, this.selectData).then(res => {
         this.chartData = res
       })
     },

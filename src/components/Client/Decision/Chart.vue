@@ -10,7 +10,8 @@
         {{btn.name}}
       </button>
     </div>
-    <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main" v-show="this.url !== 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -71,11 +72,21 @@ export default {
     chartData (val) {
       let chartX = []
       let chartY = []
-      this.chartData.forEach(v => {
-        chartX.push(v.channelName)
-        chartY.push(v.price)
-      })
-      this.getEchart(chartX, chartY)
+      let chartYY = []
+      if (this.url === 'CoverageOf') {
+        this.chartData.forEach(v => {
+          chartX.push(v.channelName)
+          chartY.push(v.carrtafficRate)
+          chartYY.push(v.commercialRate)
+        })
+        this.getEchartDb(chartX, chartY, chartYY)
+      } else {
+        this.chartData.forEach(v => {
+          chartX.push(v.channelName)
+          chartY.push(v.price)
+        })
+        this.getEchart(chartX, chartY)
+      }
     }
   },
   methods: {
@@ -88,7 +99,7 @@ export default {
       this.$emit('getChartData', data)
     },
     getEchart (x, y) {
-      var myChart = echarts.init(document.getElementById('main'))
+      let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -151,6 +162,89 @@ export default {
                   return colorList[params.dataIndex]
                 }
               }
+            }
+          }
+        ]
+      })
+    },
+    getEchartDb (x, y, yy) {
+      const label = {
+        show: true,
+        rotate: 90,
+        position: 'insideBottom',
+        offset: [5, -50]
+      }
+      let myChart1 = echarts.init(document.getElementById('main1'))
+      myChart1.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: x,
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '销售额',
+            nameTextStyle: {
+              color: '#666666'
+            },
+            nameGap: 24,
+            axisLine: {
+              lineStyle: {
+                color: '#C6C8C9'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#666666'
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: '交强险占比',
+            type: 'bar',
+            barWidth: '30%',
+            data: y,
+            label: label,
+            barWidth: 30,
+            itemStyle: {
+              color: '#5F72B4'
+            }
+          },
+          {
+            name: '商业险占比',
+            type: 'bar',
+            barWidth: '30%',
+            data: yy,
+            label: label,
+            barWidth: 30,
+            itemStyle: {
+              color: '#FE6F5F'
             }
           }
         ]

@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       startTime: '',
-      endTime: new Date(),
+      endTime: '',
       selectChannel: ''
     }
   },

@@ -1,47 +1,37 @@
 <template>
   <div class="Selector">
     <div class="Selector-main">
-      <button class="all" :class="{isVol : vol == 1}" v-if="all">全部时间</button>
-
-      <el-select v-model="value" placeholder="订单时间">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      -
+      <button class="all" :class="{isVol : vol == 1}" v-if="all" @click="clearTime(0, 0)">全部时间</button>
       <el-date-picker
-        v-model="value1"
+        v-model="startTime"
         type="date"
-        placeholder="选择日期">
+        placeholder="选择日期"
+        value-format="yyyy-MM-dd">
       </el-date-picker>
       -
       <el-date-picker
-        v-model="value1"
+        v-model="endTime"
         type="date"
-        placeholder="选择日期">
+        placeholder="选择日期"
+        value-format="yyyy-MM-dd">
       </el-date-picker>
 
-      <button class="span" @click="clearTime">清除</button>
+      <button class="span" @click="clearTime(0)">清除</button>
     </div>
 
     <div class="Selector-main">
-      <button class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
+      <button @click="clearTime(1, 0)" class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
 
-      <el-select v-model="value" placeholder="选择渠道">
+      <el-select v-model="selectChannel" placeholder="选择渠道">
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          v-for="item in channelList"
+          :key="item.channelId"
+          :label="item.channelName"
+          :value="item.channelId">
         </el-option>
       </el-select>
-      -
-      <input type="text">
-      <button class="search" :class="{isVolS : vol == 1}">查询</button>
-      <button class="clear">清空</button>
+      <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
+      <button class="clear" @click="clearTime(1)">清空</button>
     </div>
   </div>
 </template>
@@ -51,21 +41,32 @@ export default {
   name: 'Selector',
   data () {
     return {
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        }
-      ],
-      value1: '',
-      value: ''
+      startTime: '',
+      endTime: new Date(),
+      selectChannel: ''
     }
   },
   mounted () {
   },
   methods: {
-    clearTime () {
-      console.log('1')
+    clearTime (msg, data) {
+      if (msg === 0) {
+        this.startTime = ''
+        this.endTime = ''
+      } else {
+        this.selectChannel = ''
+      }
+      if (data === 0) {
+        this.giveParams()
+      }
+    },
+    giveParams () { // 彭可润接口，选择全部时间时，时间字段的值不能为空，要去除时间的字段
+      let selectData = {
+        startTime: this.startTime,
+        endTime: this.endTime,
+        selectChannel: this.selectChannel
+      }
+      this.$emit('giveParams', selectData)
     }
   },
   props: {
@@ -76,6 +77,9 @@ export default {
     vol: {
       type: Boolean,
       default: false
+    },
+    channelList: {
+      type: Array
     }
   }
 }

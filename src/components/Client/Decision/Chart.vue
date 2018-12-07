@@ -5,9 +5,9 @@
         v-for="(btn, index) in btnList"
         :key="index"
         :class="{active : num == index}"
-        @click="tab(index)"
+        @click="tab(index, btn.url)"
       >
-        {{btn}}
+        {{btn.name}}
       </button>
     </div>
     <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
@@ -28,18 +28,66 @@ export default {
   name: 'Chart',
   data () {
     return {
-      btnList: ['分期总金额', '还款总金额', '渠道占比', '还款率', '逾期率', '退保率', '险种占比'],
-      num: 0
+      btnList: [
+        {
+          name: '分期总金额',
+          url: 'TotalAmountInStages'
+        },
+        {
+          name: '还款总金额',
+          url: 'TotalAmountOfRepayment'
+        },
+        {
+          name: '渠道占比',
+          url: 'ChannelsOf'
+        },
+        {
+          name: '还款率',
+          url: 'RepaymentRate'
+        },
+        {
+          name: '逾期率',
+          url: 'OverdueRate'
+        },
+        {
+          name: '退保率',
+          url: 'SurrenderRate'
+        },
+        {
+          name: '险种占比',
+          url: 'CoverageOf'
+        }
+      ],
+      num: 0,
+      url: ''
     }
   },
-  mounted () {
-    this.getEchart()
+  props: {
+    chartData: {
+      type: Array
+    }
+  },
+  watch: {
+    chartData (val) {
+      let chartX = []
+      let chartY = []
+      this.chartData.forEach(v => {
+        chartX.push(v.channelName)
+        chartY.push(v.price)
+      })
+      this.getEchart(chartX, chartY)
+    }
   },
   methods: {
-    tab (e) {
-      this.num = e
+    tab (index, url) {
+      this.num = index
+      this.getData(url)
     },
-    getEchart () {
+    getData (data) {
+      this.url = data
+      this.$emit('getChartData', data)
+    },
+    getEchart (x, y) {
       var myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         tooltip: {
@@ -57,7 +105,7 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu'],
+            data: x,
             axisTick: {
               alignWithLabel: true
             }
@@ -95,7 +143,7 @@ export default {
             name: '直接访问',
             type: 'bar',
             barWidth: '30%',
-            data: [10, 52, 200, 334],
+            data: y,
             itemStyle: {
               normal: {
                 color: function (params) {

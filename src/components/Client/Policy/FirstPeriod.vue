@@ -25,30 +25,24 @@
       <span>条</span>
       <el-button size="small">刷新</el-button>
     </div>
+    
     <el-table
       ref="multipleTable"
       :data="tableData3"
-      tooltip-effect="dark"
+      tooltip-effect="light"
+      border
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
-      <el-table-column
-        label="日期"
-        width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-        show-overflow-tooltip>
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="date" label="订单号" width="120"></el-table-column>
+      <el-table-column prop="date" label="公司名称" width="120"></el-table-column>
+      <el-table-column prop="date" label="车辆数" width="120"></el-table-column>
+      <el-table-column prop="date" label="险种" width ="120"></el-table-column>
+      <el-table-column prop="name" label="投保时间" width="120"></el-table-column>
+      <el-table-column label="支付操作">
+        <template slot-scope="scope">
+          已支付
+        </template>
       </el-table-column>
     </el-table>
 

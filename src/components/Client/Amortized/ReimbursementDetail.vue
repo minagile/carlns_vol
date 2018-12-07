@@ -26,29 +26,23 @@
       <button>刷新</button>
     </div>
 
-    <el-table
-      :data="tableData"
-      border
-      style="width: 95%; margin: 0 auto;border: 1px solid #eee">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
-      </el-table-column>
-    </el-table>
+    <div class="Amortized-table">
+      <el-table :data="tableData" border style="width: 100%">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="date" label="订单号" width="180"></el-table-column>
+        <el-table-column prop="name" label="公司名称" width="180"></el-table-column>
+        <el-table-column prop="name" label="车辆数"></el-table-column>
+        <el-table-column prop="date" label="投保时间"></el-table-column>
+        <el-table-column prop="name" label="车投保金额"></el-table-column>
+        <el-table-column prop="name" label="车险种"></el-table-column>
+        <el-table-column prop="name" label="分期状态"></el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <el-button type="text">查看详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <el-pagination
       @size-change="handleSizeChange"

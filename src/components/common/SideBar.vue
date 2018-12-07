@@ -7,11 +7,11 @@
     <div class="img"  v-if="fromVol" style="height: 100px;background: #FFC107;"></div>
     <div class="list" v-if="!fromVol">
       <!-- <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li> -->
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="o.img" alt="">{{ o.label }}</li>
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="num === i ? o.aimg : o.img">{{ o.label }}</li>
     </div>
     <div class="list vol" v-if="fromVol">
       <!-- <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li> -->
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="o.img" alt="">{{ o.label }}</li>
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="num === i ? o.vaimg : o.img">{{ o.label }}</li>
     </div>
   </div>
 </template>
@@ -25,30 +25,40 @@ export default {
       tabList: [
         {
           img: list.list1,
+          aimg: list.List1,
+          vaimg: list.llist1,
           label: '缴费通知单列表',
           href: 'DebitNote',
           vhref: 'VolDebitNote'
         },
         {
           img: list.list2,
+          aimg: list.List2,
+          vaimg: list.llist2,
           label: '报价单列表',
           href: 'Quotation',
           vhref: 'VolQuotation'
         },
         {
           img: list.list3,
+          aimg: list.List3,
+          vaimg: list.llist3,
           label: '保单首期支付结果列表',
           href: 'FirstPeriod',
           vhref: 'VolFirstPeriod'
         },
         {
           img: list.list4,
+          aimg: list.List4,
+          vaimg: list.llist4,
           label: '付款计划表列表',
           href: 'PaymentSchedule',
           vhref: 'VolPaymentSchedule'
         },
         {
           img: list.list5,
+          aimg: list.List5,
+          vaimg: list.llist5,
           label: '退保保单列表',
           href: 'InsuranceCancel',
           vhref: 'VolInsuranceCancel'
@@ -56,19 +66,25 @@ export default {
       ],
       stagingList: [
         {
-          img: '',
+          img: list.list1,
+          aimg: list.List1,
+          vaimg: list.llist1,
           label: '已分期列表',
           href: 'StageList',
           vhref: 'VolStageList'
         },
         {
-          img: '',
+          img: list.list5,
+          aimg: list.List5,
+          vaimg: list.llist5,
           label: '还款明细',
           href: 'ReimbursementDetail',
           vhref: 'VolReimbursementDetail'
         },
         {
-          img: '',
+          img: list.list2,
+          aimg: list.List2,
+          vaimg: list.llist2,
           label: '保单及发票管理',
           href: 'PolicyAndInvoice',
           vhref: 'VolPolicyAndInvoice'
@@ -76,31 +92,36 @@ export default {
       ],
       orderList: [
         {
-          img: '',
+          img: list.list1,
+          vaimg: list.llist1,
           label: '生成报价单',
           vhref: 'QuotationOrder'
         },
         {
-          img: '',
+          img: list.list5,
+          vaimg: list.llist5,
           label: '制作付款计划表',
           vhref: 'MakePayment'
         }
       ],
       blackList: [
         {
-          img: '',
+          img: list.list1,
+          vaimg: list.llist1,
           label: '黑名单列表',
           vhref: 'BlackList'
         }
       ],
       settingList: [
         {
-          img: '',
+          img: list.list6,
+          vaimg: list.llist6,
           label: '渠道管理',
           vhref: 'ChannelManagement'
         },
         {
-          img: '',
+          img: list.list1,
+          vaimg: list.llist1,
           label: '帐号管理',
           vhref: 'AccountManagement'
         }
@@ -163,9 +184,15 @@ export default {
       font-weight: 400;
       color:rgba(89,89,89,1);
       line-height: 60px;
-      text-indent: 72px;
+      text-indent: 25px;
       margin: 43px 0;
       cursor: pointer;
+      img {
+        vertical-align: middle;
+        margin-right: 28px;
+        margin-top: -3px;
+        width: 18px;
+      }
       &.active {
         color:rgba(73,119,252,1);
         background:rgba(73,119,252,0.1);

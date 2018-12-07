@@ -245,7 +245,6 @@ export default {
     float: right;
     padding-right: 10px;
   }
-  
 }
 .home_page {
   background: #fff;

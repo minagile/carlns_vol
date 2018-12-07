@@ -42,6 +42,7 @@
       <el-table-column prop="name" label="退保原因"></el-table-column>
     </el-table>
 
+    <!-- 分页 -->
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -51,6 +52,11 @@
       layout="prev, pager, next, total, jumper"
       :total="400">
     </el-pagination>
+
+    <!-- 新增退保 -->
+    <el-dialog :visible.sync="centerDialogVisible" width="760px">
+      <div class="dialog-header">新增退保</div>
+    </el-dialog>
   </div>
 </template>
 
@@ -60,6 +66,7 @@ export default {
   name: 'VolInsuranceCancel',
   data () {
     return {
+      centerDialogVisible: true,
       currentPage4: 1,
       tableData3: [{
         date: '2016-05-03',

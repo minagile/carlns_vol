@@ -2,7 +2,7 @@
   <!-- 黑名单列表 -->
   <div class="BlackList">
     <div class="blackList-input">
-      <el-select v-model="value" placeholder="订单时间">
+      <el-select v-model="value" placeholder="按公司名称：">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -34,7 +34,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <button>刷新</button>
+      <button @click="centerDialogVisible = true">+ 新增</button>
     </div>
 
     <div class="Amortized-table">
@@ -42,26 +42,48 @@
         :data="tableData"
         border
         style="width: 100%">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="date" label="序号"  width="180"></el-table-column>
+        <el-table-column prop="name" label="公司名称" width="180"></el-table-column>
+        <el-table-column prop="address" label="联系地址"></el-table-column>
+        <el-table-column prop="address" label="联系方式"></el-table-column>
+        <el-table-column prop="address" label="邮箱"></el-table-column>
+        <el-table-column prop="address" label="添加时间"></el-table-column>
+        <el-table-column prop="address" label="加入原因"></el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <el-button type="text">编辑</el-button>
+            <el-button type="text">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新增 -->
+    <el-dialog :visible.sync="centerDialogVisible" width="770px">
+      <div class="dialog-header">新增</div>
+      <el-form :model="form">
+        <el-form-item label="公司名称：" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司名称"></el-input>
+        </el-form-item>
+        <el-form-item label="联系地址：" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司地址"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式：" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入联系方式"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱：" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入账号"></el-input>
+        </el-form-item>
+        <el-form-item label="添加原因：" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button class="cancel" @click="centerDialogVisible = false">取 消</el-button>
+        <el-button class="submit" type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -72,6 +94,11 @@ export default {
     return {
       options: [],
       value: '',
+      centerDialogVisible: false,
+      form: {
+        name: ''
+      },
+      formLabelWidth: '209px',
       tableData: [
         {
           date: '2016-05-02',

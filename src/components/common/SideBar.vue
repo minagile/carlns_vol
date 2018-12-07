@@ -6,46 +6,49 @@
     </div>
     <div class="img"  v-if="fromVol" style="height: 100px;background: #FFC107;"></div>
     <div class="list" v-if="!fromVol">
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
+      <!-- <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li> -->
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="o.img" alt="">{{ o.label }}</li>
     </div>
     <div class="list vol" v-if="fromVol">
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li>
+      <!-- <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li> -->
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="o.img" alt="">{{ o.label }}</li>
     </div>
   </div>
 </template>
 
 <script>
+import { list } from '../../assets/js/img.js'
 export default {
   name: 'SideBar',
   data () {
     return {
       tabList: [
         {
-          img: '',
+          img: list.list1,
           label: '缴费通知单列表',
           href: 'DebitNote',
           vhref: 'VolDebitNote'
         },
         {
-          img: '',
+          img: list.list2,
           label: '报价单列表',
           href: 'Quotation',
           vhref: 'VolQuotation'
         },
         {
-          img: '',
+          img: list.list3,
           label: '保单首期支付结果列表',
           href: 'FirstPeriod',
           vhref: 'VolFirstPeriod'
         },
         {
-          img: '',
+          img: list.list4,
           label: '付款计划表列表',
           href: 'PaymentSchedule',
           vhref: 'VolPaymentSchedule'
         },
         {
-          img: '<i class="iconfont"></i>',
+          img: list.list5,
           label: '退保保单列表',
           href: 'InsuranceCancel',
           vhref: 'VolInsuranceCancel'

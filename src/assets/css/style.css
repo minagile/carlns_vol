@@ -265,7 +265,7 @@
   color:rgba(40,40,40,1);
   text-indent: 20px;
 }
-.el-dialog .el-input {
+.el-dialog .el-form .el-input {
   width: 405px;
 }
 .el-dialog .dialog-footer {
@@ -281,4 +281,27 @@
   color: #fff;
   margin-left: 166px;
   border-color:#282828;
+}
+
+.el-dialog__body {
+  padding: 30px 0;
+}
+
+/* 按钮 */
+.el-button:hover, .el-button:focus {
+  background: #fff;
+  border-color: #D9D9D9;
+  color: #333;
+}
+.el-button.yellow, .el-button.yellow:hover, .el-button.yellow:focus {
+  background: #FFC107;
+  border-color: #FFC107;
+  color: #282828;
+}
+.el-button--text {
+  color: #4977FC;
+}
+.el-button--text:hover,  .el-button--text:focus{
+  color: #4977FC;
+  border-color: #fff;
 }

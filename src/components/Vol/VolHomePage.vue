@@ -17,6 +17,7 @@
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/vimg/first.png" alt="">
             首期应付款
           </div>
            <el-table
@@ -45,6 +46,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/vimg/thisweek.png" alt="">
             本周待还
           </div>
            <el-table
@@ -74,6 +76,7 @@
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/vimg/danger.png" alt="">
             逾期警告
           </div>
            <el-table
@@ -102,6 +105,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/vimg/calender.png" alt="">
             还款日历
           </div>
           <el-card class="box-card" :body-style="{ padding: '0px' }">
@@ -184,6 +188,9 @@ export default {
   border-radius: 16px;
   margin: 0 34px;
   padding-top: 23px;
+  img {
+    vertical-align: middle;
+  }
   .xuanze {
     width:353px;
     height:56px;

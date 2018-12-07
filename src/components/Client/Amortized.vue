@@ -37,6 +37,7 @@ export default {
     border-radius: 16px;
     height: 100%;
     animation: mymove 1s cubic-bezier(.28,1.41,1,1.1) normal;
+    position: relative;
   }
 }
 @keyframes mymove {

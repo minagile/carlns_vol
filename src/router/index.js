@@ -27,6 +27,7 @@ import VolAmortized from '@/components/Vol/VolAmortized'
 import VolDecision from '@/components/Vol/VolDecision'
 import VolBlackList from '@/components/Vol/VolBlackList'
 import VolSetting from '@/components/Vol/VolSetting'
+import MLogin from '@/components/Vol/MLogin'
 
 import VolDebitNote from '@/components/Vol/Policy/VolDebitNote'
 import VolQuotation from '@/components/Vol/Policy/VolQuotation'
@@ -135,6 +136,11 @@ export default new Router({
       name: 'VolBasic',
       component: VolBasic,
       children: [
+        {
+          path: '/vol/MLogin',
+          name: 'MLogin',
+          component: MLogin
+        },
         {
           path: '/vol/VolHomePage',
           name: 'VolHomePage',

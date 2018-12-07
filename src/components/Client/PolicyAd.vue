@@ -39,6 +39,7 @@ export default {
     background: #fff;
     border-radius: 16px;
     height: 100%;
+    position: relative;
     animation: mymove 1s cubic-bezier(.28,1.41,1,1.1) normal;
   }
 }

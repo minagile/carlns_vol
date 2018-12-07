@@ -138,15 +138,15 @@ export default {
         <td colspan="2" style="text-align:center;">负责人：</td>
         <td style="text-align:center;">地址：</td>
         <td>联系方式：</td>
-        <td><button style="background: #fff;color:#4977FC;">删除</button></td>
-        <td><button style="background: #fff;color:#4977FC;">编辑</button></td>
+        <td><button class="del" style="background: #fff;color:#4977FC;">删除</button></td>
+        <td><button class="aidt" style="background: #fff;color:#4977FC;">编辑</button></td>
         <td></td>
       </tr>`
       if (item.expand === false) {
         item.expand = true
         tr[index].classList.add('tractive' + index)
         $('.tractive' + index).after(element)
-        $('button').on('click', e => {
+        $('.del').on('click', e => {
           console.log(e)
           this.delt()
         })

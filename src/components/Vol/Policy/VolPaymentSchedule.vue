@@ -28,27 +28,21 @@
     <el-table
       ref="multipleTable"
       :data="tableData3"
-      tooltip-effect="dark"
+      tooltip-effect="light"
+      border
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
-      <el-table-column
-        label="日期"
-        width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-        show-overflow-tooltip>
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="date" label="订单号" width="120"></el-table-column>
+      <el-table-column prop="date" label="公司名称" width="120"></el-table-column>
+      <el-table-column prop="date" label="车辆数" width="120"></el-table-column>
+      <el-table-column prop="date" label="险种" width="120"></el-table-column>
+      <el-table-column prop="name" label="投保时间" width="120"></el-table-column>
+      <el-table-column label="付款计划表">
+        <template slot-scope="scope">
+          <img src="../../../assets/img/list1.png" alt="">
+          <el-button type="text">点击查看报价单</el-button>
+        </template>
       </el-table-column>
     </el-table>
 

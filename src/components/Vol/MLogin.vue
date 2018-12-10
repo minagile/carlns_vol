@@ -23,8 +23,8 @@ export default {
   name: 'MLogin',
   data () {
     return {
-      user: '',
-      psd: ''
+      user: 'admin',
+      psd: '123456'
     }
   },
   methods: {
@@ -62,9 +62,10 @@ export default {
           phone: this.user,
           password: this.psd
         }).then((response) => {
+          // console.log(response)
           if (response.code === 0) {
             sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('username', response.data.username)
+            // sessionStorage.setItem('username', response.data.username)
             this.$router.push('/vol/VolHomePage')
           } else {
             this.$message({

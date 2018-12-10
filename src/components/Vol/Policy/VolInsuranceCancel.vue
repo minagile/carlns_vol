@@ -1,30 +1,16 @@
 <template>
   <!-- 退保保单列表 -->
   <div class="VolInsuranceCancel">
-    <Selector :vol="true"/>
+    <selector
+      :all="true"
+      :vol="true"
+      @sort="sort"
+      @page="page"
+      @giveParams="giveParams"
+    >
+    </selector>
 
-    <div class="header">
-      <span>排序</span>
-      <el-select v-model="value" size="small" placeholder="序号正序">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span style="margin-left: 40px;margin-right: 20px;">显示</span>
-      <el-select v-model="value" size="small">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>条</span>
-      <el-button size="small" @click="centerDialogVisible = true">+ 新增退保</el-button>
-    </div>
+    <el-button size="small" @click="centerDialogVisible = true">+ 新增退保</el-button>
 
     <el-table
       ref="multipleTable"
@@ -123,7 +109,10 @@ export default {
       }],
       options: [],
       value: '',
-      innerVisible: false
+      innerVisible: false,
+      serchDate: [],
+      SortValue: '1',
+      NumValue: 10
     }
   },
   mounted () {
@@ -132,11 +121,41 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
+    giveParams (data) {
+      // console.log(data)
+      this.serchDate = data
+      this.getData()
+    },
+    // 一页几条数据
+    page (data) {
+      this.NumValue = data
+      this.getData()
+    },
+    // 正序反序
+    sort (data) {
+      this.SortValue = data
+      this.getData()
+    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+    },
+    getData () {
+      var data = {
+        channelId: '',
+        startTime: this.serchDate.startTime,
+        endTime: this.serchDate.endTime,
+        corporateName: this.serchDate.selectChannel,
+        order: this.SortValue,
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }
+      console.log(data)
+      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
+      //   console.log(res)
+      // })
     }
   },
   components: {
@@ -150,21 +169,22 @@ export default {
   // margin-top: 50px;
 }
 .VolInsuranceCancel {
+  .el-button {
+    float: right;
+    margin-right: 2.5%;
+    margin-top: -55px;
+    background:rgba(255,193,7,1);
+    border-color:rgba(255,193,7,1);
+    border-radius:4px;
+    &:hover {
+      color: #333;
+    }
+    &:focus {
+      color: #333;
+    }
+  }
   .header {
     padding: 10px 0 30px 2.5%;
-    .el-button {
-      float: right;
-      margin-right: 2.5%;
-      background:rgba(255,193,7,1);
-      border-color:rgba(255,193,7,1);
-      border-radius:4px;
-      &:hover {
-        color: #333;
-      }
-      &:focus {
-        color: #333;
-      }
-    }
   }
   .el-dialog {
     .top {

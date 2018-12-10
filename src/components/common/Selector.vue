@@ -15,8 +15,6 @@
         placeholder="选择日期"
         value-format="yyyy-MM-dd">
       </el-date-picker>
-
-      <button class="span" @click="clearTime(0)">清除</button>
     </div>
 
     <div class="Selector-main">
@@ -31,7 +29,30 @@
         </el-option>
       </el-select>
       <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
-      <button class="clear" @click="clearTime(1)">清空</button>
+    </div>
+
+    <div class="Amortized-sort" v-if="sortTable">
+      <span>排序</span>
+      <el-select v-model="SortValue" placeholder="请选择正反序" @change="sortchange">
+        <el-option
+          v-for="item in SortOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <span>显示</span>
+      <el-select v-model="NumValue" placeholder="请选择" @change="numchange">
+        <el-option
+          v-for="item in numOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          >
+        </el-option>
+      </el-select>
+      <span>条</span>
+      <el-button v-if="refresh"></el-button>
     </div>
   </div>
 </template>
@@ -43,22 +64,35 @@ export default {
     return {
       startTime: '',
       endTime: '',
-      selectChannel: ''
+      selectChannel: '',
+      SortOptions: [
+        {
+          value: '1',
+          label: '序号正序'
+        },
+        {
+          value: '2',
+          label: '序号反序'
+        }
+      ],
+      numOptions: [
+        {value: 5},
+        {value: 10},
+        {value: 15},
+        {value: 25}
+      ],
+      SortValue: '1',
+      NumValue: 10
     }
   },
   mounted () {
   },
   methods: {
-    clearTime (msg, data) {
-      if (msg === 0) {
-        this.startTime = ''
-        this.endTime = ''
-      } else {
-        this.selectChannel = ''
-      }
-      if (data === 0) {
-        this.giveParams()
-      }
+    sortchange (data) {
+      this.$emit('sort', this.SortValue)
+    },
+    numchange () {
+      this.$emit('page', this.NumValue)
     },
     giveParams () { // 传递数据
       let selectData = {
@@ -80,6 +114,14 @@ export default {
     },
     channelList: {
       type: Array
+    },
+    sortTable: {
+      type: Boolean,
+      default: true
+    },
+    refresh: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -88,7 +130,8 @@ export default {
 <style lang="less" scoped>
 @bgcolor: #FFC107;
 .Selector {
-  padding: 25px 3.44% 0 3.44%;
+  padding: 25px 3.44% 23px 3.44%;
+  position: relative;
   .Selector-main {
     padding-bottom: 22px;
     .all {
@@ -118,13 +161,22 @@ export default {
       // cursor:pointer;
     }
     .search {
-      width:75px;
-      height:40px;
-      border:1px solid rgba(73,119,252,1);
-      border-radius:4px;
-      color: #4977FC;
-      background: white;
-      margin-left: 10px;
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      line-height: 60px;
+      text-align: center;
+      top: 40px;
+      left: 52%;
+      cursor: pointer;
+      border:1px solid rgba(217,217,217,1);
+      &:hover {
+        background: rgba(73,119,252,1);
+        border-color: rgba(73,119,252,1);
+        color: #fff;
+      }
     }
     .clear {
       width:75px;
@@ -140,12 +192,12 @@ export default {
     .el-date-editor {
       width: 16.49%;
     }
-    button:hover {
-      opacity: 0.5;
-    }
-    button:active {
-      opacity: 1;
-    }
+    // button:hover {
+    //   opacity: 0.5;
+    // }
+    // button:active {
+    //   opacity: 1;
+    // }
     .isVol {
       background: @bgcolor;
       color: black;
@@ -153,7 +205,39 @@ export default {
     .isVolS {
       border: 1px solid #282828;
       color: #282828;
+      &:hover {
+        background: @bgcolor;
+        border-color: @bgcolor;
+        color: black;
+      }
     }
+  }
+}
+.Amortized-sort {
+  // padding: 25px 3.44% 23px 3.44%;
+  .el-select:nth-of-type(1) {
+    width: 138px;
+    margin-left: 10px;
+    margin-right: 40px;
+  }
+  .el-select:nth-of-type(2) {
+    width: 138px;
+    margin: 0 10px;
+  }
+  button {
+    width:88px;
+    height:35px;
+    background:rgba(255,255,255,1);
+    border:1px solid rgba(232,232,232,1);
+    border-radius:4px;
+    float: right;
+    color: #4977FC;
+  }
+  .el-button {
+    float: right;
+    width: 88px;
+    height: 36px;
+    background-image: url(../../assets/img/refresh.png);
   }
 }
 </style>

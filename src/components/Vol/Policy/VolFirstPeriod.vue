@@ -1,30 +1,14 @@
 <template>
   <!-- 保单首期支付结果列表 -->
   <div class="VolFirstPeriod">
-     <Selector :vol="true"/>
-
-    <div class="header" style="width: 95%; margin: 0 auto">
-      <span>排序</span>
-      <el-select v-model="value" size="small" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>显示</span>
-      <el-select v-model="value" size="small" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>条</span>
-      <el-button size="small">刷新</el-button>
-    </div>
+    <selector
+      :all="true"
+      :vol="true"
+      @sort="sort"
+      @page="page"
+      @giveParams="giveParams"
+    >
+    </selector>
 
     <el-table
       ref="multipleTable"
@@ -66,51 +50,10 @@ export default {
   data () {
     return {
       currentPage4: 1,
-      tableData3: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      tableData3: [],
+      serchDate: [],
+      SortValue: '1',
+      NumValue: 10,
       value: ''
     }
   },
@@ -120,11 +63,41 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
+    giveParams (data) {
+      // console.log(data)
+      this.serchDate = data
+      this.getData()
+    },
+    // 一页几条数据
+    page (data) {
+      this.NumValue = data
+      this.getData()
+    },
+    // 正序反序
+    sort (data) {
+      this.SortValue = data
+      this.getData()
+    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+    },
+    getData () {
+      var data = {
+        channelId: '',
+        startTime: this.serchDate.startTime,
+        endTime: this.serchDate.endTime,
+        corporateName: this.serchDate.selectChannel,
+        order: this.SortValue,
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }
+      console.log(data)
+      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
+      //   console.log(res)
+      // })
     }
   },
   components: {

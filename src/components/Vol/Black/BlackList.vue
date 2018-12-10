@@ -2,21 +2,12 @@
   <!-- 黑名单列表 -->
   <div class="BlackList">
     <div class="blackList-input">
-      <el-select v-model="value" placeholder="按公司名称：">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <input type="text">
+      <input type="text" placeholder="请输入公司名称">
       <button>查询</button>
-      <button>清空</button>
     </div>
     <div class="Amortized-sort">
       <span>排序</span>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="sort" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -25,12 +16,12 @@
         </el-option>
       </el-select>
       <span>显示</span>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="pagination.pageSize" placeholder="请选择" @change="handleSizeChange">
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          v-for="item in pagination.pageSizes"
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
       </el-select>
       <span>条</span>
@@ -41,18 +32,19 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        height="550"
+        style="width: 100%;">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="date" label="序号"  width="180"></el-table-column>
-        <el-table-column prop="name" label="公司名称" width="180"></el-table-column>
+        <!-- <el-table-column prop="date" label="序号"  width="180"></el-table-column> -->
+        <el-table-column prop="channelName" label="公司名称" width="180"></el-table-column>
         <el-table-column prop="address" label="联系地址"></el-table-column>
-        <el-table-column prop="address" label="联系方式"></el-table-column>
-        <el-table-column prop="address" label="邮箱"></el-table-column>
-        <el-table-column prop="address" label="添加时间"></el-table-column>
-        <el-table-column prop="address" label="加入原因"></el-table-column>
+        <el-table-column prop="channelPhone" label="联系方式"></el-table-column>
+        <el-table-column prop="channelEmail" label="邮箱"></el-table-column>
+        <el-table-column prop="createTime" label="添加时间"></el-table-column>
+        <el-table-column prop="remark" label="加入原因"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button type="text" @click="openDialog('编辑', scope.row.name)">编辑</el-button>
+            <el-button type="text" @click="openDialog('编辑', scope.row.id)">编辑</el-button>
             <el-button type="text">删除</el-button>
           </template>
         </el-table-column>
@@ -64,35 +56,34 @@
       <div class="dialog-header">{{title}}</div>
       <el-form :model="form">
         <el-form-item label="公司名称：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司名称"></el-input>
+          <el-input v-model="form.channelName" autocomplete="off" placeholder="请输入公司名称"></el-input>
         </el-form-item>
         <el-form-item label="联系地址：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司地址"></el-input>
+          <el-input v-model="form.address" autocomplete="off" placeholder="请输入公司地址"></el-input>
         </el-form-item>
         <el-form-item label="联系方式：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入联系方式"></el-input>
+          <el-input v-model="form.tel" autocomplete="off" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item label="邮箱：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入账号"></el-input>
+          <el-input v-model="form.email" autocomplete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item label="添加原因：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入密码"></el-input>
+          <el-input v-model="form.reason" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button class="cancel" @click="centerDialogVisible = false">取 消</el-button>
-        <el-button class="submit" type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        <el-button class="cancel" @click="cancel">取 消</el-button>
+        <el-button class="submit" type="primary" @click="addBlackList">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :current-page="pagination.currentPage"
+      :page-sizes="pagination.pageSizes"
+      :page-size="pagination.pageSize"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="pagination.total">
     </el-pagination>
   </div>
 </template>
@@ -103,20 +94,35 @@ export default {
   data () {
     return {
       title: '新增',
-      options: [],
-      value: '',
+      options: [
+        {
+          label: '序号正序',
+          value: 0
+        },
+        {
+          label: '序号反序',
+          value: 1
+        }
+      ],
+      sort: 0,
       centerDialogVisible: false,
       form: {
-        name: ''
+        channelName: '',
+        address: '',
+        tel: '',
+        email: '',
+        reason: '',
+        channelId: ''
       },
       formLabelWidth: '209px',
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      tableData: [],
+      pagination: {
+        currentPage: 1,
+        pageSizes: [10, 20, 30, 40, 50],
+        pageSize: 10,
+        total: 0
+      },
+      channelName: '1'
     }
   },
   mounted () {
@@ -126,25 +132,96 @@ export default {
     openDialog (title, id) {
       this.centerDialogVisible = true
       this.title = title
+      this.form.channelId = id
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.pagination.pageSize = val
+      this.getBlackList()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.pagination.currentPage = val
+      this.getBlackList()
     },
     getBlackList () {
       this.$post('/admin/channel/queryBlacklist', {
-        'channelName': '1',
-        'page': 1,
-        'pageNumber': 10,
-        'sorting': 0
+        'page': this.pagination.currentPage,
+        'pageNumber': this.pagination.pageSize,
+        'sorting': this.sort
       }).then(res => {
-        console.log(res)
+        if (res.code === 0) {
+          this.pagination.total = res.data.records
+          this.tableData = res.data.rows
+        }
       })
+    },
+    addBlackList () {
+      if (this.title === '新增') {
+        this.$post('/admin/channel/addBlacklist', {
+          'channelName': this.form.channelName,
+          'address': this.form.address,
+          'tel': this.form.tel,
+          'email': this.form.email,
+          'reason': this.form.reason
+        }).then(res => {
+          if (res.code === 0) {
+            this.centerDialogVisible = false
+            this.$message({
+              message: res.msg,
+              type: 'success'
+            })
+            this.getBlackList()
+            this.cancel()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
+        })
+      } else {
+        this.$post('/admin/channel/editBlacklist', {
+          'channelName': this.form.channelName,
+          'address': this.form.address,
+          'tel': this.form.tel,
+          'email': this.form.email,
+          'reason': this.form.reason,
+          'channelId': this.form.channelId
+        }).then(res => {
+          if (res.code === 0) {
+            this.centerDialogVisible = false
+            this.$message({
+              message: res.msg,
+              type: 'success'
+            })
+            this.getBlackList()
+            this.cancel()
+          } else {
+            this.$message({
+              message: res.message,
+              type: 'error'
+            })
+          }
+        })
+      }
+    },
+    cancel () {
+      this.centerDialogVisible = false
+      this.from = {
+        channelName: '',
+        address: '',
+        tel: '',
+        email: '',
+        reason: '',
+        channelId: ''
+      }
+    }
+  },
+  watch: {
+    sort (val) {
+      this.getBlackList()
     }
   }
 }
@@ -152,7 +229,6 @@ export default {
 
 <style lang="less" scoped>
 .BlackList {
-  // margin: 0 34px;
   .Amortized-sort {
     padding: 25px 3.44% 23px 3.44%;
     .el-select:nth-of-type(1) {

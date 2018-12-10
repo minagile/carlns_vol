@@ -198,17 +198,22 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData = res.data
+          console.log(res.data)
         }
       })
       this.$fetch('/admin/homePage_a/overdue_a', {
         channelId: this.channelId
       }).then(res => {
-        console.log(res)
+        if (res.code === 0) {
+          this.tableData2 = res.data
+        }
       })
       this.$fetch('/admin/homePage_a/thisWeek_a', {
         channelId: this.channelId
       }).then(res => {
-        console.log(res)
+        if (res.code === 0) {
+          this.tableData1 = res.data
+        }
       })
     }
   }

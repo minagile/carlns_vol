@@ -60,6 +60,7 @@ export default {
     this.getData()
   },
   methods: {
+    // 查询按钮
     giveParams (data) {
       // console.log(data)
       this.serchDate = data

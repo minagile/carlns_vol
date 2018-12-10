@@ -88,6 +88,9 @@ export default {
   mounted () {
   },
   methods: {
+    clearTime (val) {
+      console.log(val)
+    },
     sortchange (data) {
       this.$emit('sort', this.SortValue)
     },

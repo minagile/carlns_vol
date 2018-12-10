@@ -231,7 +231,7 @@ export default {
             barWidth: '30%',
             data: y,
             label: label,
-            barWidth: 30,
+            // barWidth: 30,
             itemStyle: {
               color: '#5F72B4'
             }
@@ -242,7 +242,7 @@ export default {
             barWidth: '30%',
             data: yy,
             label: label,
-            barWidth: 30,
+            // barWidth: 30,
             itemStyle: {
               color: '#FE6F5F'
             }

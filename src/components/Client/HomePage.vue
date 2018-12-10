@@ -15,6 +15,7 @@
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/img/shouqi.png" alt="">
             首期应付款
           </div>
            <el-table
@@ -54,6 +55,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/img/thisweek.png" alt="">
             本周待还
           </div>
            <el-table
@@ -94,6 +96,7 @@
       <el-row class="home-body">
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/img/warning.png" alt="">
             逾期警告
           </div>
            <el-table
@@ -138,6 +141,7 @@
 
         <el-col :span="12">
           <div class="home-body-title">
+            <img src="../../assets/img/calender.png" alt="">
             还款日历
           </div>
           <el-card class="box-card" :body-style="{ padding: '0px' }">
@@ -279,6 +283,9 @@ export default {
       font-weight:400;
       color:rgba(3,0,0,1);
       border-bottom: 4px solid #F1F1F1;
+      img {
+        vertical-align: middle;
+      }
     }
     .el-table {
       overflow: auto;

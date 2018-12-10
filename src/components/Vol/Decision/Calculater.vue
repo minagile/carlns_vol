@@ -97,7 +97,7 @@
 </template>
 
 <script>
-// import { Req } from '../../assets/js/http.js'
+import { Req } from '../../../assets/js/http.js'
 export default {
   name: 'Calculater',
   data () {
@@ -165,22 +165,23 @@ export default {
       for (let i = 0; i < this.list.length; i++) {
         this.list[i].endTime = this.endtime
       }
-      // let config = {
-      //   headers: {
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //     'token': sessionStorage.getItem('token')
-      //   }
-      // }
+      let config = {
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'token': sessionStorage.getItem('token')
+        }
+      }
       // this.$post('/interestRate/calculators', this.list, {'contentType': 'application/json; charset=UTF-8'}).then(res => {
-      // this.$http.post(Req + '/interestRate/calculators', JSON.stringify(this.list), config).then(res => {
-      //   if (res.data.code === 0) {
-      //     this.datalist = res.data.data1
-      //     this.resSoure = res.data.data2
-      //     console.log(this.resSoure.commercials.sfs)
-      //   } else {
-      //     this.$message(res.data.msg)
-      //   }
-      // })
+      this.$http.post(Req + '/interestRate/calculators', JSON.stringify(this.list), config).then(res => {
+        // console.log(res)
+        if (res.data.code === 0) {
+          this.datalist = res.data.data1
+          this.resSoure = res.data.data2
+          console.log(this.resSoure.commercials.sfs)
+        } else {
+          this.$message(res.data.msg)
+        }
+      })
     }
   }
 }

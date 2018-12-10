@@ -1,30 +1,14 @@
 <template>
   <!-- 还款明细 -->
   <div class="ReimbursementDetail">
-    <selector :all="true"></selector>
-
-    <div class="Amortized-sort">
-      <span>排序</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>显示</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>条</span>
-      <el-button></el-button>
-    </div>
+    <selector
+      :all="true"
+      :refresh="true"
+      @sort="sort"
+      @page="page"
+      @giveParams="giveParams"
+    >
+    </selector>
 
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
@@ -65,6 +49,9 @@ export default {
       options: [],
       currentPage4: 1,
       value: '',
+      serchDate: [],
+      SortValue: '1',
+      NumValue: 10,
       tableData: [
         {
           date: '2016-05-02',
@@ -80,11 +67,41 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
+    giveParams (data) {
+      // console.log(data)
+      this.serchDate = data
+      this.getData()
+    },
+    // 一页几条数据
+    page (data) {
+      this.NumValue = data
+      this.getData()
+    },
+    // 正序反序
+    sort (data) {
+      this.SortValue = data
+      this.getData()
+    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+    },
+    getData () {
+      var data = {
+        channelId: '',
+        startTime: this.serchDate.startTime,
+        endTime: this.serchDate.endTime,
+        corporateName: this.serchDate.selectChannel,
+        order: this.SortValue,
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }
+      console.log(data)
+      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
+      //   console.log(res)
+      // })
     }
   },
   components: {

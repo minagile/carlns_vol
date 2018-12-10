@@ -23,8 +23,8 @@ export default {
   name: 'MLogin',
   data () {
     return {
-      user: '',
-      psd: ''
+      user: 'admin',
+      psd: '123456'
     }
   },
   methods: {
@@ -58,22 +58,24 @@ export default {
           message: '请输入密码'
         })
       } else {
-        this.$fetch('/login/admin', {
-          username: this.user,
+        // POST /login/loginInByAdmin
+        this.$post('/login/loginInByAdmin', {
+          phone: this.user,
           password: this.psd
         }).then((response) => {
+          // console.log(response)
           if (response.code === 0) {
             sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('username', response.data.username)
-            this.$fetch('/ad/limit/findPermission').then(res => {
-              let arr = []
-              res.data.forEach(v => {
-                arr.push(v.adauthName)
-              })
-              sessionStorage.setItem('permission', JSON.stringify(arr))
-              sessionStorage.setItem('password', this.psd)
-              this.$router.push({name: 'AllChannels'})
-            })
+            // sessionStorage.setItem('username', response.data.username)
+            // this.$fetch('/ad/limit/findPermission').then(res => {
+            //   let arr = []
+            //   res.data.forEach(v => {
+            //     arr.push(v.adauthName)
+            //   })
+            //   sessionStorage.setItem('permission', JSON.stringify(arr))
+            //   sessionStorage.setItem('password', this.psd)
+            this.$router.push({name: 'VolHomePage'})
+            // })
           } else {
             this.$message({
               type: 'error',

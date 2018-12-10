@@ -4,8 +4,8 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
-// axios.defaults.baseURL = 'http://192.168.1.145:80'
+// axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
+axios.defaults.baseURL = 'http://192.168.1.145:80'
 // axios.defaults.baseURL = 'http://192.168.1.136:80'
 // axios.defaults.baseURL = 'http://www.easyfq.com/carins'
 
@@ -15,17 +15,13 @@ axios.interceptors.request.use(
     const token = sessionStorage.getItem('token')
     // config.data = JSON.stringify(config.data)
     config.headers = {
-      // 'Content-Type': 'application/json;charset=UTF-8',
       'token': token,
-      'Accept': '*/*',
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      // 'token': token
-      // 'Accept': '*/*',
-      // 'token': token
+      // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8'
     }
-    // if (token) {
-    //   config.params = { 'token': token }
-    // }
+    if (token) {
+      config.params = { 'token': token }
+    }
     return config
   }
 )

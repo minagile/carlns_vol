@@ -1,30 +1,14 @@
 <template>
   <!-- 已分期列表 -->
   <div class="VolStageList">
-    <selector :all="true" :vol="true"></selector>
-
-    <div class="Amortized-sort">
-      <span>排序</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>显示</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span>条</span>
-      <!-- <button>刷新</button> -->
-    </div>
+    <selector
+      :all="true"
+      :vol="true"
+      @sort="sort"
+      @page="page"
+      @giveParams="giveParams"
+    >
+    </selector>
 
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
@@ -43,6 +27,16 @@
         </el-table-column>
       </el-table>
     </div>
+
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="10"
+      layout="prev, pager, next, total, jumper"
+      :total="400">
+    </el-pagination>
   </div>
 </template>
 
@@ -52,20 +46,53 @@ export default {
   name: 'VolStageList',
   data () {
     return {
-      options: [],
-      value: '',
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      currentPage4: 1,
+      tableData: [],
+      serchDate: {},
+      SortValue: '1',
+      NumValue: 10
     }
   },
   mounted () {
   },
-  methods: {},
+  methods: {
+    giveParams (data) {
+      // console.log(data)
+      this.serchDate = data
+      this.getData()
+    },
+    // 一页几条数据
+    page (data) {
+      this.NumValue = data
+      this.getData()
+    },
+    // 正序反序
+    sort (data) {
+      this.SortValue = data
+      this.getData()
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    },
+    getData () {
+      var data = {
+        channelId: '',
+        startTime: this.serchDate.startTime,
+        endTime: this.serchDate.endTime,
+        corporateName: this.serchDate.selectChannel,
+        order: this.SortValue,
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }
+      console.log(data)
+      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
+      //   console.log(res)
+      // })
+    }
+  },
   components: {
     Selector
   }
@@ -73,27 +100,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.Amortized-sort {
-  padding: 25px 3.44% 23px 3.44%;
-  .el-select:nth-of-type(1) {
-    width: 138px;
-    margin-left: 10px;
-    margin-right: 40px;
-  }
-  .el-select:nth-of-type(2) {
-    width: 138px;
-    margin: 0 10px;
-  }
-  button {
-    width:88px;
-    height:35px;
-    background:rgba(255,255,255,1);
-    border:1px solid rgba(232,232,232,1);
-    border-radius:4px;
-    float: right;
-    color: #4977FC;
-  }
-}
 .Amortized-table {
   padding: 0 3.44% 23px 3.44%;
 }

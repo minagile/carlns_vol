@@ -16,12 +16,12 @@ axios.interceptors.request.use(
     // config.data = JSON.stringify(config.data)
     config.headers = {
       'token': token,
-      // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      // 'Content-Type': 'application/json; charset=UTF-8'
     }
-    if (token) {
-      config.params = { 'token': token }
-    }
+    // if (token) {
+    //   config.params = { 'token': token }
+    // }
     return config
   }
 )

@@ -7,7 +7,7 @@
         </ul>
         <div class="header-img">
           <p><img src="../../assets/img/person.png" >用户名</p>
-          <p><img src="../../assets/img/out.png" >退出登录</p>
+          <p @click="out"><img src="../../assets/img/out.png">退出登录</p>
         </div>
       </div>
     </header>
@@ -84,6 +84,10 @@ export default {
     })
   },
   methods: {
+    out () {
+      sessionStorage.clear()
+      this.$router.push({name: 'MLogin'})
+    },
     tab (i) {
       this.num = i
       this.$router.push({name: this.tabList[i].href})

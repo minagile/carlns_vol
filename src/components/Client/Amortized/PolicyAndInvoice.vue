@@ -27,14 +27,14 @@
       </el-table>
     </div>
 
-    <el-pagination
+    <el-pagination v-if="total > NumValue"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
       :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :page-size="NumValue"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -51,6 +51,7 @@ export default {
       serchDate: [],
       SortValue: '1',
       NumValue: 10,
+      total: 0,
       tableData: [
         {
           date: '2016-05-02',
@@ -98,9 +99,9 @@ export default {
         pageSize: this.NumValue
       }
       console.log(data)
-      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-      //   console.log(res)
-      // })
+      this.$fetch('/user/byStages/insuranceInvoice', data).then(res => {
+        console.log(res)
+      })
     }
   },
   components: {

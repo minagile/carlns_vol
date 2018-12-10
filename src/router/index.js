@@ -132,15 +132,15 @@ export default new Router({
       ]
     },
     {
+      path: '/MLogin',
+      name: 'MLogin',
+      component: MLogin
+    },
+    {
       path: '/vol',
       name: 'VolBasic',
       component: VolBasic,
       children: [
-        {
-          path: '/vol/MLogin',
-          name: 'MLogin',
-          component: MLogin
-        },
         {
           path: '/vol/VolHomePage',
           name: 'VolHomePage',

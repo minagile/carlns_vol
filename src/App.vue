@@ -103,7 +103,7 @@ button {
   background: #000000;
   color: #fff;
 }
-.Volbasic .el-pagination .el-pager li:hover, .el-pagination button:hover {
+.Volbasic .el-pagination .el-pager li:hover, .Volbasic .el-pagination button:hover {
   background: #000000;
   color: #fff;
 }

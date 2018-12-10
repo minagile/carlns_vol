@@ -156,12 +156,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import vueEventCalendar from 'vue-event-calendar'
-Vue.use(vueEventCalendar, {
-  locale: 'en',
-  color: '#FFC107'
-})
+// import Vue from 'vue'
+// import vueEventCalendar from 'vue-event-calendar'
+// Vue.use(vueEventCalendar, {
+//   locale: 'en',
+//   color: '#FFC107'
+// })
 export default {
   name: 'VolHomePage',
   data () {
@@ -169,6 +169,8 @@ export default {
       options: [],
       value: '',
       tableData: [],
+      tableData1: [],
+      tableData2: [],
       demoEvents: [
         {
           date: '2018/12/15',
@@ -194,7 +196,9 @@ export default {
       this.$fetch('/admin/homePage_a/accountPayable_a', {
         channelId: this.channelId
       }).then(res => {
-        console.log(res)
+        if (res.code === 0) {
+          this.tableData = res.data
+        }
       })
       this.$fetch('/admin/homePage_a/overdue_a', {
         channelId: this.channelId
@@ -307,6 +311,7 @@ export default {
 <style>
 .item {
   height: 45px;
+  /* width: 45px; */
 }
 .el-card__body{
   height: 395px;

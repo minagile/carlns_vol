@@ -34,7 +34,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <button @click="centerDialogVisible = true">+ 新增</button>
+      <button @click="openDialog('新增')">+ 新增</button>
     </div>
 
     <div class="Amortized-table">
@@ -52,7 +52,7 @@
         <el-table-column prop="address" label="加入原因"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button type="text">编辑</el-button>
+            <el-button type="text" @click="openDialog('编辑', scope.row.name)">编辑</el-button>
             <el-button type="text">删除</el-button>
           </template>
         </el-table-column>
@@ -61,7 +61,7 @@
 
     <!-- 新增 -->
     <el-dialog :visible.sync="centerDialogVisible" width="770px">
-      <div class="dialog-header">新增</div>
+      <div class="dialog-header">{{title}}</div>
       <el-form :model="form">
         <el-form-item label="公司名称：" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司名称"></el-input>
@@ -84,6 +84,16 @@
         <el-button class="submit" type="primary" @click="centerDialogVisible = false">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="10"
+      layout="prev, pager, next, total, jumper"
+      :total="400">
+    </el-pagination>
   </div>
 </template>
 
@@ -92,6 +102,7 @@ export default {
   name: 'BlackList',
   data () {
     return {
+      title: '新增',
       options: [],
       value: '',
       centerDialogVisible: false,
@@ -109,8 +120,33 @@ export default {
     }
   },
   mounted () {
+    this.getBlackList()
   },
-  methods: {}
+  methods: {
+    openDialog (title, id) {
+      this.centerDialogVisible = true
+      this.title = title
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    },
+    getBlackList () {
+      this.$post('/admin/channel/queryBlacklist', {
+        'channelName': '1',
+        'page': 1,
+        'pageNumber': 10,
+        'sorting': 0
+      }).then(res => {
+        console.log(res)
+      })
+    }
+  }
 }
 </script>
 

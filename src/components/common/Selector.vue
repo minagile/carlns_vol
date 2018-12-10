@@ -60,7 +60,7 @@ export default {
         this.giveParams()
       }
     },
-    giveParams () { // 彭可润接口，选择全部时间时，时间字段的值不能为空，要去除时间的字段
+    giveParams () { // 传递数据
       let selectData = {
         startTime: this.startTime,
         endTime: this.endTime,

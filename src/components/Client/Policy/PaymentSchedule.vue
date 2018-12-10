@@ -23,7 +23,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <el-button size="small">刷新</el-button>
+      <el-button size="small"></el-button>
     </div>
 
     <el-table
@@ -140,6 +140,14 @@ export default {
 .PaymentSchedule {
   .header {
     padding-bottom: 20px;
+    .el-button {
+      float: right;
+      width: 88px;
+      height: 36px;
+      background-image: url(../../../assets/img/downfile.png);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
   }
 }
 </style>

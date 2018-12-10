@@ -4,10 +4,10 @@
     <div class="company">
       <el-row class="home-header">
         <el-col :span="4" v-for="(o, i) in companyList" :key="i">
-          <div class="grid-content">
+          <div :class="{back: i === 0}" class="grid-content">
             <p>{{ o.name }}</p>
             <p>{{o.number}}<span>辆</span></p>
-            <p>查看全部</p>
+            <p v-if="i === 0">查看全部</p>
           </div>
         </el-col>
       </el-row>
@@ -222,6 +222,13 @@ export default {
     width: 19.14%;
     box-shadow:0px 12px 36px 0px rgba(211,215,221,0.4);
     border-radius:5px;
+  }
+  .back{
+    background-image: url('../../assets/img/1@2x.png');
+    color: #F1F1F1;
+  }
+  div {
+    background-image: url('../../assets/img/com.png');
   }
 }
 .grid-content {

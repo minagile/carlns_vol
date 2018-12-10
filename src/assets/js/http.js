@@ -4,9 +4,9 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
+// axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
 // axios.defaults.baseURL = 'http://192.168.1.145:80'
-// axios.defaults.baseURL = 'http://192.168.1.136:80'
+axios.defaults.baseURL = 'http://192.168.1.136:80'
 // axios.defaults.baseURL = 'http://www.easyfq.com/carins'
 
 // http request 拦截器
@@ -26,6 +26,7 @@ axios.interceptors.request.use(
     // if (token) {
     //   config.params = { 'token': token }
     // }
+    console.log(config.headers.token)
     return config
   }
 )

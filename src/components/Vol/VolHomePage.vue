@@ -20,7 +20,7 @@
             <img src="../../assets/vimg/first.png" alt="">
             首期应付款
           </div>
-           <el-table
+            <el-table
               :data="tableData"
               style="width: 100%">
               <el-table-column
@@ -28,18 +28,29 @@
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
               </el-table-column>
             </el-table>
         </el-col>
@@ -49,26 +60,37 @@
             <img src="../../assets/vimg/thisweek.png" alt="">
             本周待还
           </div>
-           <el-table
-              :data="tableData"
+            <el-table
+              :data="tableData1"
               style="width: 100%">
               <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
               </el-table-column>
             </el-table>
         </el-col>
@@ -79,26 +101,42 @@
             <img src="../../assets/vimg/danger.png" alt="">
             逾期警告
           </div>
-           <el-table
-              :data="tableData"
+            <el-table
+              :data="tableData2"
               style="width: 100%">
               <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
               <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
+                prop="batch"
+                label="批次"
+                width=50>
+              </el-table-column>
+              <el-table-column
+                prop="time"
+                label="时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="公司">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="地址">
+                prop="carNumber"
+                label="车辆数">
+              </el-table-column>
+              <el-table-column
+                prop="coverage"
+                label="险种">
+              </el-table-column>
+              <el-table-column
+                prop="money"
+                label="金额">
+              </el-table-column>
+              <el-table-column
+                prop="daysOverdue"
+                label="逾期天数"
+                class-name="yuqi">
               </el-table-column>
             </el-table>
         </el-col>
@@ -128,7 +166,6 @@ export default {
   name: 'VolHomePage',
   data () {
     return {
-      companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
       options: [],
       value: '',
       tableData: [],
@@ -142,13 +179,33 @@ export default {
           date: '2018/12/12',
           title: 'this is a title'
         }
-      ]
+      ],
+      channelId: '1'
     }
   },
   mounted () {
+    console.log(sessionStorage.getItem('token'))
+    this.getData()
   },
   methods: {
     changedMonth (e) {
+    },
+    getData () {
+      this.$fetch('/admin/homePage_a/accountPayable_a', {
+        channelId: this.channelId
+      }).then(res => {
+        console.log(res)
+      })
+      this.$fetch('/admin/homePage_a/overdue_a', {
+        channelId: this.channelId
+      }).then(res => {
+        console.log(res)
+      })
+      this.$fetch('/admin/homePage_a/thisWeek_a', {
+        channelId: this.channelId
+      }).then(res => {
+        console.log(res)
+      })
     }
   }
 }
@@ -254,5 +311,8 @@ export default {
 .el-card__body{
   height: 395px;
   overflow: auto;
+}
+.yuqi {
+  color: red
 }
 </style>

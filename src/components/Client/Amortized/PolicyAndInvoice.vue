@@ -22,7 +22,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <button>刷新</button>
+      <el-button></el-button>
     </div>
 
     <div class="Amortized-table">
@@ -103,15 +103,21 @@ export default {
     width: 138px;
     margin: 0 10px;
   }
-  button {
-    width:88px;
-    height:35px;
-    background:rgba(255,255,255,1);
-    border:1px solid rgba(232,232,232,1);
-    border-radius:4px;
+  .el-button {
     float: right;
-    color: #4977FC;
+    width: 88px;
+    height: 36px;
+    background-image: url(../../../assets/img/refresh.png);
   }
+  // button {
+  //   width:88px;
+  //   height:35px;
+  //   background:rgba(255,255,255,1);
+  //   border:1px solid rgba(232,232,232,1);
+  //   border-radius:4px;
+  //   float: right;
+  //   color: #4977FC;
+  // }
 }
 .Amortized-table {
   padding: 0 3.44% 23px 3.44%;

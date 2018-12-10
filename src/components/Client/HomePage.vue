@@ -4,10 +4,10 @@
     <div class="company">
       <el-row class="home-header">
         <el-col :span="4" v-for="(o, i) in companyList" :key="i">
-          <div class="grid-content">
+          <div class="grid-content total" :class="{companyactive: companyNum === i}" @click="companyTab(i)">
             <p>{{ o.name }}</p>
             <p>{{o.number}}<span>辆</span></p>
-            <p>查看全部</p>
+            <p v-if="i === 0">查看全部</p>
           </div>
         </el-col>
       </el-row>
@@ -174,7 +174,8 @@ export default {
           date: '2018/12/12',
           title: 'this is a title'
         }
-      ]
+      ],
+      companyNum: 0
     }
   },
   mounted () {
@@ -182,6 +183,9 @@ export default {
     // console.log(sessionStorage.getItem('token'))
   },
   methods: {
+    companyTab (i) {
+      this.companyNum = i
+    },
     changedMonth (e) {
     },
     getHomePage () {
@@ -222,6 +226,17 @@ export default {
     width: 19.14%;
     box-shadow:0px 12px 36px 0px rgba(211,215,221,0.4);
     border-radius:5px;
+  }
+  .total {
+    background-image: url(../../assets/img/com.png);
+    cursor: pointer;
+    transition: 1s;
+  }
+  .companyactive {
+    background-image: url(../../assets/img/combg.png);
+    cursor: pointer;
+    transition: 1s;
+    color: #fff;
   }
 }
 .grid-content {

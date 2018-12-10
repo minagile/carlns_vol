@@ -6,8 +6,8 @@
           <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
         </ul>
         <div class="header-img">
-          <p>用户名</p>
-          <p>退出登录</p>
+          <p><img src="../../assets/img/person.png" >用户名</p>
+          <p><img src="../../assets/img/out.png" >退出登录</p>
         </div>
       </div>
     </header>
@@ -139,11 +139,16 @@ export default {
         float: right;
         padding-right: 38px;
         p {
-          line-height: 61px;
+          line-height: 52px;
           display: inline-block;
           vertical-align: top;
-          color: white;
           margin-left: 43px;
+          font-size: 17px;
+          cursor: pointer;
+          img {
+            vertical-align: middle;
+            margin-right: 8px;
+          }
         }
       }
     }

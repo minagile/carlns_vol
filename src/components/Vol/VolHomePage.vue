@@ -118,12 +118,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import vueEventCalendar from 'vue-event-calendar'
-Vue.use(vueEventCalendar, {
-  locale: 'en',
-  color: '#FFC107'
-})
+// import Vue from 'vue'
+// import vueEventCalendar from 'vue-event-calendar'
+// Vue.use(vueEventCalendar, {
+//   locale: 'en',
+//   color: '#FFC107'
+// })
 export default {
   name: 'VolHomePage',
   data () {

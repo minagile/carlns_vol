@@ -13,13 +13,13 @@
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="date" label="还款时间" width="180"></el-table-column>
-        <el-table-column prop="name" label="还款金额" width="180"></el-table-column>
-        <el-table-column prop="name" label="批次"></el-table-column>
-        <el-table-column prop="date" label="公司名称"></el-table-column>
-        <el-table-column prop="name" label="投保时间"></el-table-column>
-        <el-table-column prop="name" label="险种"></el-table-column>
-        <el-table-column prop="name" label="车辆数"></el-table-column>
+        <el-table-column prop="repaymentTime" label="还款时间" width="180"></el-table-column>
+        <el-table-column prop="repaymentAmount" label="还款金额" width="180"></el-table-column>
+        <el-table-column prop="batch" label="批次"></el-table-column>
+        <el-table-column prop="name" label="公司名称"></el-table-column>
+        <el-table-column prop="forTheTime" label="投保时间"></el-table-column>
+        <el-table-column prop="coverage" label="险种"></el-table-column>
+        <el-table-column prop="carNumber" label="车辆数"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
@@ -28,14 +28,15 @@
       </el-table>
     </div>
 
-    <el-pagination
+    <!-- 分页 -->
+    <el-pagination v-if="total > NumValue"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
       :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :page-size="NumValue"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -46,14 +47,18 @@ export default {
   name: 'VolStageList',
   data () {
     return {
-      currentPage4: 1,
-      tableData: [],
-      serchDate: {},
+      options: [],
+      value: '',
+      serchDate: [],
       SortValue: '1',
-      NumValue: 10
+      NumValue: 10,
+      currentPage4: 1,
+      total: 0,
+      tableData: []
     }
   },
   mounted () {
+    this.getData()
   },
   methods: {
     giveParams (data) {
@@ -79,7 +84,7 @@ export default {
     },
     getData () {
       var data = {
-        channelId: '',
+        // channelId: '',
         startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
         corporateName: this.serchDate.selectChannel,
@@ -88,9 +93,15 @@ export default {
         pageSize: this.NumValue
       }
       console.log(data)
-      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-      //   console.log(res)
-      // })
+      this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.tableData = res.data.rows
+          this.total = res.data.records
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   },
   components: {

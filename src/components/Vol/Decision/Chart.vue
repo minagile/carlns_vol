@@ -1,6 +1,6 @@
 <template>
   <div class="chart animated flipInY">
-    <selector :all="true" :vol="true"></selector>
+    <selector :all="true" :vol="true" :sortTable="false"></selector>
     <div class="con">
       <div class="btn">
         <button

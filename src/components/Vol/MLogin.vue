@@ -23,7 +23,7 @@ export default {
   name: 'MLogin',
   data () {
     return {
-      user: 'admin',
+      user: '12345678999',
       psd: '123456'
     }
   },

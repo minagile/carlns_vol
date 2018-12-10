@@ -42,7 +42,7 @@
         </el-option>
       </el-select>
       <span>显示</span>
-      <el-select v-model="NumValue" placeholder="请选择" @change="numchange">
+      <el-select v-model="NumValue" placeholder="请选择" @change="numchange" style="width: 70px;">
         <el-option
           v-for="item in numOptions"
           :key="item.value"
@@ -88,6 +88,9 @@ export default {
   mounted () {
   },
   methods: {
+    clearTime (val) {
+      console.log(val)
+    },
     sortchange (data) {
       this.$emit('sort', this.SortValue)
     },

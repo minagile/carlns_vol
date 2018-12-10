@@ -13,12 +13,12 @@
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="date" label="车牌" width="180"></el-table-column>
-        <el-table-column prop="name" label="批次"></el-table-column>
-        <el-table-column prop="date" label="公司名称"></el-table-column>
-        <el-table-column prop="name" label="投保时间"></el-table-column>
-        <el-table-column prop="name" label="保单"></el-table-column>
-        <el-table-column prop="name" label="发票"></el-table-column>
+        <el-table-column prop="carNumber" label="车辆数" width="180"></el-table-column>
+        <el-table-column prop="batch" label="批次"></el-table-column>
+        <el-table-column prop="name" label="公司名称"></el-table-column>
+        <el-table-column prop="time" label="投保时间"></el-table-column>
+        <el-table-column prop="policy" label="保单"></el-table-column>
+        <el-table-column prop="invoice" label="发票"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
@@ -28,14 +28,14 @@
     </div>
 
     <!-- 分页 -->
-    <el-pagination
+    <el-pagination v-if="total > NumValue"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
       :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :page-size="NumValue"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -52,18 +52,15 @@ export default {
       SortValue: '1',
       NumValue: 10,
       currentPage4: 1,
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      total: 0,
+      tableData: []
     }
   },
   mounted () {
+    this.getData()
   },
   methods: {
+    // 查询按钮
     giveParams (data) {
       // console.log(data)
       this.serchDate = data
@@ -87,7 +84,7 @@ export default {
     },
     getData () {
       var data = {
-        channelId: '',
+        // channelId: '',
         startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
         corporateName: this.serchDate.selectChannel,
@@ -96,9 +93,15 @@ export default {
         pageSize: this.NumValue
       }
       console.log(data)
-      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-      //   console.log(res)
-      // })
+      this.$fetch('/admin/byStages_a/insuranceInvoice_a', data).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.tableData = res.data.rows
+          this.total = res.data.records
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   },
   components: {

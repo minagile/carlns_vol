@@ -13,13 +13,13 @@
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="date" label="订单号" width="180"></el-table-column>
+        <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
         <el-table-column prop="name" label="公司名称" width="180"></el-table-column>
-        <el-table-column prop="name" label="车辆数"></el-table-column>
-        <el-table-column prop="date" label="投保时间"></el-table-column>
-        <el-table-column prop="name" label="车投保金额"></el-table-column>
-        <el-table-column prop="name" label="车险种"></el-table-column>
-        <el-table-column prop="name" label="分期状态"></el-table-column>
+        <el-table-column prop="carNumber" label="车辆数"></el-table-column>
+        <el-table-column prop="time" label="投保时间"></el-table-column>
+        <el-table-column prop="money" label="车投保金额"></el-table-column>
+        <el-table-column prop="coverage" label="车险种"></el-table-column>
+        <el-table-column prop="state" label="分期状态"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
@@ -29,14 +29,14 @@
     </div>
 
     <!-- 分页 -->
-    <el-pagination
+    <el-pagination v-if="total > NumValue"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
       :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :page-size="NumValue"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="total">
     </el-pagination>
   </div>
 </template>
@@ -53,16 +53,12 @@ export default {
       serchDate: [],
       SortValue: '1',
       NumValue: 10,
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      total: 0,
+      tableData: []
     }
   },
   mounted () {
+    this.getData()
   },
   methods: {
     giveParams (data) {
@@ -88,7 +84,7 @@ export default {
     },
     getData () {
       var data = {
-        channelId: '',
+        // channelId: '1',
         startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
         corporateName: this.serchDate.selectChannel,
@@ -96,10 +92,16 @@ export default {
         page: this.currentPage4,
         pageSize: this.NumValue
       }
-      console.log(data)
-      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-      //   console.log(res)
-      // })
+      // console.log(data)
+      this.$fetch('/admin/byStages_a/stagingList_a', data).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.tableData = res.data.rows
+          this.total = res.data.records
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   },
   components: {

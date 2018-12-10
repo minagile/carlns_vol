@@ -20,13 +20,9 @@ axios.interceptors.request.use(
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       // 'Content-Type': 'application/json; charset=UTF-8'
     }
-    if (token) {
-      config.params = { 'token': token }
-    }
     // if (token) {
     //   config.params = { 'token': token }
     // }
-    console.log(config.headers.token)
     return config
   }
 )

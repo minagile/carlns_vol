@@ -1,7 +1,7 @@
 <template>
   <div class="Selector">
     <div class="Selector-main">
-      <button class="all" :class="{isVol : vol == 1}" v-if="all" @click="clearTime(0, 0)">全部时间</button>
+      <button class="all" :class="{isVol : vol == 1}" v-if="all" @click="clearTime(0)">全部时间</button>
       <el-date-picker
         v-model="startTime"
         type="date"
@@ -18,7 +18,7 @@
     </div>
 
     <div class="Selector-main">
-      <button @click="clearTime(1, 0)" class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
+      <button @click="clearTime(1)" class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
 
       <el-select v-model="selectChannel" placeholder="选择渠道">
         <el-option
@@ -89,7 +89,13 @@ export default {
   },
   methods: {
     clearTime (val) {
-      console.log(val)
+      if (val === 0) {
+        this.startTime = ''
+        this.endTime = ''
+      } else {
+        this.selectChannel = ''
+      }
+      this.giveParams()
     },
     sortchange (data) {
       this.$emit('sort', this.SortValue)

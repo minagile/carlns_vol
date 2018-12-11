@@ -44,8 +44,8 @@
         <el-table-column prop="remark" label="加入原因"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button type="text" @click="openDialog('编辑', scope.row.id)">编辑</el-button>
-            <el-button type="text">删除</el-button>
+            <el-button type="text" @click="openDialog('编辑', scope.row.channelId)">编辑</el-button>
+            <el-button type="text" @click="deleteBlackList(scope.row.channelId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,10 +65,10 @@
           <el-input v-model="form.tel" autocomplete="off" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item label="邮箱：" :label-width="formLabelWidth">
-          <el-input v-model="form.email" autocomplete="off" placeholder="请输入账号"></el-input>
+          <el-input v-model="form.email" autocomplete="off" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="添加原因：" :label-width="formLabelWidth">
-          <el-input v-model="form.reason" autocomplete="off" placeholder="请输入密码"></el-input>
+          <el-input v-model="form.reason" autocomplete="off" placeholder="请输入原因"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -121,31 +121,44 @@ export default {
         pageSizes: [10, 20, 30, 40, 50],
         pageSize: 10,
         total: 0
-      },
-      channelName: '1'
+      }
     }
   },
   mounted () {
     this.getBlackList()
   },
   methods: {
-    openDialog (title, id) {
+    openDialog (title, id) { // 打开弹窗
       this.centerDialogVisible = true
       this.title = title
-      this.form.channelId = id
+      if (id) {
+        this.form.channelId = id
+        this.$post('/admin/channel/selectByChannelId', {
+          'channelId': id
+        }).then(res => {
+          if (res.code === 0) {
+            this.form.channelName = res.data.channelName
+            this.form.address = res.data.channelAddress
+            this.form.tel = res.data.channelPhone
+            this.form.email = res.data.channelEmail
+            this.form.reason = res.data.remark
+            this.form.channelId = res.data.channelId
+          }
+        })
+      }
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    handleSizeChange (val) {
+    handleSizeChange (val) { // 每页显示
       this.pagination.pageSize = val
       this.getBlackList()
     },
-    handleCurrentChange (val) {
+    handleCurrentChange (val) { // 分页
       this.pagination.currentPage = val
       this.getBlackList()
     },
-    getBlackList () {
+    getBlackList () { // 获取所有黑名单
       this.$post('/admin/channel/queryBlacklist', {
         'page': this.pagination.currentPage,
         'pageNumber': this.pagination.pageSize,
@@ -157,7 +170,7 @@ export default {
         }
       })
     },
-    addBlackList () {
+    addBlackList () { // 新增黑名单
       if (this.title === '新增') {
         this.$post('/admin/channel/addBlacklist', {
           'channelName': this.form.channelName,
@@ -174,14 +187,14 @@ export default {
             })
             this.getBlackList()
             this.cancel()
-          } else {
+          } else if (res.code === 1) {
             this.$message({
               message: res.message,
               type: 'error'
             })
           }
         })
-      } else {
+      } else { // 编辑黑名单
         this.$post('/admin/channel/editBlacklist', {
           'channelName': this.form.channelName,
           'address': this.form.address,
@@ -198,7 +211,7 @@ export default {
             })
             this.getBlackList()
             this.cancel()
-          } else {
+          } else if (res.code === 1) {
             this.$message({
               message: res.message,
               type: 'error'
@@ -207,7 +220,7 @@ export default {
         })
       }
     },
-    cancel () {
+    cancel () { // 取消添加，清除表单数据
       this.centerDialogVisible = false
       this.from = {
         channelName: '',
@@ -217,10 +230,39 @@ export default {
         reason: '',
         channelId: ''
       }
+    },
+    deleteBlackList (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$post('/admin/channel/delBlacklist', {
+          'channelId': id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getBlackList()
+          } else if (res.code === 1) {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   },
   watch: {
-    sort (val) {
+    sort (val) { // 点击排序
       this.getBlackList()
     }
   }

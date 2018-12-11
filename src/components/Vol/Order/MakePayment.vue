@@ -40,7 +40,7 @@
       <button class="round" @click="createPlan">生成付款计划表</button>
     </div>
 
-    <div class="inventory">
+    <div class="inventory" v-show="showList">
       <p>致：上海锦锭科技有限公司</p>
       <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
       <div class="order-table-header">
@@ -72,7 +72,7 @@
       </table>
     </div>
 
-    <div class="inventory schadule">
+    <div class="inventory schadule" v-show="showList">
       <h4>付款计划表</h4>
       <table>
         <tr>
@@ -110,6 +110,7 @@ export default {
   name: 'MakePayment',
   data () {
     return {
+      showList: false,
       selectAllChannel: [
         {
           value: '1072062971435315200',
@@ -222,6 +223,7 @@ export default {
       }
     },
     createPlan () { // 生成付款计划表
+      this.showList = true
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
         batch: this.batch

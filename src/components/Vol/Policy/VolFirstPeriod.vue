@@ -15,7 +15,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
-      max-height="500"
+      max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -23,11 +23,15 @@
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column prop="carSum" label="车辆数"></el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>
-      <el-table-column prop="createTime" label="投保时间"></el-table-column>
+      <el-table-column label="投保时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeChange }}
+        </template>
+      </el-table-column>
       <el-table-column label="支付操作">
         <template slot-scope="scope">
-          <el-button class="yellow" size="mini">已支付</el-button>
-          <el-button size="mini">未支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini">已支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini">未支付</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -101,7 +105,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/requisition/getFirstPaymentList', data).then(res => {
         if (res.code === 0) {
-          console.log(res.data)
+          // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records
         } else {
@@ -112,7 +116,20 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    timeChange (data) {
+      let date = new Date(data)
+      return date.getFullYear() + '-' + zero(date.getMonth() + 1) + '-' + zero(date.getDate())
+    },
+    time (data) {
+      return data.split(' ')[0].replace('-', '.').replace('-', '.')
+    }
   }
+}
+function zero (data) {
+  if (data < 10) return '0' + data
+  return data
 }
 </script>
 

@@ -10,8 +10,14 @@
     >
     </selector>
 
-    <div class="Amortized-table">
-      <el-table :data="tableData" border style="width: 100%">
+    <!-- <div class="Amortized-table"> -->
+      <el-table
+      ref="multipleTable"
+      :data="tableData"
+      tooltip-effect="light"
+      border
+      max-height="450"
+      style="width: 95%; margin: 0 auto;border: 1px solid #eee">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="carNumber" label="车辆数" width="180"></el-table-column>
         <el-table-column prop="batch" label="批次"></el-table-column>
@@ -25,7 +31,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    <!-- </div> -->
 
     <!-- 分页 -->
     <el-pagination v-if="total > NumValue"

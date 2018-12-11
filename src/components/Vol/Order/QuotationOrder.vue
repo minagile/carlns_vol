@@ -23,7 +23,7 @@
       <el-button class="up" @click="downDemo">下载模板</el-button>
     </div>
 
-    <div class="order-table">
+    <div class="order-table" v-show="listShow">
       <div class="order-table-header">
         <span>批次：{{ orderList.header.batch }}</span>
         <span>企业名称：{{ orderList.header.channelName }}</span>
@@ -83,6 +83,7 @@ export default {
     return {
       options: [],
       value4: '',
+      listShow: false,
       orderList: {
         header: {},
         middle: [],
@@ -131,6 +132,7 @@ export default {
           this.$fetch('/admin/requisition/showQuotationList', {channelId: this.value4}).then(res => {
             console.log(res)
             if (res.code === 0) {
+              this.listShow = true
               this.orderList = res.data
             } else {
               this.$message(res.msg)

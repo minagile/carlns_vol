@@ -6,7 +6,7 @@
           <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
         </ul>
         <div class="header-img">
-          <p><img src="../../assets/img/person.png" >用户名</p>
+          <p><img src="../../assets/img/person.png" >{{username}}</p>
           <p @click="out"><img src="../../assets/img/out.png">退出登录</p>
         </div>
       </div>
@@ -57,10 +57,12 @@ export default {
           href: 'ChannelManagement'
         }
       ],
+      username: '',
       num: 0
     }
   },
   mounted () {
+    this.username = sessionStorage.getItem('username')
     let path = this.$router.history.current.fullPath
     this.tabList.forEach((v, k) => {
       if (path.split('/')[2] === v.href || path.split('/')[3] === v.href) {
@@ -86,6 +88,7 @@ export default {
   methods: {
     out () {
       sessionStorage.clear()
+      this.$fetch('/login/logout')
       this.$router.push({name: 'MLogin'})
     },
     tab (i) {

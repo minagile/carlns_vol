@@ -1,7 +1,7 @@
 <template>
   <!-- 帐号管理 -->
   <div class="AccountManagement">
-    <el-button class="add" @click="centerDialogVisible = true">+ 添加账号</el-button>
+    <el-button class="add" @click="open('添加账号')">+ 添加账号</el-button>
 
     <!-- table -->
     <table>
@@ -9,13 +9,14 @@
         <td><div class="index">{{ index + 1 }}</div></td>
         <td>账号：{{ item.adminName }}</td>
         <td><el-button type="text" @click="set(item.adminId)">设置权限</el-button></td>
+        <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
         <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
       </tr>
     </table>
 
     <!-- 分页 -->
-    <el-pagination v-if="total > NumValue"
-      @size-change="handleSizeChange"
+    <el-pagination
+      v-if="total > NumValue"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
       :page-sizes="[100, 200, 300, 400]"
@@ -30,73 +31,69 @@
       <div class="top">
         <span>账号：123</span>
         <el-button class="setBtn" size="small"  @click="childDialogVisible = false">返回</el-button>
-        <el-button class="setBtn" size="small">确定</el-button>
+        <el-button class="setBtn" size="small" @click="sureUpdate">确定</el-button>
       </div>
       <el-table :data="tableData5" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-table :data="tableData5" style="width: 100%" :show-header="false">
-              <el-table-column>
+            <el-table :data="props.row.object" style="width: 100%" :show-header="false">
+              <el-table-column label="名称" prop="name" width=160></el-table-column>
+              <el-table-column align="center">
                 <template slot-scope="scope">
-                  全部渠道
+                  <el-checkbox v-if="scope.row.fp[0]" v-model="scope.row.fp[0][0].status"  @change="boxchecked($event, scope, 6, props.row)"></el-checkbox>
+                  <el-checkbox v-if="!scope.row.fp[0]" disabled></el-checkbox>
                 </template>
               </el-table-column>
-              <el-table-column label="查看">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="checked"></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column label="添加">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="checked"></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column label="编辑">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="checked"></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column label="删除">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="checked"></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column label="全选">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="checked"></el-checkbox>
-                </template>
-              </el-table-column>
+              <el-table-column align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-if="scope.row.fp[1]" v-model="scope.row.fp[1][0].status"  @change="boxchecked($event, scope, 7, props.row)"></el-checkbox>
+                <el-checkbox v-if="!scope.row.fp[1]" disabled></el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-if="scope.row.fp[2]" v-model="scope.row.fp[2][0].status"  @change="boxchecked($event, scope, 8, props.row)"></el-checkbox>
+                <el-checkbox v-if="!scope.row.fp[2]" disabled></el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-if="scope.row.fp[3]" v-model="scope.row.fp[3][0].status"  @change="boxchecked($event, scope, 9, props.row)"></el-checkbox>
+                <el-checkbox v-if="!scope.row.fp[3]" disabled></el-checkbox>
+              </template>
+            </el-table-column>
+            <el-table-column align="center">
+              <template slot-scope="scope">
+                <el-checkbox v-model="scope.row.all"  @change="boxchecked($event, scope, 10, props.row)"></el-checkbox>
+              </template>
+            </el-table-column>
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column>
+        <el-table-column label="名称" prop="name"></el-table-column>
+        <el-table-column label="查看" align="center">
           <template slot-scope="scope">
-            {{ scope.row.name }}
+            <el-checkbox v-model="scope.row.look" @change="boxchecked($event, scope, 0)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="查看">
+        <el-table-column label="添加" align="center">
           <template slot-scope="scope">
-            <el-checkbox v-model="checked"></el-checkbox>
+            <el-checkbox v-model="scope.row.add" @change="boxchecked($event, scope, 1)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="添加">
+        <el-table-column label="删除" align="center">
           <template slot-scope="scope">
-            <el-checkbox v-model="checked"></el-checkbox>
+            <el-checkbox v-model="scope.row.del" @change="boxchecked($event, scope, 2)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="编辑">
+        <el-table-column label="编辑" align="center">
           <template slot-scope="scope">
-            <el-checkbox v-model="checked"></el-checkbox>
+            <el-checkbox v-model="scope.row.adit" @change="boxchecked($event, scope, 3)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="删除">
+        <el-table-column label="全选" align="center">
           <template slot-scope="scope">
-            <el-checkbox v-model="checked"></el-checkbox>
-          </template>
-        </el-table-column>
-        <el-table-column label="全选">
-          <template slot-scope="scope">
-            <el-checkbox v-model="checked"></el-checkbox>
+            <el-checkbox v-model="scope.row.all" @change="boxchecked($event, scope, 5)"></el-checkbox>
           </template>
         </el-table-column>
       </el-table>
@@ -104,16 +101,19 @@
 
     <!-- 添加账号 -->
     <el-dialog :visible.sync="centerDialogVisible" width="683px">
-      <div class="dialog-header">添加账号</div>
+      <div class="dialog-header">{{title}}</div>
       <el-form :model="form">
-        <el-form-item label="手机号：" label-width="150px">
+        <el-form-item label="手机号：" label-width="150px" v-if="title === '添加账号'">
           <el-input v-model="form.phone" autocomplete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
-        <el-form-item label="账号：" label-width="150px">
+        <el-form-item label="账号：" label-width="150px" v-if="title === '添加账号'">
           <el-input v-model="form.username" autocomplete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item label="密码：" label-width="150px">
           <el-input v-model="form.password" autocomplete="off" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" label-width="150px" v-if="title === '修改密码'">
+          <el-input v-model="form.newPass" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,12 +138,15 @@ export default {
       form: {
         phone: '',
         username: '',
-        password: ''
+        password: '',
+        newPass: ''
       },
       formLabelWidth: '209px',
       NumValue: 10,
       currentPage4: 1,
-      total: 0
+      total: 0,
+      id: '',
+      title: '添加账号'
     }
   },
   mounted () {
@@ -151,11 +154,11 @@ export default {
   },
   methods: {
     set (id) {
-      this.$post('/Menu/findByAdminId', {
+      this.id = id
+      this.$post('/admin/Menu/findByAdminId', {
         adminId: id
       }).then(res => {
         if (res.code === 0) {
-          console.log(res)
           this.childDialogVisible = true
           this.tableData5 = res.data
         } else {
@@ -164,25 +167,53 @@ export default {
       })
     },
     adduser () {
-      this.$post('/admin/account/insertAdmin', {
-        phone: this.form.phone,
-        username: this.form.username,
-        password: this.form.password
-      }).then(res => {
-        // console.log(res)
-        if (res.code === 0) {
-          this.centerDialogVisible = false
-          this.$message(res.msg)
-          this.getDataList()
-          this.form = {
-            phone: '',
-            username: '',
-            password: ''
+      if (this.title === '添加账号') {
+        this.$post('/admin/account/insertAdmin', {
+          phone: this.form.phone,
+          username: this.form.username,
+          password: this.form.password
+        }).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            this.centerDialogVisible = false
+            this.$message(res.msg)
+            this.getDataList()
+            this.form = {
+              phone: '',
+              username: '',
+              password: ''
+            }
+          } else {
+            this.$message(res.msg)
           }
-        } else {
-          this.$message(res.msg)
-        }
-      })
+        })
+      } else {
+        this.$post('/admin/account/updateAdminIndex', {
+          nextPassword: this.form.newPass,
+          password: this.form.password,
+          adminId: this.id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '修改成功'
+            })
+            this.centerDialogVisible = false
+          } else if (res.code === 1) {
+            this.$message({
+              type: 'info',
+              message: res.message
+            })
+          }
+        })
+      }
+    },
+    open (msg, id) {
+      console.log(id)
+      this.form = {}
+      this.id = id
+      this.centerDialogVisible = true
+      this.title = msg
     },
     // 删除帐户
     delte (id) {
@@ -215,18 +246,21 @@ export default {
         })
       })
     },
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
-    },
+    // handleSizeChange (val) {
+    //   console.log(`每页 ${val} 条`)
+    //   this.NumValue = val
+    //   this.getDataList()
+    // },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getDataList()
     },
     getDataList () {
       this.$fetch('/admin/account/findAll', {
         page: this.currentPage4,
         pageSize: this.NumValue
       }).then(res => {
-        console.log(res)
         if (res.code === 0) {
           this.list = res.data.rows
           this.total = res.data.records
@@ -234,6 +268,127 @@ export default {
           this.$message(res.msg)
         }
       })
+    },
+    boxchecked (event, scope, which, father) {
+      if (which === 5) {
+        if (event === true) {
+          scope.row.look = true
+          scope.row.add = true
+          scope.row.del = true
+          scope.row.adit = true
+          scope.row.object.forEach(v => {
+            v.fp.forEach(m => {
+              if (m) {
+                m[0].status = true
+              }
+            })
+            v.all = true
+          })
+        } else {
+          scope.row.look = false
+          scope.row.add = false
+          scope.row.del = false
+          scope.row.adit = false
+          scope.row.object.forEach(v => {
+            v.fp.forEach(m => {
+              if (m) {
+                m[0].status = false
+              }
+            })
+            v.all = false
+          })
+        }
+      } else if (which <= 3 && which >= 0) {
+        if (event === true) {
+          scope.row.object.forEach(v => {
+            if (v.fp[which]) {
+              v.fp[which][0].status = true
+            }
+          })
+        } else {
+          scope.row.all = false
+          scope.row.object.forEach(v => {
+            v.all = false
+            if (v.fp[which]) {
+              v.fp[which][0].status = false
+            }
+          })
+        }
+      } else if (which <= 9 && which >= 6) {
+        if (event === false) {
+          scope.row.all = false
+          father.all = false
+          if (which === 6) {
+            father.look = false
+          }
+          if (which === 7) {
+            father.add = false
+          }
+          if (which === 8) {
+            father.del = false
+          }
+          if (which === 9) {
+            father.adit = false
+          }
+        }
+      } else if (which === 10) {
+        if (event === false) {
+          father.look = false
+          father.add = false
+          father.del = false
+          father.adit = false
+          father.all = false
+          scope.row.fp.forEach(v => {
+            if (v) {
+              v[0].status = false
+            }
+          })
+        } else {
+          scope.row.fp.forEach(v => {
+            if (v) {
+              v[0].status = true
+            }
+          })
+        }
+      }
+    },
+    sureUpdate () { // 确定权限
+      let arr = []
+      this.tableData5.forEach(v => {
+        v.object.forEach(m => {
+          m.fp.forEach(n => {
+            if (n) {
+              if (n[0].status === true) {
+                arr.push(n[0].id)
+              }
+            }
+          })
+        })
+      })
+      if (arr.length <= 0) {
+        this.$message({
+          message: '您还没有选择任何权限',
+          type: 'error'
+        })
+      } else {
+        this.$post('/admin/Menu/updatePermission', {
+          adminId: this.id,
+          fundIds: JSON.stringify(arr).split('[')[1].split(']')[0]
+        }).then(res => {
+          if (res.code === 0) {
+            this.childDialogVisible = false
+            this.$message({
+              message: res.msg,
+              type: 'success'
+            })
+          } else if (res.code === 1) {
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        })
+      }
     }
   }
 }

@@ -38,6 +38,7 @@ export default {
     padding-bottom: 1px;
     animation: mymove 1s cubic-bezier(.28,1.41,1,1.1) normal;
     position: relative;
+    overflow: auto;
   }
 }
 @keyframes mymove {

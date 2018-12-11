@@ -2,7 +2,6 @@
   <!-- 保单及发票管理 -->
   <div class="PolicyAndInvoice">
     <selector
-      :all="true"
       :refresh="true"
       @sort="sort"
       @page="page"

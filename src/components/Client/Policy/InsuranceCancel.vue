@@ -4,8 +4,9 @@
    <selector
       :refresh="true"
       @sort="sort"
-      @page="page"
+      @page="handleSizeChange"
       @giveParams="giveParams"
+      :channelList="list"
     >
     </selector>
 
@@ -14,25 +15,22 @@
       :data="tableData3"
       tooltip-effect="dark"
       border
-      style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-      @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="date" label="订单号" width="180"></el-table-column>
-      <el-table-column prop="name" label="车牌" width="180"></el-table-column>
-      <el-table-column prop="name" label="公司"></el-table-column>
-      <el-table-column prop="date" label="险种"></el-table-column>
-      <el-table-column prop="name" label="投保时间"></el-table-column>
-      <el-table-column prop="name" label="退保原因"></el-table-column>
+      style="width: 95%; margin: 0 auto;border: 1px solid #eee">
+      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="carNumber" label="车辆数"></el-table-column>
+      <el-table-column prop="coverageName" label="险种"></el-table-column>
+      <el-table-column prop="createTime" label="投保时间"></el-table-column>
+      <el-table-column prop="remark" label="退保原因"></el-table-column>
     </el-table>
 
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :current-page="pagination.currentPage"
+      :page-sizes="pagination.pageSizes"
+      :page-size="pagination.pageSize"
       layout="prev, pager, next, total, jumper"
-      :total="400">
+      :total="pagination.total">
     </el-pagination>
   </div>
 </template>
@@ -48,21 +46,25 @@ export default {
       currentPage4: 1,
       serchDate: [],
       SortValue: '1',
-      NumValue: 10,
-      tableData3: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      tableData3: [],
+      pagination: {
+        pageSize: 10,
+        pageSizes: [10, 20, 30, 40, 50],
+        currentPage: 1,
+        total: 0
+      },
+      list: [] // 渠道列表
     }
   },
   mounted () {
+    this.getData()
+    this.getList()
   },
   methods: {
-    handleSelectionChange (val) {
-      this.multipleSelection = val
+    getList () {
+      this.$post('/user/uchannel/getNextChannel').then(res => {
+        this.list = res.data
+      })
     },
     giveParams (data) {
       // console.log(data)
@@ -79,26 +81,29 @@ export default {
       this.SortValue = data
       this.getData()
     },
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+    handleSizeChange (val) { // 一页几条数据
+      this.pagination.pageSize = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.pagination.currentPage = val
+      this.getData()
     },
     getData () {
       var data = {
-        channelId: '',
-        startTime: this.serchDate.startTime,
+        beginTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
-        corporateName: this.serchDate.selectChannel,
+        channelName: this.serchDate.selectChannel,
         order: this.SortValue,
-        page: this.currentPage4,
-        pageSize: this.NumValue
+        page: this.pagination.currentPage,
+        pageSize: this.pagination.pageSize
       }
-      console.log(data)
-      // this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-      //   console.log(res)
-      // })
+      this.$fetch('/user/ucar/getSurrenderCar', data).then(res => {
+        if (res.code === 0) {
+          this.tableData3 = res.data.rows
+          this.pagination.total = res.data.records
+        }
+      })
     }
   },
   components: {

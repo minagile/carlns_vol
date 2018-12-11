@@ -3,7 +3,7 @@
   <div class="MakePayment">
     <div class="header">
       <div class="select">
-        <el-select v-model="value4" size="small" clearable placeholder="请选择">
+        <el-select v-model="channelId" size="small" clearable placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -11,9 +11,9 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-select v-model="value4" size="small" clearable placeholder="请选择">
+        <el-select v-model="batch" size="small" clearable placeholder="请选择">
           <el-option
-            v-for="item in options"
+            v-for="item in options1"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -37,18 +37,18 @@
       </div>
       <el-button class="up">上传</el-button>
       <el-button>清空</el-button>
-      <div class="round">手动输入</div>
+      <button class="round" @click="createPlan">生成付款计划表</button>
     </div>
 
     <div class="inventory">
       <p>致：上海锦锭科技有限公司</p>
-      <p>根据我司 蓝途新能源汽车（上海）有限公司 与贵司于 2018 年 11 月 1日签订的《商户合作协议书》，我司 2018 年 11 月 14 日投保 商业险 的车辆业务清单如下：</p>
+      <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
       <div class="order-table-header">
-        <span>批次：</span>
-        <span>企业名称：</span>
-        <span>险种：</span>
-        <span>车辆数：</span>
-        <span>预收款合计：</span>
+        <span>批次：{{head.batch}}</span>
+        <span>企业名称：{{head.name}}</span>
+        <span>险种：{{head.coverage}}</span>
+        <span>车辆数：{{head.carNumber}}</span>
+        <span>投保时间{{head.qdate}}</span>
       </div>
       <table>
         <tr>
@@ -57,12 +57,18 @@
           <th>保险公司</th>
           <th>车险保单号</th>
         </tr>
-        <tr v-for="(item, index) in orderList" :key="index">
+        <tr v-for="(item, index) in middle" :key="index">
+          <th>{{item.plateNumber}}</th>
+          <th>{{item.vin}}</th>
+          <th>{{item.ICBC}}</th>
+          <th>{{item.policyNumber}}</th>
+        </tr>
+        <!-- <tr v-for="(item, index) in orderList" :key="index">
           <td><input type="text" v-model="item.chepaihao"></td>
           <td><input type="text" v-model="item.shangyexian"></td>
           <td><input type="text" v-model="item.baofei"></td>
           <td><input type="text" v-model="item.shenqing"></td>
-        </tr>
+        </tr> -->
       </table>
     </div>
 
@@ -74,21 +80,21 @@
           <th>付款日期</th>
           <th>还款金额</th>
         </tr>
-        <tr v-for="(item, index) in orderList" :key="index">
-          <td></td>
-          <td></td>
-          <td></td>
+        <tr v-for="(i, index) in orderList" :key="index">
+          <td>{{i.periods}}</td>
+          <td>{{i.date}}</td>
+          <td>{{i.money}}</td>
         </tr>
         <tr>
           <td colspan="3">
-            <p>合计：6,0000</p>
+            <p>合计：{{orderList[0].sum}}</p>
             <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
           </td>
         </tr>
       </table>
       <p>本业务清单及付款计划表属于《商户合作协议书》不可分割的部分，作为附件与 《商户合作协议书》主文具备同等法律效力。我司对业务清单所列之被保险车辆信息的真实性负责，并承诺按照付款计划表所列进度进行付款</p>
-      <p class="t">蓝途新能源汽车（上海）有限公司</p>
-      <p class="t">2018年11月14日</p>
+      <p class="t">{{head.name}}</p>
+      <p class="t">{{head.qdate}}</p>
     </div>
 
     <div class="btn">
@@ -106,16 +112,32 @@ export default {
     return {
       options: [
         {
-          value: '选项1',
-          label: '黄金糕'
+          value: '1072062971435315200',
+          label: '渠道1'
         }
       ],
-      value4: '',
+      options1: [
+        {
+          value: 1,
+          label: '批次1'
+        }
+      ],
+      channelId: '',
+      batch: 1,
       orderList: [
         {
           name: 123
         }
-      ]
+      ],
+      head: {
+        name: '',
+        rdate: '',
+        qdate: '',
+        coverage: '',
+        batch: '',
+        carNumber: ''
+      },
+      middle: []
     }
   },
   mounted () {
@@ -139,6 +161,23 @@ export default {
         if (res.code === 0) {
         } else {
           this.$message(res.msg)
+        }
+      })
+    },
+    createPlan () { // 生成付款计划表
+      this.$fetch('/admin/stager/insertStager', {
+        channelId: this.channelId,
+        batch: this.batch
+      }).then(res => {
+        if (res.code === 0) {
+          console.log(res.data)
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+          this.head = res.data.head
+          this.middle = res.data.middle
+          this.orderList = res.data.trailVo1
         }
       })
     }
@@ -198,16 +237,16 @@ export default {
       margin-top: 37px;
     }
     .round {
-      width:66px;
-      height:66px;
+      width:151px;
+      height:40px;
       background:rgba(255,193,7,1);
-      border-radius:50%;
+      border-radius:4px;
       float: right;
-      margin: 20px 117px 0 0;
-      line-height: 66px;
+      margin: 35px 117px 0 0;
+      // line-height: 66px;
       font-size: 15px;
       text-align: center;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
   .inventory {

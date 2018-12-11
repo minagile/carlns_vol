@@ -186,7 +186,6 @@ export default {
     }
   },
   mounted () {
-    console.log(sessionStorage.getItem('token'))
     this.getData()
   },
   methods: {
@@ -198,7 +197,6 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData = res.data
-          console.log(res.data)
         }
       })
       this.$fetch('/admin/homePage_a/overdue_a', {

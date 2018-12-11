@@ -52,7 +52,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <el-button v-if="refresh"></el-button>
+      <el-button v-if="refresh" @click="refurbish"></el-button>
     </div>
   </div>
 </template>
@@ -110,6 +110,9 @@ export default {
         selectChannel: this.selectChannel
       }
       this.$emit('giveParams', selectData)
+    },
+    refurbish () {
+      this.$emit('getData')
     }
   },
   props: {

@@ -7,6 +7,7 @@
       @page="handleSizeChange"
       @giveParams="giveParams"
       :channelList="list"
+      @getData="getData"
     >
     </selector>
 

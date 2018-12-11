@@ -54,7 +54,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      user: '12345678999',
+      user: '12345678966',
       psd: '123456',
       forget: true,
       count: 60,
@@ -143,12 +143,11 @@ export default {
           message: '请输入密码'
         })
       } else {
-        this.$post(`/login/loginIn?phone=${this.user}&password=${this.psd}`
-        // {
-        //   phone: this.user,
-        //   password: this.psd
-        // }
-        ).then((response) => {
+        // POST /login/loginInByUser
+        this.$post('/login/loginInByUser', {
+          phone: this.user,
+          password: this.psd
+        }).then((response) => {
           if (response.code === 0) {
             console.log(response)
             sessionStorage.setItem('token', response.data.token)

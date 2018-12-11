@@ -1,7 +1,7 @@
 <template>
   <!-- 渠道管理 -->
   <div class="ChannelManagement">
-    <el-button class="add" @click="centerDialogVisible = true">+ 新增渠道</el-button>
+    <el-button class="add" @click="centerDialogVisible = true, addtext === '新增渠道'">+ 新增渠道</el-button>
 
     <!-- table -->
     <table>
@@ -23,7 +23,7 @@
 
     <!-- 添加子公司 -->
     <el-dialog :visible.sync="childDialogVisible" width="770px">
-      <div class="dialog-header">添加子公司</div>
+      <div class="dialog-header">{{ addtext }}</div>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
         <el-form-item label="公司名称：" prop="channelName" :label-width="formLabelWidth">
           <el-input v-model="ruleForm.channelName" placeholder="请输入公司名称"></el-input>
@@ -107,7 +107,10 @@ export default {
       },
       formLabelWidth: '209px',
       id: '0',
-      addtext: '新增渠道'
+      addtext: '新增渠道',
+      childadit: false,
+      channelId: '',
+      clickData: []
     }
   },
   mounted () {
@@ -116,15 +119,21 @@ export default {
   methods: {
     // 编辑渠道
     delchannel (id) {
-      this.centerDialogVisible = true
-      this.addtext = '编辑渠道'
+      if (this.childadit === true) {
+        this.childDialogVisible = true
+        this.addtext = '编辑子公司'
+      } else {
+        this.centerDialogVisible = true
+        this.addtext = '编辑渠道'
+      }
+      this.channelId = id
       this.$post('/admin/channel/selectByChannelId', {channelId: id}).then(res => {
         console.log(res)
         if (res.code === 0) {
           this.ruleForm = {
             channelName: res.data.channelName,
             address: res.data.channelAddress,
-            principal: res.data.principal,
+            principal: res.data.channelPrincipal,
             phone: res.data.channelPhone,
             pwd: res.data.plaintextPwd
           }
@@ -137,6 +146,7 @@ export default {
     addchild (id) {
       this.childDialogVisible = true
       this.id = id
+      this.addtext = '添加子公司'
     },
     addNewChannel (data) {
       if (this.ruleForm.channelName === '') {
@@ -155,8 +165,9 @@ export default {
             message: '手机号输入不正确'
           })
         } else {
-          if (this.addtext === '编辑渠道') {
+          if (this.addtext === '编辑渠道' || this.addtext === '编辑子公司') {
             this.$post('/admin/channel/updateChannel', {
+              channelId: this.channelId,
               channelName: this.ruleForm.channelName,
               address: this.ruleForm.address,
               principal: this.ruleForm.principal,
@@ -164,25 +175,28 @@ export default {
               pwd: this.ruleForm.pwd,
               parentId: this.id
             }).then(res => {
-              console.log(res.data)
-              // if (res.code === 0) {
-              //   this.$message.success(res.msg)
-              //   if (data !== 'id') {
-              //     this.centerDialogVisible = false
-              //   } else {
-              //     this.childDialogVisible = false
-              //   }
-              this.getDataList()
-              //   this.ruleForm = {
-              //     channelName: '',
-              //     address: '',
-              //     principal: '',
-              //     phone: '',
-              //     pwd: ''
-              //   }
-              // } else {
-              //   this.$message.error(res.msg)
-              // }
+              if (res.code === 0) {
+                this.$message.success(res.msg)
+                if (this.childadit === true) {
+                  // console.log(res.data)
+                  this.childDialogVisible = false
+                  // console.log(this.clickData[1])
+                  $('.childrenTr' + this.clickData[1]).remove()
+                  this.childListData(this.clickData[0], this.clickData[1], this.clickData[2])
+                } else {
+                  this.getDataList()
+                  this.centerDialogVisible = false
+                }
+                this.ruleForm = {
+                  channelName: '',
+                  address: '',
+                  principal: '',
+                  phone: '',
+                  pwd: ''
+                }
+              } else {
+                this.$message.error(res.msg)
+              }
             })
           } else {
             if (data !== 'id') {
@@ -269,12 +283,17 @@ export default {
             })
             $('.tractive' + index).after(element)
             $('.del').click(function () {
-              var index = $('.del').index($(this))
-              that.delt(item, index, id, res.data[index].channelId)
+              var i = $('.del').index($(this))
+              that.delt(item, index, id, res.data[i].channelId)
             })
             $('.aidt').click(function () {
-              var index = $('.aidt').index($(this))
-              that.delt(item, index, id, res.data[index].channelId)
+              var i = $('.aidt').index($(this))
+              // console.log(i)
+              that.childadit = true
+              that.clickData = [item, index, id]
+              // console.log(that.clickData)
+              that.id = res.data[i].parentId
+              that.delchannel(res.data[i].channelId)
             })
           } else {
             this.$message('暂无数据')

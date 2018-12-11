@@ -67,11 +67,11 @@ export default {
       selectChannel: '',
       SortOptions: [
         {
-          value: '1',
+          value: 1,
           label: '序号正序'
         },
         {
-          value: '2',
+          value: 2,
           label: '序号反序'
         }
       ],
@@ -81,7 +81,7 @@ export default {
         {value: 15},
         {value: 25}
       ],
-      SortValue: '1',
+      SortValue: 1,
       NumValue: 10
     }
   },

@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { Req } from '../../../assets/js/http.js'
 export default {
   name: 'MakePayment',
   data () {
@@ -119,7 +120,29 @@ export default {
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    uploadfile () {
+      var formData = new FormData()
+      formData.append('policyFile', this.ruleForm.username)
+      formData.append('scheduleFile', this.ruleForm.username)
+      formData.append('invoiceFile', this.ruleForm.username)
+      formData.append('channelId', this.ruleForm.username)
+      formData.append('batch', this.ruleForm.username)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'token': sessionStorage.getItem('token')
+        }
+      }
+      this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    }
+  }
 }
 </script>
 

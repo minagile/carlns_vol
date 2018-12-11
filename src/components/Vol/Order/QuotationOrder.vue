@@ -2,24 +2,25 @@
   <!-- 生成报价单 -->
   <div class="QuotationOrder">
     <div class="header">
-      <el-select v-model="value4" clearable placeholder="请选择">
+      <el-select v-model="value4" clearable placeholder="请选择渠道"  @visible-change="select">
+        <el-option
+          v-for="item in selectAllChannel"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <!-- <el-select v-model="value4" clearable placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.value"
           :label="item.label"
           :value="item.value">
         </el-option>
-      </el-select>
-      <el-select v-model="value4" clearable placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-button class="up">上传</el-button>
+      </el-select> -->
+      <el-button class="up"><input type="file" @click="uploadfile">上传</el-button>
       <el-button>清空</el-button>
+      <el-button class="up" @click="downDemo">下载模板</el-button>
     </div>
 
     <div class="order-table">
@@ -75,28 +76,77 @@
 </template>
 
 <script>
+import { Req } from '../../../assets/js/http.js'
 export default {
   name: 'QuotationOrder',
   data () {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }],
+      options: [],
       value4: '',
-      orderList: [
-        {
-          name: 123
-        },
-        {
-          name: 123
-        }
-      ]
+      orderList: [],
+      selectAllChannel: []
     }
   },
   mounted () {
   },
-  methods: {}
+  methods: {
+    uploadfile (e) {
+      var file = e.target.files[0]
+      if (file.name.split('.')[1] !== 'xls' && file.name.split('.')[1] !== 'xlsx') {
+        this.$message({
+          type: 'info',
+          message: '请上传.xls/.xlsx文件'
+        })
+      } else {
+        var formData = new FormData()
+        formData.append('policyFile', file)
+        formData.append('ChannelId', this.value4)
+        let config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'token': sessionStorage.getItem('token')
+          }
+        }
+        this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$message(res.msg)
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
+    // 下载模板
+    downDemo () {
+      this.$post('/admin/requisition/downloadFiles').then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          window.location.href = Req + res.data
+          window.open(Req + res.data)
+        } else {
+          window.open(Req + res.data)
+          this.$message(res.msg)
+        }
+      })
+    },
+    // 选择渠道
+    select (val) {
+      if (val === true) {
+        this.selectAllChannel = []
+        this.$fetch('/admin/channel/selectAllChannel').then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    }
+  }
 }
 </script>
 
@@ -112,6 +162,16 @@ export default {
       background:rgba(255,193,7,1);
       border-color:rgba(255,193,7,1);
       margin-left: 40px;
+      position: relative;
+      input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
     }
   }
   .order-table {

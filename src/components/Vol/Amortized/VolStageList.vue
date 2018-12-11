@@ -20,11 +20,11 @@
         <el-table-column prop="forTheTime" label="投保时间"></el-table-column>
         <el-table-column prop="coverage" label="险种"></el-table-column>
         <el-table-column prop="carNumber" label="车辆数"></el-table-column>
-        <el-table-column>
+        <!-- <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
 

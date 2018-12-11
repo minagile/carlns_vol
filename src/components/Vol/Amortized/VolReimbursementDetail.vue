@@ -20,11 +20,11 @@
         <el-table-column prop="money" label="车投保金额"></el-table-column>
         <el-table-column prop="coverage" label="车险种"></el-table-column>
         <el-table-column prop="state" label="分期状态"></el-table-column>
-        <el-table-column>
+        <!-- <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
 

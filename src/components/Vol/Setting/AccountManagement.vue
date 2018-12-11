@@ -7,11 +7,22 @@
     <table>
       <tr v-for="(item, index) in list" :key="index">
         <td><div class="index">{{ index + 1 }}</div></td>
-        <td>账号：{{ item.cont }}</td>
-        <td><el-button type="text" @click="childDialogVisible = true">设置权限</el-button></td>
-        <td><el-button type="text">删除</el-button></td>
+        <td>账号：{{ item.adminName }}</td>
+        <td><el-button type="text" @click="set(item.adminId)">设置权限</el-button></td>
+        <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
       </tr>
     </table>
+
+    <!-- 分页 -->
+    <el-pagination v-if="total > NumValue"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="NumValue"
+      layout="prev, pager, next, total, jumper"
+      :total="total">
+    </el-pagination>
 
     <!-- 权限设置 -->
     <el-dialog :visible.sync="childDialogVisible" width="1000px">
@@ -60,7 +71,7 @@
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            全部渠道
+            {{ scope.row.name }}
           </template>
         </el-table-column>
         <el-table-column label="查看">
@@ -95,16 +106,19 @@
     <el-dialog :visible.sync="centerDialogVisible" width="683px">
       <div class="dialog-header">添加账号</div>
       <el-form :model="form">
+        <el-form-item label="手机号：" label-width="150px">
+          <el-input v-model="form.phone" autocomplete="off" placeholder="请输入账号"></el-input>
+        </el-form-item>
         <el-form-item label="账号：" label-width="150px">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入账号"></el-input>
+          <el-input v-model="form.username" autocomplete="off" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item label="密码：" label-width="150px">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入密码"></el-input>
+          <el-input v-model="form.password" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button class="cancel" @click="centerDialogVisible = false">取 消</el-button>
-        <el-button class="submit" type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        <el-button class="submit" type="primary" @click="adduser">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -117,46 +131,111 @@ export default {
   data () {
     return {
       checked: false,
-      tableData5: [
-        {
-          id: '12987122'
-        },
-        {
-          id: '12987122'
-        },
-        {
-          id: '12987122'
-        },
-        {
-          id: '12987122'
-        }
-      ],
-      list: [
-        {
-          cont: '1234566'
-        },
-        {
-          cont: '1234566'
-        }
-      ],
+      tableData5: [],
+      list: [],
       childDialogVisible: false,
       centerDialogVisible: false,
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        phone: '',
+        username: '',
+        password: ''
       },
-      formLabelWidth: '209px'
+      formLabelWidth: '209px',
+      NumValue: 10,
+      currentPage4: 1,
+      total: 0
     }
   },
   mounted () {
+    this.getDataList()
   },
-  methods: {}
+  methods: {
+    set (id) {
+      this.$post('/Menu/findByAdminId', {
+        adminId: id
+      }).then(res => {
+        if (res.code === 0) {
+          console.log(res)
+          this.childDialogVisible = true
+          this.tableData5 = res.data
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    adduser () {
+      this.$post('/admin/account/insertAdmin', {
+        phone: this.form.phone,
+        username: this.form.username,
+        password: this.form.password
+      }).then(res => {
+        // console.log(res)
+        if (res.code === 0) {
+          this.centerDialogVisible = false
+          this.$message(res.msg)
+          this.getDataList()
+          this.form = {
+            phone: '',
+            username: '',
+            password: ''
+          }
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    // 删除帐户
+    delte (id) {
+      this.$confirm('是否删除这个账号？', '删除账号', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '删除',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.$post('/admin/account/deleteAdmin', {
+          id: id
+        }).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '已删除成功'
+            })
+            this.getDataList()
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.message
+            })
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: '取消删除'
+        })
+      })
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    },
+    getDataList () {
+      this.$fetch('/admin/account/findAll', {
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.list = res.data.rows
+          this.total = res.data.records
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    }
+  }
 }
 </script>
 

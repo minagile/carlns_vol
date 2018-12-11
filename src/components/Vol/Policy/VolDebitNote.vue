@@ -15,6 +15,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      max-height="500"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -80,10 +81,12 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {

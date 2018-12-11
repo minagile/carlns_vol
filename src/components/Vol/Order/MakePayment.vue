@@ -3,15 +3,15 @@
   <div class="MakePayment">
     <div class="header">
       <div class="select">
-        <el-select v-model="channelId" size="small" clearable placeholder="请选择">
+        <el-select v-model="channelId" size="small" clearable placeholder="请选择渠道" @visible-change="select">
           <el-option
-            v-for="item in options"
+            v-for="item in selectAllChannel"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
-        <el-select v-model="batch" size="small" clearable placeholder="请选择">
+        <el-select v-model="batch" size="small" clearable placeholder="请选择对应批次" @visible-change="selectBatch">
           <el-option
             v-for="item in options1"
             :key="item.value"
@@ -23,19 +23,19 @@
       <div class="upfile">
         <img src="../../../assets/vimg/upload.png" alt="">
         <p>上传保单</p>
-        <input type="file">
+        <input type="file" @change="upfile($event, 1)">
       </div>
       <div class="upfile">
         <img src="../../../assets/vimg/upload.png" alt="">
         <p>上传付款计划表</p>
-        <input type="file">
+        <input type="file"  @change="upfile($event, 2)">
       </div>
       <div class="upfile">
         <img src="../../../assets/vimg/upload.png" alt="">
         <p>上传发票扫描件</p>
-        <input type="file">
+        <input type="file"  @change="upfile($event, 3)">
       </div>
-      <el-button class="up">上传</el-button>
+      <el-button class="up" @click="uploadfile">上传</el-button>
       <el-button>清空</el-button>
       <button class="round" @click="createPlan">生成付款计划表</button>
     </div>
@@ -97,10 +97,10 @@
       <p class="t">{{head.qdate}}</p>
     </div>
 
-    <div class="btn">
+    <!-- <div class="btn">
       <el-button class="cancel">取消</el-button>
       <el-button class="submit">确定</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -110,20 +110,15 @@ export default {
   name: 'MakePayment',
   data () {
     return {
-      options: [
+      selectAllChannel: [
         {
           value: '1072062971435315200',
           label: '渠道1'
         }
       ],
-      options1: [
-        {
-          value: 1,
-          label: '批次1'
-        }
-      ],
+      options1: [],
       channelId: '',
-      batch: 1,
+      batch: 0,
       orderList: [
         {
           name: 123
@@ -137,32 +132,94 @@ export default {
         batch: '',
         carNumber: ''
       },
-      middle: []
+      middle: [],
+      file1: {},
+      file2: {},
+      file3: {}
     }
   },
   mounted () {
   },
   methods: {
-    uploadfile () {
-      var formData = new FormData()
-      formData.append('policyFile', this.ruleForm.username)
-      formData.append('scheduleFile', this.ruleForm.username)
-      formData.append('invoiceFile', this.ruleForm.username)
-      formData.append('channelId', this.ruleForm.username)
-      formData.append('batch', this.ruleForm.username)
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'token': sessionStorage.getItem('token')
+    selectBatch (val) {
+      if (val === true) {
+        this.options1 = []
+        this.$fetch('/admin/requisition/getBatchByChannelId', {channelId: this.channelId}).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.options1.push({value: v.requisitionBatch, label: v.requisitionBatch})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
+    // 选择渠道
+    select (val) {
+      if (val === true) {
+        this.selectAllChannel = []
+        this.$fetch('/admin/channel/selectAllChannel').then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
+    upfile (e, i) {
+      var file = e.target.files[0]
+      if (file.name.split('.')[1] !== 'xls' && file.name.split('.')[1] !== 'xlsx') {
+        this.$message({
+          type: 'info',
+          message: '请上传.xls/.xlsx文件'
+        })
+      } else {
+        if (i === 1) {
+          this.file1 = file
+        }
+        if (i === 2) {
+          this.file2 = file
+        }
+        if (i === 3) {
+          this.file3 = file
         }
       }
-      this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
-        console.log(res)
-        if (res.code === 0) {
-        } else {
-          this.$message(res.msg)
+    },
+    uploadfile () {
+      if (this.file1 === '') {
+        this.$message('请先上传保单文件')
+      } else if (this.file2 === '') {
+        this.$message('请先上传付款计划表')
+      } else if (this.file3 === '') {
+        this.$message('请先上传发票')
+      } else {
+        var formData = new FormData()
+        formData.append('policyFile', this.file1)
+        formData.append('scheduleFile', this.file2)
+        formData.append('invoiceFile', this.file3)
+        formData.append('channelId', this.channelId)
+        formData.append('batch', this.batch)
+        let config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'token': sessionStorage.getItem('token')
+          }
         }
-      })
+        this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$message.success(res.msg)
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
     },
     createPlan () { // 生成付款计划表
       this.$fetch('/admin/stager/insertStager', {
@@ -188,7 +245,8 @@ export default {
 <style lang="less" scoped>
 .MakePayment {
   .header {
-    height: 107px;
+    min-height: 107px;
+    overflow: hidden;
     // padding-top: 37px;
     padding-left: 43px;
     border-bottom: 13px solid #EDEDED;

@@ -15,14 +15,15 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      max-height="500"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" width="120"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称" width="120"></el-table-column>
-      <el-table-column prop="carSum" label="车辆数" width="120"></el-table-column>
-      <el-table-column prop="coverageName" label="险种" width="120"></el-table-column>
-      <el-table-column prop="createTime" label="投保时间" width="120"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="carSum" label="车辆数"></el-table-column>
+      <el-table-column prop="coverageName" label="险种"></el-table-column>
+      <el-table-column prop="createTime" label="投保时间"></el-table-column>
       <el-table-column label="报价单">
         <template slot-scope="scope">
           <img src="../../../assets/img/list1.png" alt="">
@@ -81,10 +82,12 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {

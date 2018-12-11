@@ -7,16 +7,16 @@
     <table>
       <tr v-for="(item, index) in list" :key="index" class="tabletr">
         <td><div class="index">{{ index + 1 }}</div></td>
-        <td>公司名称：{{ item.name }}</td>
-        <td>地址：{{ item.adress }}</td>
-        <td>负责人：{{ item.people }}</td>
-        <td>联系方式：{{ item.phone }}</td>
-        <td>账号：{{ item.cont }}</td>
-        <td><el-button type="text" @click="childDialogVisible = true">添加子公司</el-button></td>
-        <td><el-button type="text">编辑</el-button></td>
+        <td>公司名称：{{ item.channelName }}</td>
+        <td>地址：{{ item.channelAddress }}</td>
+        <td>负责人：{{ item.channelPrincipal }}</td>
+        <td>联系方式：{{ item.channelPhone }}</td>
+        <td>密码：{{ item.channelPwd }}</td>
+        <td><el-button type="text" @click="addchild(item.channelId)">添加子公司</el-button></td>
+        <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
         <td>
-          <div class="zhankai" v-if="!item.expand" @click="expand(item, index)">展开 <span></span></div>
-          <div class="shouqi" v-if="item.expand" @click="expand(item, index)">收起 <span></span></div>
+          <div class="zhankai" v-show="!item.expand" @click="expand(item, index, item.channelId)">展开 <span></span></div>
+          <div class="shouqi" v-show="item.expand" @click="expand(item, index)">收起 <span></span></div>
         </td>
       </tr>
     </table>
@@ -24,52 +24,49 @@
     <!-- 添加子公司 -->
     <el-dialog :visible.sync="childDialogVisible" width="770px">
       <div class="dialog-header">添加子公司</div>
-      <el-form :model="form">
-        <el-form-item label="公司名称：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司名称"></el-input>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <el-form-item label="公司名称：" prop="channelName" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.channelName" placeholder="请输入公司名称"></el-input>
         </el-form-item>
-        <el-form-item label="地址：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司地址"></el-input>
+        <el-form-item label="地址：" prop="address" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.address" placeholder="请输入公司地址"></el-input>
         </el-form-item>
-        <el-form-item label="负责人：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入负责人"></el-input>
+        <el-form-item label="负责人：" prop="principal" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.principal" placeholder="请输入负责人"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入联系方式"></el-input>
+        <el-form-item label="联系方式：" prop="phone" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.phone" placeholder="请输入联系方式"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button class="cancel" @click="childDialogVisible = false">取 消</el-button>
-        <el-button class="submit" type="primary" @click="childDialogVisible = false">确 定</el-button>
+        <el-button class="submit" type="primary" @click="addNewChannel('id')">确 定</el-button>
       </div>
     </el-dialog>
 
     <!-- 新增渠道弹窗 -->
     <el-dialog :visible.sync="centerDialogVisible" width="770px">
-      <div class="dialog-header">新增渠道</div>
-      <el-form :model="form">
-        <el-form-item label="公司名称：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司名称"></el-input>
+      <div class="dialog-header">{{ addtext }}</div>
+      <el-form :model="ruleForm"  :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <el-form-item label="公司名称：" prop="channelName" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.channelName" placeholder="请输入公司名称"></el-input>
         </el-form-item>
-        <el-form-item label="地址：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入公司地址"></el-input>
+        <el-form-item label="地址：" prop="address" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.address" placeholder="请输入公司地址"></el-input>
         </el-form-item>
-        <el-form-item label="负责人：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入负责人"></el-input>
+        <el-form-item label="负责人：" prop="principal" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.principal" placeholder="请输入负责人"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入联系方式"></el-input>
-        </el-form-item>
-        <el-form-item label="账号：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入账号"></el-input>
+        <el-form-item label="联系方式：" prop="phone" :label-width="formLabelWidth">
+          <el-input v-model="ruleForm.phone" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item label="密码：" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" placeholder="请输入密码"></el-input>
+          <el-input v-model="ruleForm.pwd" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button class="cancel" @click="centerDialogVisible = false">取 消</el-button>
-        <el-button class="submit" type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        <el-button class="submit" type="primary" @click="addNewChannel">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -82,89 +79,236 @@ export default {
   name: 'ChannelManagement',
   data () {
     return {
-      list: [
-        {
-          name: '锦上有限公司',
-          adress: '津滨大道',
-          people: '忘而',
-          phone: '1234566',
-          cont: '1234566',
-          expand: false
-        },
-        {
-          name: '锦上有限公司',
-          adress: '津滨大道',
-          people: '忘而',
-          phone: '1234566',
-          cont: '1234566',
-          expand: false
-        }
-      ],
-      childlist: [
-        {
-          name: 'xxx公司',
-          adress: '津滨大道',
-          people: '忘而',
-          phone: '1234566',
-          expand: false
-        },
-        {
-          name: 'xxx公司',
-          adress: '津滨大道',
-          people: '忘而',
-          phone: '1234566',
-          expand: false
-        }
-      ],
+      list: [],
+      childlist: [],
       childDialogVisible: false,
       centerDialogVisible: false,
-      form: {
-        name: ''
+      ruleForm: {
+        channelName: '',
+        address: '',
+        principal: '',
+        phone: '',
+        pwd: ''
       },
-      formLabelWidth: '209px'
+      rules: {
+        channelName: [
+          { required: true, message: '请输入公司名称', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '请输入地址', trigger: 'blur' }
+        ],
+        principal: [
+          { required: true, message: '请输入负责人姓名', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入联系方式', trigger: 'blur' },
+          { pattern: /^[1][0-9][0-9]{9}$/, message: '请输入正确的联系方式', trigger: 'blur' }
+        ]
+      },
+      formLabelWidth: '209px',
+      id: '0',
+      addtext: '新增渠道'
     }
   },
   mounted () {
+    this.getDataList()
   },
   methods: {
-    // 展开收起
-    expand (item, index) {
-      // this.num = index
-      var tr = $('.tabletr')
-      // console.log(tr[index])
-      var element = `<tr class="sonList childrenTr${index}" style="height: 50px;border-bottom:2px solid #f2f2f2;color:#666;">
-        <td></td>
-        <td>公司名称：</td>
-        <td colspan="2" style="text-align:center;">负责人：</td>
-        <td style="text-align:center;">地址：</td>
-        <td>联系方式：</td>
-        <td><button class="del" style="background: #fff;color:#4977FC;">删除</button></td>
-        <td><button class="aidt" style="background: #fff;color:#4977FC;">编辑</button></td>
-        <td></td>
-      </tr>`
-      if (item.expand === false) {
-        item.expand = true
-        tr[index].classList.add('tractive' + index)
-        $('.tractive' + index).after(element)
-        $('.del').on('click', e => {
-          console.log(e)
-          this.delt()
-        })
+    // 编辑渠道
+    delchannel (id) {
+      this.centerDialogVisible = true
+      this.addtext = '编辑渠道'
+      this.$post('/admin/channel/selectByChannelId', {channelId: id}).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.ruleForm = {
+            channelName: res.data.channelName,
+            address: res.data.channelAddress,
+            principal: res.data.principal,
+            phone: res.data.channelPhone,
+            pwd: res.data.plaintextPwd
+          }
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    // 添加子公司
+    addchild (id) {
+      this.childDialogVisible = true
+      this.id = id
+    },
+    addNewChannel (data) {
+      if (this.ruleForm.channelName === '') {
+        this.$message('公司名称不为空')
+      } else if (this.ruleForm.address === '') {
+        this.$message('地址不为空')
+      } else if (this.ruleForm.principal === '') {
+        this.$message('负责人不为空')
+      } else if (this.ruleForm.phone === '') {
+        this.$message('联系方式不为空')
       } else {
-        // tr[index].classList.remove('childrenTr')
+        var myreg = /^[1][0-9][0-9]{9}$/
+        if (!myreg.test(this.ruleForm.phone)) {
+          this.$message({
+            type: 'error',
+            message: '手机号输入不正确'
+          })
+        } else {
+          if (this.addtext === '编辑渠道') {
+            this.$post('/admin/channel/updateChannel', {
+              channelName: this.ruleForm.channelName,
+              address: this.ruleForm.address,
+              principal: this.ruleForm.principal,
+              phone: this.ruleForm.phone,
+              pwd: this.ruleForm.pwd,
+              parentId: this.id
+            }).then(res => {
+              console.log(res.data)
+              // if (res.code === 0) {
+              //   this.$message.success(res.msg)
+              //   if (data !== 'id') {
+              //     this.centerDialogVisible = false
+              //   } else {
+              //     this.childDialogVisible = false
+              //   }
+              this.getDataList()
+              //   this.ruleForm = {
+              //     channelName: '',
+              //     address: '',
+              //     principal: '',
+              //     phone: '',
+              //     pwd: ''
+              //   }
+              // } else {
+              //   this.$message.error(res.msg)
+              // }
+            })
+          } else {
+            if (data !== 'id') {
+              this.id = '0'
+            }
+            this.$post('/admin/channel/addChannel', {
+              channelName: this.ruleForm.channelName,
+              address: this.ruleForm.address,
+              principal: this.ruleForm.principal,
+              phone: this.ruleForm.phone,
+              pwd: this.ruleForm.pwd,
+              parentId: this.id
+            }).then(res => {
+              if (res.code === 0) {
+                this.$message.success(res.msg)
+                if (data !== 'id') {
+                  this.centerDialogVisible = false
+                } else {
+                  this.childDialogVisible = false
+                }
+                this.getDataList()
+                this.ruleForm = {
+                  channelName: '',
+                  address: '',
+                  principal: '',
+                  phone: '',
+                  pwd: ''
+                }
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
+        }
+      }
+    },
+    // 获取父级列表
+    getDataList () {
+      this.$fetch('/admin/channel/getMaxChannel').then(res => {
+        // console.log(res.data)
+        if (res.code === 0) {
+          this.list = res.data
+          this.list.forEach(v => {
+            v.expand = false
+          })
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    // 展开收起
+    expand (item, index, id) {
+      // console.log(item, index, id)
+      if (item.expand === false) {
+        this.childListData(item, index, id)
+      } else {
         item.expand = false
         $('.childrenTr' + index).remove()
       }
     },
-    delt () {
+    childListData (item, index, id) {
+      var that = this
+      var tr = $('.tabletr')
+      var element = ''
+      this.$post('/admin/channel/getNextChannel', {
+        parentId: id
+      }).then(res => {
+        // console.log(res.data)
+        if (res.code === 0) {
+          if (res.data.length > 0) {
+            item.expand = true
+            tr[index].classList.add('tractive' + index)
+            res.data.forEach((v, k) => {
+              element += `<tr class="sonList childrenTr${index}" style="height: 50px;border-bottom:2px solid #f2f2f2;color:#666;">
+                <td></td>
+                <td>公司名称：${v.channelName}</td>
+                <td colspan="2" style="text-align:center;">负责人：${v.channelPrincipal}</td>
+                <td style="text-align:center;">地址：${v.channelAddress}</td>
+                <td>联系方式：${v.channelPhone}</td>
+                <td><button class="del" style="background: #fff;color:#4977FC;">删除</button></td>
+                <td><button class="aidt" style="background: #fff;color:#4977FC;">编辑</button></td>
+                <td></td>
+              </tr>`
+            })
+            $('.tractive' + index).after(element)
+            $('.del').click(function () {
+              var index = $('.del').index($(this))
+              that.delt(item, index, id, res.data[index].channelId)
+            })
+            $('.aidt').click(function () {
+              var index = $('.aidt').index($(this))
+              that.delt(item, index, id, res.data[index].channelId)
+            })
+          } else {
+            this.$message('暂无数据')
+          }
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    // 删除子公司
+    delt (item, index, id, cid) {
+      // console.log(item, index, id)
       this.$confirm('是否删除这个子公司？', '删除子公司', {
         distinguishCancelAndClose: true,
         confirmButtonText: '删除',
         cancelButtonText: '取消'
       }).then(() => {
-        this.$message({
-          type: 'info',
-          message: '已删除成功'
+        this.$post('/admin/channel/delChannel', {
+          channelId: cid
+        }).then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '已删除成功'
+            })
+            $('.childrenTr' + index).remove()
+            this.childListData(item, index, id)
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.msg
+            })
+          }
         })
       }).catch(action => {
         this.$message({

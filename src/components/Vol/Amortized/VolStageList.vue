@@ -11,7 +11,7 @@
     </selector>
 
     <div class="Amortized-table">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" height="500">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="repaymentTime" label="还款时间" width="180"></el-table-column>
         <el-table-column prop="repaymentAmount" label="还款金额" width="180"></el-table-column>

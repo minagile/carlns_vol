@@ -22,15 +22,15 @@
           </div>
             <el-table
               :data="tableData"
-              style="width: 100%">
-              <el-table-column
+              style="width: 98%; margin: 0 auto">
+              <!-- <el-table-column
                 type="selection"
                 width="55">
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 prop="batch"
                 label="批次"
-                width=50>
+                width=80>
               </el-table-column>
               <el-table-column
                 prop="time"
@@ -62,15 +62,15 @@
           </div>
             <el-table
               :data="tableData1"
-              style="width: 100%">
-              <el-table-column
+              style="width: 98%; margin: 0 auto">
+              <!-- <el-table-column
                 type="selection"
                 width="55">
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 prop="batch"
                 label="批次"
-                width=50>
+                width=80>
               </el-table-column>
               <el-table-column
                 prop="time"
@@ -103,15 +103,15 @@
           </div>
             <el-table
               :data="tableData2"
-              style="width: 100%">
-              <el-table-column
+              style="width: 98%; margin: 0 auto">
+              <!-- <el-table-column
                 type="selection"
                 width="55">
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 prop="batch"
                 label="批次"
-                width=50>
+                width=80>
               </el-table-column>
               <el-table-column
                 prop="time"

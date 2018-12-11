@@ -2,8 +2,8 @@
   <!-- 黑名单列表 -->
   <div class="BlackList">
     <div class="blackList-input">
-      <input type="text" placeholder="请输入公司名称">
-      <button>查询</button>
+      <input type="text" placeholder="请输入公司名称" v-model="search">
+      <button @click="searchCompany">查询</button>
     </div>
     <div class="Amortized-sort">
       <span>排序</span>
@@ -78,6 +78,7 @@
     </el-dialog>
 
     <el-pagination
+      v-if="pagination.total > pagination.pageSize"
       @current-change="handleCurrentChange"
       :current-page="pagination.currentPage"
       :page-sizes="pagination.pageSizes"
@@ -116,6 +117,7 @@ export default {
       },
       formLabelWidth: '209px',
       tableData: [],
+      search: '',
       pagination: {
         currentPage: 1,
         pageSizes: [10, 20, 30, 40, 50],
@@ -128,6 +130,18 @@ export default {
     this.getBlackList()
   },
   methods: {
+    searchCompany () {
+      this.$post('/admin/channel/queryBlacklist', {
+        channelName: this.search
+      }).then(res => {
+        if (res.code === 0) {
+          console.log(res)
+          this.pagination.total = res.data.records
+          this.tableData = res.data.rows
+          // console.log(this.tableData)
+        }
+      })
+    },
     openDialog (title, id) { // 打开弹窗
       this.centerDialogVisible = true
       this.title = title
@@ -232,7 +246,7 @@ export default {
       }
     },
     deleteBlackList (id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

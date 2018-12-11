@@ -87,7 +87,7 @@
         </tr>
         <tr>
           <td colspan="3">
-            <p>合计：{{orderList[0].sum}}</p>
+            <p>合计：{{sum}}</p>
             <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
           </td>
         </tr>
@@ -137,7 +137,12 @@ export default {
         batch: '',
         carNumber: ''
       },
-      middle: []
+      middle: [
+        {
+          name: 123
+        }
+      ],
+      sum: 0
     }
   },
   mounted () {
@@ -157,7 +162,6 @@ export default {
         }
       }
       this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
-        console.log(res)
         if (res.code === 0) {
         } else {
           this.$message(res.msg)
@@ -178,6 +182,8 @@ export default {
           this.head = res.data.head
           this.middle = res.data.middle
           this.orderList = res.data.trailVo1
+          const length = this.orderList.length - 1
+          this.sum = this.orderList[length].sum
         }
       })
     }

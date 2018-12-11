@@ -11,7 +11,7 @@
     </selector>
 
     <div class="Amortized-table">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" height="500">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
         <el-table-column prop="name" label="公司名称" width="180"></el-table-column>

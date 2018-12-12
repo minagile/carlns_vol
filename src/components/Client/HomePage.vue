@@ -306,13 +306,14 @@ export default {
     width: 48.39%;
     .home-body-title {
       padding: 9px 18px;
-      font-size:24px;
+      font-size:18px;
       font-family:MicrosoftYaHei;
       font-weight:400;
       color:rgba(3,0,0,1);
       border-bottom: 4px solid #F1F1F1;
       img {
         vertical-align: middle;
+        width: 22px;
       }
     }
     .el-table {

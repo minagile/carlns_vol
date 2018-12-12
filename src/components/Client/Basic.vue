@@ -126,7 +126,7 @@ export default {
         a {
           padding: 0 40px;
           color: #fff;
-          font-size: 20px;
+          font-size: 18px;
           img {
             vertical-align: middle;
             margin-right: 4px;

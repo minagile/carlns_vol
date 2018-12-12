@@ -26,7 +26,7 @@
       <el-table-column label="付款计划表">
         <template slot-scope="scope">
           <img src="../../../assets/img/list1.png" alt="">
-          <el-button type="text" @click="watchPrice(scope.row.requisitionId)">点击查看报价单</el-button>
+          <el-button type="text" @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,36 +42,25 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      width="1000px"
-      :show-close=false
-      title="付款计划表"
+      width="770px"
       custom-class="dialog">
-      <!-- <template  slot="title">
-        <div class="header">
-          <span>批次：</span>
-          <span>企业名称：</span>
-          <span>险种：</span>
-          <span>车辆数：</span>
-          <span>预收款合计：</span>
-        </div>
-      </template> -->
+      <div class="dialog-header1">付款计划表</div>
       <div class="inventory schadule">
-        <h4>付款计划表</h4>
         <table>
           <tr>
             <th>期数</th>
             <th>付款日期</th>
             <th>还款金额</th>
-            <th>是否付款</th>
+            <!-- <th>是否付款</th> -->
           </tr>
           <tr v-for="(i, index) in orderList" :key="index">
-            <td>{{i.stagesPeriods}}</td>
-            <td>{{i.stagesRepaymentTime}}</td>
-            <td>{{i.stagesProfit}}</td>
-            <td>{{i.stagesState | payed}}</td>
+            <td>{{i.periods}}</td>
+            <td>{{i.date}}</td>
+            <td>{{i.money}}</td>
+            <!-- <td>{{i.stagesState | payed}}</td> -->
           </tr>
           <tr>
-            <td colspan="4">
+            <td colspan="3">
               <!-- <p>合计：{{sum}}</p> -->
               <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
             </td>
@@ -160,7 +149,12 @@ export default {
       this.$fetch('/user/byStages/stagingList_particulars', {
         requisitionId: id
       }).then(res => {
-        this.orderList = res.data
+        this.orderList = res.data.trailVo1
+        if (res.data.trailVo1) {
+          this.orderList = res.data.trailVo1
+        } else {
+          this.orderList = res.data.trailVo2
+        }
       })
     }
   },
@@ -259,8 +253,8 @@ export default {
   }
   .inventory {
     // margin: 20px 23px 0;
-    padding: 15px 191px 32px;
-    border-bottom: 13px solid #f2f2f2;
+    padding: 0 15px;
+    // border-bottom: 13px solid #f2f2f2;
     p {
       font-size: 15px;
       line-height: 30px;

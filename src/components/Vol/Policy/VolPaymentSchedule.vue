@@ -48,21 +48,9 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      width="1000px"
-      :show-close=false
-      title="付款计划表"
-      custom-class="dialog">
-      <!-- <template  slot="title">
-        <div class="header">
-          <span>批次：</span>
-          <span>企业名称：</span>
-          <span>险种：</span>
-          <span>车辆数：</span>
-          <span>预收款合计：</span>
-        </div>
-      </template> -->
+      width="770px">
+      <div class="dialog-header">付款计划表</div>
       <div class="inventory schadule">
-        <h4>付款计划表</h4>
         <table>
           <tr>
             <th>期数</th>
@@ -73,12 +61,12 @@
           <tr v-for="(i, index) in orderList" :key="index">
             <td>{{i.stagesPeriods}}</td>
             <td>{{i.stagesRepaymentTime}}</td>
-            <td>{{i.stagesProfit}}</td>
+            <td>{{i.stagesRepaymentAmount}}</td>
             <td>{{i.stagesState | payed}}</td>
           </tr>
           <tr>
             <td colspan="4">
-              <!-- <p>合计：{{sum}}</p> -->
+              <p>合计：{{sum}}</p>
               <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
             </td>
           </tr>
@@ -102,7 +90,8 @@ export default {
       value: '',
       total: 0,
       dialogVisible: false,
-      orderList: []
+      orderList: [],
+      sum: 0
     }
   },
   mounted () {
@@ -157,10 +146,14 @@ export default {
     },
     watchPrice (id) {
       this.dialogVisible = true
+      this.sum = 0
       this.$fetch('/admin/requisition/stagingList_particulars', {
         requisitionId: id
       }).then(res => {
         this.orderList = res.data
+        this.orderList.forEach(v => {
+          this.sum += v.stagesRepaymentAmount
+        })
       })
     }
   },
@@ -198,8 +191,8 @@ function zero (data) {
   }
   .inventory {
     // margin: 20px 23px 0;
-    padding: 15px 191px 32px;
-    border-bottom: 13px solid #f2f2f2;
+    padding: 0 15px;
+    // border-bottom: 13px solid #f2f2f2;
     p {
       font-size: 15px;
       line-height: 30px;

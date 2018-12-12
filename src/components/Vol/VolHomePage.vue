@@ -222,6 +222,7 @@ export default {
               // console.log(res)
               if (res.code === 0) {
                 if (res.data.length > 0) {
+                  v.cities = []
                   res.data.forEach(m => {
                     v.cities.push({ label: m.channelName, value: m.channelId })
                   })

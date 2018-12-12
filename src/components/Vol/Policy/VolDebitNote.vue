@@ -130,9 +130,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        this.$fetch('/admin/requisition/delByRequisitionId', {
+          requisitionId: id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+            this.getData()
+          } else if (res.code === 1) {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
         })
       }).catch(() => {
         this.$message({

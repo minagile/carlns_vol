@@ -160,7 +160,7 @@ export default {
   name: 'HomePage',
   data () {
     return {
-      companyList: ['蓝途新能源汽车（上海）有限公司', '蓝途', '衡虎', '蓝速衡富', '蓝途零部件'],
+      companyList: [''],
       // header: ['批次', '时间', '公司', '车辆数', '险种', '金额'],
       tableData: [],
       tableData1: [],
@@ -210,7 +210,7 @@ export default {
         // 'channelId': this.channel
       }).then(res => {
         this.companyList = res.data
-        console.log(this.tableData2)
+        // console.log(this.tableData2)
       })
     }
   }

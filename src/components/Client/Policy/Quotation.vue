@@ -42,19 +42,9 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      width="1000px"
-      :show-close=false
-      title="报价单"
+      width="770px"
       custom-class="dialog">
-      <!-- <template  slot="title">
-        <div class="header">
-          <span>批次：</span>
-          <span>企业名称：</span>
-          <span>险种：</span>
-          <span>车辆数：</span>
-          <span>预收款合计：</span>
-        </div>
-      </template> -->
+      <div class="dialog-header1">报价单</div>
       <div class="order-table">
         <div class="order-table-header">
           <span>批次：{{ orderList.header.batch }}</span>

@@ -302,7 +302,7 @@ export default {
   // }
   .el-col {
     background:rgba(255,255,255,1);
-    box-shadow:0px 4px 8px 0px rgba(0, 0, 0, 0.35);
+    box-shadow:0px 4px 7px 1px rgba(0, 0, 0, 0.08);
     border-radius:10px;
     margin-bottom: 29px;
     height: 450px;

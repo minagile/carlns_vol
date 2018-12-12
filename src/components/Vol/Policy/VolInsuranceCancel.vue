@@ -172,7 +172,7 @@ export default {
           console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.options.push({value: v.channelId, label: v.channelName})
+              this.options.push({value: v.carId, label: v.carNumber})
             })
           } else {
             this.$message(res.msg)

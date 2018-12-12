@@ -12,6 +12,7 @@
             :value="item.value">
           </el-option>
         </el-select> -->
+        <el-button @click="allc" :class="{all: allchannel === true}">全部渠道</el-button>
         <el-cascader @visible-change="select"
           :options="options2"
           @change="changechan"
@@ -166,6 +167,7 @@ export default {
   name: 'VolHomePage',
   data () {
     return {
+      allchannel: true,
       selectAllChannel: [],
       value: '',
       tableData: [],
@@ -202,10 +204,16 @@ export default {
     this.getData()
   },
   methods: {
+    allc () {
+      this.channelId = ''
+      this.allchannel = true
+      this.getData()
+    },
     changechan (val) {
       // console.log(val)
       // console.log(Array.reverse(val))
       this.channelId = val[val.length - 1]
+      this.allchannel = false
       this.getData()
     },
     handleItemChange (val) {
@@ -324,13 +332,16 @@ export default {
     vertical-align: middle;
   }
   .xuanze {
-    width:353px;
+    width: 450px;
     height:56px;
     background:rgba(255,255,255,1);
     border-radius:28px;
     margin: 0 35px 23px 34px;
     padding: 0 12px 0 17px;
     box-sizing: border-box;
+    .all {
+      background: #FFC107;
+    }
     span {
       line-height: 56px;
     }

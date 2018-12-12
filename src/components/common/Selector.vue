@@ -1,7 +1,7 @@
 <template>
   <div class="Selector">
     <div class="Selector-main">
-      <button class="all" :class="{isVol : vol == 1}" v-if="all" @click="clearTime(0)">全部时间</button>
+      <button class="all" :class="{isVol : vol == 1, chooseall: alltime === true}" v-if="all" @click="clearTime(0)">全部时间</button>
       <el-date-picker
         v-model="startTime"
         type="date"
@@ -9,7 +9,7 @@
         value-format="yyyy-MM-dd">
       </el-date-picker>
       -
-      <el-date-picker
+      <el-date-picker @change="clickaaa"
         v-model="endTime"
         type="date"
         placeholder="选择日期"
@@ -18,16 +18,22 @@
     </div>
 
     <div class="Selector-main">
-      <button @click="clearTime(1)" class="all" v-if="all" :class="{isVol : vol == 1}">全部渠道</button>
+      <button @click="clearTime(1)" class="all" v-if="all" :class="{isVol : vol == 1, chooseall: allchannel === true}">全部渠道</button>
 
-      <el-select v-model="selectChannel" placeholder="选择渠道">
+      <!-- <el-select v-model="selectChannel" placeholder="选择渠道">
         <el-option
           v-for="item in channelList"
           :key="item.channelId"
           :label="item.channelName"
           :value="item.channelId">
         </el-option>
-      </el-select>
+      </el-select> -->
+      <el-cascader @visible-change="select"
+        :options="options2"
+        @change="changechan"
+        @active-item-change="handleItemChange"
+        :props="props"
+      ></el-cascader>
       <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
     </div>
 
@@ -62,6 +68,8 @@ export default {
   name: 'Selector',
   data () {
     return {
+      allchannel: false,
+      alltime: false,
       startTime: '',
       endTime: '',
       selectChannel: '',
@@ -82,17 +90,81 @@ export default {
         {value: 25}
       ],
       SortValue: 1,
-      NumValue: 10
+      NumValue: 10,
+      options2: [],
+      props: {
+        value: 'label',
+        // label: 'label',
+        // value: 'value',
+        children: 'cities'
+      },
+      channelId: ''
     }
   },
   mounted () {
   },
   methods: {
+    clickaaa () {
+      // console.log(234)
+      this.alltime = true
+    },
+    changechan (val) {
+      // console.log(val)
+      // console.log(Array.reverse(val))
+      this.channelId = val[val.length - 1]
+      this.allchannel = true
+      // this.getData()
+    },
+    handleItemChange (val) {
+      // console.log(val)
+      setTimeout(_ => {
+        var id = ''
+        // POST /admin/channel/getNextChannel
+        this.options2.forEach((v, k) => {
+          if (v.label === val[0]) {
+            id = v.value
+            this.$post('/admin/channel/getNextChannel', {
+              parentId: id
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                if (res.data.length > 0) {
+                  v.cities = []
+                  res.data.forEach(m => {
+                    v.cities.push({ label: m.channelName, value: m.channelId })
+                  })
+                } else {
+                  v.cities.push({ label: v.label, value: v.value })
+                }
+              }
+            })
+          }
+        })
+      }, 300)
+    },
+    // 查询所有渠道
+    select (val) {
+      if (val === true) {
+        this.options2 = []
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
     clearTime (val) {
       if (val === 0) {
         this.startTime = ''
         this.endTime = ''
+        this.alltime = false
       } else {
+        this.allchannel = false
+        this.channelId = ''
         this.selectChannel = ''
       }
       this.giveParams()
@@ -107,7 +179,7 @@ export default {
       let selectData = {
         startTime: this.startTime,
         endTime: this.endTime,
-        selectChannel: this.selectChannel
+        selectChannel: this.channelId
       }
       this.$emit('giveParams', selectData)
     },
@@ -222,6 +294,10 @@ export default {
         border-color: @bgcolor;
         color: black;
       }
+    }
+    .chooseall {
+      background: #fff;
+      border: 1px solid #282828;
     }
   }
 }

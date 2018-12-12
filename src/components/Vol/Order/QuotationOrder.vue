@@ -2,14 +2,20 @@
   <!-- 生成报价单 -->
   <div class="QuotationOrder">
     <div class="header">
-      <el-select v-model="value4" clearable placeholder="请选择渠道"  @visible-change="select">
+      <!-- <el-select v-model="value4" clearable placeholder="请选择渠道"  @visible-change="select">
         <el-option
           v-for="item in selectAllChannel"
           :key="item.value"
           :label="item.label"
           :value="item.value">
         </el-option>
-      </el-select>
+      </el-select> -->
+      <el-cascader @visible-change="select"
+        :options="options2"
+        @change="changechan"
+        @active-item-change="handleItemChange"
+        :props="props"
+      ></el-cascader>
       <!-- <el-select v-model="value4" clearable placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -98,7 +104,21 @@ export default {
         },
         sum: ''
       },
-      selectAllChannel: []
+      selectAllChannel: [],
+      channelId: '',
+      options2: [{
+        label: '江苏',
+        cities: []
+      }, {
+        label: '浙江',
+        cities: []
+      }],
+      props: {
+        // value: 'label',
+        label: 'label',
+        value: 'value',
+        children: 'cities'
+      }
     }
   },
   mounted () {
@@ -114,7 +134,7 @@ export default {
       } else {
         var formData = new FormData()
         formData.append('file', file)
-        formData.append('ChannelId', this.value4)
+        formData.append('ChannelId', this.channelId)
         let config = {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -125,7 +145,7 @@ export default {
           // console.log(res.data)
           if (res.data.code === 0) {
             // this.$message(res.data.msg)
-            this.$fetch('/admin/requisition/showQuotationList', {channelId: this.value4}).then(res => {
+            this.$fetch('/admin/requisition/showQuotationList', {channelId: this.channelId}).then(res => {
               // console.log(res)
               if (res.code === 0) {
                 this.listShow = true
@@ -147,14 +167,54 @@ export default {
     downDemo () {
       location.href = `${Req}/admin/requisition/downloadFiles`
     },
-    // 选择渠道
+    changechan (val) {
+      // console.log(val)
+      this.channelId = val[val.length - 1]
+      // console.log(this.channelId)
+      // this.getData()
+    },
+    handleItemChange (val) {
+      // console.log(val)
+      setTimeout(_ => {
+        var id = ''
+        // POST /admin/channel/getNextChannel
+        this.options2.forEach((v, k) => {
+          if (v.value === val[0]) {
+            id = v.value
+            this.$post('/admin/channel/getNextChannel', {
+              parentId: id
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                if (res.data.length > 0) {
+                  v.cities = []
+                  res.data.forEach(m => {
+                    v.cities.push({ label: m.channelName, value: m.channelId })
+                  })
+                } else {
+                  v.cities.push({ label: v.label, value: v.value })
+                }
+              }
+            })
+          }
+        })
+      }, 300)
+    },
+    change () {
+      this.getData()
+    },
+    // 查询所有渠道
     select (val) {
       if (val === true) {
-        this.selectAllChannel = []
-        this.$fetch('/admin/channel/selectAllChannel').then(res => {
+        // this.selectAllChannel = []
+        this.options2 = []
+        // GET /admin/channel/getOneChannel
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          // console.log(res.data)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+              this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+              // this.selectAllChannel.push({value: v.channelId, label: v.channelName})
             })
           } else {
             this.$message(res.msg)

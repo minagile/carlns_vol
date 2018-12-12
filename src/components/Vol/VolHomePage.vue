@@ -4,14 +4,20 @@
     <div class="company">
       <div class="xuanze">
         <span>选择渠道：</span>
-        <el-select v-model="channelId" placeholder="请选择渠道"  @visible-change="select" @change="change">
+        <!-- <el-select v-model="channelId" placeholder="请选择渠道"  @visible-change="select" @change="change">
           <el-option
             v-for="item in selectAllChannel"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+        </el-select> -->
+        <el-cascader @visible-change="select"
+          :options="options2"
+          @change="changechan"
+          @active-item-change="handleItemChange"
+          :props="props"
+        ></el-cascader>
       </div>
 
       <el-row class="home-body">
@@ -156,12 +162,6 @@
 </template>
 
 <script>
-// import Vue from 'vue'
-// import vueEventCalendar from 'vue-event-calendar'
-// Vue.use(vueEventCalendar, {
-//   locale: 'en',
-//   color: '#FFC107'
-// })
 export default {
   name: 'VolHomePage',
   data () {
@@ -182,25 +182,73 @@ export default {
           title: 'this is a title'
         }
       ],
-      channelId: ''
+      channelId: '',
+      options2: [{
+        label: '江苏',
+        cities: []
+      }, {
+        label: '浙江',
+        cities: []
+      }],
+      props: {
+        // value: 'label',
+        label: 'label',
+        value: 'value',
+        children: 'cities'
+      }
     }
   },
   mounted () {
     this.getData()
   },
   methods: {
+    changechan (val) {
+      // console.log(val)
+      // console.log(Array.reverse(val))
+      this.channelId = val[val.length - 1]
+      this.getData()
+    },
+    handleItemChange (val) {
+      // console.log(val)
+      setTimeout(_ => {
+        var id = ''
+        // POST /admin/channel/getNextChannel
+        this.options2.forEach((v, k) => {
+          if (v.value === val[0]) {
+            id = v.value
+            this.$post('/admin/channel/getNextChannel', {
+              parentId: id
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                if (res.data.length > 0) {
+                  res.data.forEach(m => {
+                    v.cities.push({ label: m.channelName, value: m.channelId })
+                  })
+                } else {
+                  v.cities.push({ label: v.label, value: v.value })
+                }
+              }
+            })
+          }
+        })
+      }, 300)
+    },
     change () {
       this.getData()
     },
     // 查询所有渠道
     select (val) {
       if (val === true) {
-        this.selectAllChannel = []
-        this.$fetch('/admin/channel/selectAllChannel').then(res => {
-          // console.log(res)
+        // this.selectAllChannel = []
+        this.options2 = []
+        // GET /admin/channel/getOneChannel
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          // console.log(res.data)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+              this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+              // this.selectAllChannel.push({value: v.channelId, label: v.channelName})
             })
           } else {
             this.$message(res.msg)
@@ -310,11 +358,14 @@ export default {
     width: 48.39%;
     .home-body-title {
       padding: 9px 18px;
-      font-size:24px;
+      font-size:18px;
       font-family:MicrosoftYaHei;
       font-weight:400;
       color:rgba(3,0,0,1);
       border-bottom: 4px solid #F1F1F1;
+      img {
+        width: 22px;
+      }
     }
     .el-table {
       overflow: auto;

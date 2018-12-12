@@ -10,8 +10,12 @@
         <p>密码</p>
         <div class="psd">
           <input type="password" v-model="psd" @keypress="enter">
-          <img src="../../assets/img/eye.png" @click="showPsd($event)"/>
+          <img :src="img" @click="showPsd($event)"/>
         </div>
+        <p class="remember" @click="rember">
+          <img :src="rememberImg" alt="">
+          记住密码
+        </p>
         <button @click="login">登 录</button>
       </div>
     </el-card>
@@ -19,15 +23,37 @@
 </template>
 
 <script>
+import img1 from '../../assets/img/eye.png'
+import img2 from '../../assets/img/eye1.png'
+import img3 from '../../assets/img/circle.png'
+import img4 from '../../assets/img/circlec.png'
+import { setCookie, getCookie, delCookie } from '../../assets/js/cookie.js'
 export default {
   name: 'MLogin',
   data () {
     return {
       user: '',
-      psd: ''
+      psd: '',
+      img: img1,
+      rememberImg: img3
+    }
+  },
+  mounted () {
+    if (getCookie('adphone')) {
+      this.user = getCookie('adphone')
+      this.psd = getCookie('adpwd')
+      // this.login()
+      this.rememberImg = img4
     }
   },
   methods: {
+    rember () {
+      if (this.rememberImg === img3) {
+        this.rememberImg = img4
+      } else {
+        this.rememberImg = img3
+      }
+    },
     // 回车键登录
     enter (e) {
       if (e.keyCode === 13) {
@@ -41,12 +67,20 @@ export default {
     showPsd (ev) {
       if (ev.target.previousElementSibling.type === 'password') {
         ev.target.previousElementSibling.type = 'text'
+        this.img = img2
       } else {
         ev.target.previousElementSibling.type = 'password'
+        this.img = img1
       }
     },
     // 登录
     login () {
+      if (this.rememberImg === img4) {
+        setCookie('adphone', this.user, 1000 * 60)
+        setCookie('adpwd', this.psd, 1000 * 60)
+      } else {
+        delCookie('adphone')
+      }
       if (this.user === '') {
         this.$message({
           type: 'error',
@@ -126,17 +160,18 @@ export default {
     input {
       width:342px;
       height:48px;
-      background-color:rgba(232,232,234,1);
-      opacity:0.32;
+      background-color:rgba(232,232,234,0.32);
+      // opacity:0.32;
       border-radius:24px;
       border: 0;
       display: block;
       outline: none;
       text-indent: 30px;
+      color: #fff;
     }
     button {
       width:342px;
-      margin-top: 30px;
+      // margin-top: 30px;
       height:48px;
       background:#FFC107;
       border-radius:24px;
@@ -161,6 +196,17 @@ export default {
       top: 17px;
       right: 28px;
       cursor: pointer;
+    }
+  }
+  .remember {
+    cursor: pointer;
+    line-height: 30px;
+    height: 30px;
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 10px;
+    img {
+      vertical-align: middle;
     }
   }
 }

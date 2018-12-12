@@ -7,6 +7,7 @@
       @sort="sort"
       @page="page"
       @giveParams="giveParams"
+      @reload="reload"
     >
     </selector>
 
@@ -71,6 +72,9 @@ export default {
     this.getData()
   },
   methods: {
+    reload () {
+      this.getData()
+    },
     lookDetail (id) {
       window.open(id.invoice)
       window.open(id.policy)
@@ -101,7 +105,6 @@ export default {
     },
     getData () {
       var data = {
-        // channelId: '',
         startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
         corporateName: this.serchDate.selectChannel,
@@ -112,7 +115,7 @@ export default {
       // console.log(data)
       // GET /user/byStages/insuranceInvoice
       this.$fetch('/user/byStages/insuranceInvoice', data).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records

@@ -52,7 +52,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <el-button v-if="refresh"></el-button>
+      <el-button v-if="refresh" @click="reload"></el-button>
     </div>
   </div>
 </template>
@@ -88,6 +88,9 @@ export default {
   mounted () {
   },
   methods: {
+    reload () {
+      this.$emit('reload')
+    },
     clearTime (val) {
       if (val === 0) {
         this.startTime = ''

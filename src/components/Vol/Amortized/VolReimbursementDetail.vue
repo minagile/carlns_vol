@@ -18,19 +18,20 @@
     border
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
-      <el-table-column prop="name" label="公司名称" width="180"></el-table-column>
+      <el-table-column prop="repaymentTime" label="还款时间"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="name" label="公司名称"></el-table-column>
       <el-table-column prop="carNumber" label="车辆数"></el-table-column>
-      <el-table-column prop="time" label="投保时间"></el-table-column>
-      <el-table-column prop="money" label="车投保金额"></el-table-column>
-      <el-table-column prop="coverage" label="车险种"></el-table-column>
+      <el-table-column prop="forTheTime" label="投保时间"></el-table-column>
+      <el-table-column prop="coverage" label="险种"></el-table-column>
+      <el-table-column prop="repaymentAmount" label="本期待还"></el-table-column>
       <el-table-column prop="state" label="分期状态"></el-table-column>
-      <!-- <el-table-column>
+      <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text">查看详情</el-button>
+          <el-button type="text" v-if="scope.row.condition === 0" style="color: red" @click="gotopay(scope.row.stagesId)">待还款</el-button>
+          <el-button type="text" v-if="scope.row.condition === 1" style="color: #333">已还款</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <!-- </div> -->
 
@@ -67,6 +68,37 @@ export default {
     this.getData()
   },
   methods: {
+    gotopay (id) {
+      this.$confirm('是否确定还款', '还款', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '还款',
+        cancelButtonText: '取消'
+      }).then(() => {
+        // GET /admin/stager/affirm
+        this.$fetch('/admin/stager/affirm', {
+          stagesId: id
+        }).then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '已确认还款'
+            })
+            this.getData()
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: '取消还款'
+        })
+      })
+    },
     giveParams (data) {
       // console.log(data)
       this.serchDate = data
@@ -99,7 +131,8 @@ export default {
         pageSize: this.NumValue
       }
       // console.log(data)
-      this.$fetch('/admin/byStages_a/stagingList_a', data).then(res => {
+      // GET /admin/byStages_a/reimbursementDetail_a
+      this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
         console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows

@@ -189,23 +189,23 @@ export default {
     changedMonth (e) {
     },
     getHomePage () {
-      this.$fetch('/homePage_c/accountPayable', {
-        'channelId': this.channel
+      this.$fetch('/user/homePage_c/accountPayable', {
+        // 'channelId': this.channel
       }).then(res => {
         this.tableData = res.data
       })
-      this.$fetch('/homePage_c/thisWeek', {
-        'channelId': this.channel
+      this.$fetch('/user/homePage_c/thisWeek', {
+        // 'channelId': this.channel
       }).then(res => {
         this.tableData1 = res.data
       })
-      this.$fetch('/homePage_c/overdue', {
-        'channelId': this.channel
+      this.$fetch('/user/homePage_c/overdue', {
+        // 'channelId': this.channel
       }).then(res => {
         this.tableData2 = res.data
       })
-      this.$fetch('/homePage_c/vehicle', {
-        'channelId': this.channel
+      this.$fetch('/user/homePage_c/vehicle', {
+        // 'channelId': this.channel
       }).then(res => {
         this.companyList = res.data
         console.log(this.tableData2)

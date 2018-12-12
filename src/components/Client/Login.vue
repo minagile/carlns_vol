@@ -54,7 +54,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      user: '12345678966',
+      user: '12345678955',
       psd: '123456',
       forget: true,
       count: 60,

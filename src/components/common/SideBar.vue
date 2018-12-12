@@ -11,7 +11,7 @@
     </div>
     <div class="list vol" v-if="fromVol">
       <!-- <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><span class="iconfont banner-icon" v-html="o.img"></span>{{ o.label }}</li> -->
-      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><img :src="num === i ? o.vaimg : o.img">{{ o.label }}</li>
+      <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)" v-show="o.show"><img :src="num === i ? o.vaimg : o.img">{{ o.label }}</li>
     </div>
   </div>
 </template>
@@ -29,7 +29,8 @@ export default {
           vaimg: list.llist1,
           label: '缴费通知单列表',
           href: 'DebitNote',
-          vhref: 'VolDebitNote'
+          vhref: 'VolDebitNote',
+          show: false
         },
         {
           img: list.list2,
@@ -37,7 +38,8 @@ export default {
           vaimg: list.llist2,
           label: '报价单列表',
           href: 'Quotation',
-          vhref: 'VolQuotation'
+          vhref: 'VolQuotation',
+          show: false
         },
         {
           img: list.list3,
@@ -45,7 +47,8 @@ export default {
           vaimg: list.llist3,
           label: '保单首期支付结果列表',
           href: 'FirstPeriod',
-          vhref: 'VolFirstPeriod'
+          vhref: 'VolFirstPeriod',
+          show: false
         },
         {
           img: list.list4,
@@ -53,7 +56,8 @@ export default {
           vaimg: list.llist4,
           label: '付款计划表列表',
           href: 'PaymentSchedule',
-          vhref: 'VolPaymentSchedule'
+          vhref: 'VolPaymentSchedule',
+          show: false
         },
         {
           img: list.list5,
@@ -61,7 +65,8 @@ export default {
           vaimg: list.llist5,
           label: '退保保单列表',
           href: 'InsuranceCancel',
-          vhref: 'VolInsuranceCancel'
+          vhref: 'VolInsuranceCancel',
+          show: false
         }
       ],
       stagingList: [
@@ -71,7 +76,8 @@ export default {
           vaimg: list.llist1,
           label: '已分期列表',
           href: 'StageList',
-          vhref: 'VolStageList'
+          vhref: 'VolStageList',
+          show: false
         },
         {
           img: list.list5,
@@ -79,7 +85,8 @@ export default {
           vaimg: list.llist5,
           label: '还款明细',
           href: 'ReimbursementDetail',
-          vhref: 'VolReimbursementDetail'
+          vhref: 'VolReimbursementDetail',
+          show: false
         },
         {
           img: list.list2,
@@ -87,7 +94,8 @@ export default {
           vaimg: list.llist2,
           label: '保单及发票管理',
           href: 'PolicyAndInvoice',
-          vhref: 'VolPolicyAndInvoice'
+          vhref: 'VolPolicyAndInvoice',
+          show: false
         }
       ],
       orderList: [
@@ -95,13 +103,15 @@ export default {
           img: list.list1,
           vaimg: list.llist1,
           label: '生成报价单',
-          vhref: 'QuotationOrder'
+          vhref: 'QuotationOrder',
+          show: false
         },
         {
           img: list.list5,
           vaimg: list.llist5,
           label: '制作付款计划表',
-          vhref: 'MakePayment'
+          vhref: 'MakePayment',
+          show: false
         }
       ],
       blackList: [
@@ -109,7 +119,8 @@ export default {
           img: list.list1,
           vaimg: list.llist1,
           label: '黑名单列表',
-          vhref: 'BlackList'
+          vhref: 'BlackList',
+          show: false
         }
       ],
       settingList: [
@@ -117,19 +128,53 @@ export default {
           img: list.list6,
           vaimg: list.llist6,
           label: '渠道管理',
-          vhref: 'ChannelManagement'
+          vhref: 'ChannelManagement',
+          show: false
         },
         {
           img: list.list1,
           vaimg: list.llist1,
-          label: '帐号管理',
-          vhref: 'AccountManagement'
+          label: '账号管理',
+          vhref: 'AccountManagement',
+          show: false
         }
       ],
       num: 0
     }
   },
   mounted () {
+    var setting = JSON.parse(sessionStorage.getItem('settingList'))
+    // console.log(setting)
+    if (setting) {
+      setting.forEach(v => {
+        this.tabList.forEach(m => {
+          if (m.label === v) {
+            m.show = true
+          }
+        })
+        this.stagingList.forEach(m => {
+          if (m.label === v) {
+            m.show = true
+          }
+        })
+        this.orderList.forEach(m => {
+          if (m.label === v) {
+            m.show = true
+          }
+        })
+        this.blackList.forEach(m => {
+          if (m.label === v) {
+            m.show = true
+          }
+        })
+        this.settingList.forEach(m => {
+          if (m.label === v) {
+            m.show = true
+          }
+        })
+      })
+    }
+    // console.log(this.settingList)
     if (this.stage === 'staging') {
       this.tabList = this.stagingList
     } else if (this.stage === 'order') {

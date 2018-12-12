@@ -4,9 +4,9 @@
     <div class="company">
       <div class="xuanze">
         <span>选择渠道：</span>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="channelId" placeholder="请选择渠道"  @visible-change="select" @change="change">
           <el-option
-            v-for="item in options"
+            v-for="item in selectAllChannel"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -166,7 +166,7 @@ export default {
   name: 'VolHomePage',
   data () {
     return {
-      options: [],
+      selectAllChannel: [],
       value: '',
       tableData: [],
       tableData1: [],
@@ -189,6 +189,25 @@ export default {
     this.getData()
   },
   methods: {
+    change () {
+      this.getData()
+    },
+    // 查询所有渠道
+    select (val) {
+      if (val === true) {
+        this.selectAllChannel = []
+        this.$fetch('/admin/channel/selectAllChannel').then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
     changedMonth (e) {
     },
     getData () {

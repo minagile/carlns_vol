@@ -19,13 +19,13 @@
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="repaymentTime" label="还款时间" width="180"></el-table-column>
-      <el-table-column prop="repaymentAmount" label="还款金额" width="180"></el-table-column>
-      <el-table-column prop="batch" label="批次"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="name" label="公司名称"></el-table-column>
-      <el-table-column prop="forTheTime" label="投保时间"></el-table-column>
-      <el-table-column prop="coverage" label="险种"></el-table-column>
       <el-table-column prop="carNumber" label="车辆数"></el-table-column>
+      <el-table-column prop="time" label="投保时间"></el-table-column>
+      <el-table-column prop="money" label="投保金额"></el-table-column>
+      <el-table-column prop="coverage" label="险种"></el-table-column>
+      <el-table-column prop="state" label="分期状态"></el-table-column>
       <!-- <el-table-column>
         <template slot-scope="scope">
           <el-button type="text">查看详情</el-button>
@@ -98,9 +98,10 @@ export default {
         page: this.currentPage4,
         pageSize: this.NumValue
       }
-      console.log(data)
-      this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-        console.log(res)
+      // console.log(data)
+      // GET /admin/byStages_a/stagingList_a
+      this.$fetch('/admin/byStages_a/stagingList_a', data).then(res => {
+        // console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records

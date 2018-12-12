@@ -264,13 +264,15 @@ export default {
         page: this.currentPage4,
         pageSize: this.NumValue
       }).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.code === 0) {
           this.list = res.data.rows
           this.total = res.data.records
-          this.list.forEach(v => {
-            v.expand = false
-          })
+          if (res.data.rows.length > 0) {
+            this.list.forEach(v => {
+              v.expand = false
+            })
+          }
         } else {
           this.$message(res.msg)
         }

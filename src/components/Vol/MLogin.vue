@@ -64,7 +64,7 @@ export default {
         }).then((response) => {
           // console.log(response)
           if (response.code === 0) {
-            console.log('dd')
+            // console.log('dd')
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('username', response.data.data.adminName)
             this.$router.push('/vol/VolHomePage')

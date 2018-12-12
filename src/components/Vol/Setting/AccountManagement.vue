@@ -227,7 +227,7 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         this.$post('/admin/account/deleteAdmin', {
-          id: id
+          adminId: id
         }).then(res => {
           // console.log(res)
           if (res.code === 0) {

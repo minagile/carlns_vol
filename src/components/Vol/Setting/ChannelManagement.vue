@@ -4,22 +4,35 @@
     <el-button class="add" @click="centerDialogVisible = true, addtext === '新增渠道'">+ 新增渠道</el-button>
 
     <!-- table -->
-    <table>
-      <tr v-for="(item, index) in list" :key="index" class="tabletr">
-        <td><div class="index">{{ index + 1 }}</div></td>
-        <td>公司名称：{{ item.channelName }}</td>
-        <td>地址：{{ item.channelAddress }}</td>
-        <td>负责人：{{ item.channelPrincipal }}</td>
-        <td>联系方式：{{ item.channelPhone }}</td>
-        <td>密码：{{ item.channelPwd }}</td>
-        <td><el-button type="text" @click="addchild(item.channelId)">添加子公司</el-button></td>
-        <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
-        <td>
-          <div class="zhankai" v-show="!item.expand" @click="expand(item, index, item.channelId)">展开 <span></span></div>
-          <div class="shouqi" v-show="item.expand" @click="expand(item, index)">收起 <span></span></div>
-        </td>
-      </tr>
-    </table>
+    <div class="table">
+      <table>
+        <tr v-for="(item, index) in list" :key="index" class="tabletr">
+          <td><div class="index">{{ index + 1 }}</div></td>
+          <td>公司名称：{{ item.channelName }}</td>
+          <td>地址：{{ item.channelAddress }}</td>
+          <td>负责人：{{ item.channelPrincipal }}</td>
+          <td>联系方式：{{ item.channelPhone }}</td>
+          <td>密码：{{ item.channelPwd }}</td>
+          <td><el-button type="text" @click="addchild(item.channelId)">添加子公司</el-button></td>
+          <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
+          <td>
+            <div class="zhankai" v-show="!item.expand" @click="expand(item, index, item.channelId)">展开 <span></span></div>
+            <div class="shouqi" v-show="item.expand" @click="expand(item, index)">收起 <span></span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 分页 -->
+    <el-pagination v-if="total > NumValue"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="pageTAb"
+      :page-size="NumValue"
+      layout="prev, pager, next, total, sizes, jumper"
+      :total="total">
+    </el-pagination>
 
     <!-- 添加子公司 -->
     <el-dialog :visible.sync="childDialogVisible" width="770px">
@@ -61,7 +74,7 @@
           <el-input v-model="ruleForm.phone" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item label="密码：" :label-width="formLabelWidth">
-          <el-input v-model="ruleForm.pwd" placeholder="请输入密码"></el-input>
+          <el-input v-model="ruleForm.pwd" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -79,6 +92,10 @@ export default {
   name: 'ChannelManagement',
   data () {
     return {
+      currentPage4: 1,
+      NumValue: 9,
+      total: 0,
+      pageTAb: ['9', '5', '15'],
       list: [],
       childlist: [],
       childDialogVisible: false,
@@ -117,6 +134,14 @@ export default {
     this.getDataList()
   },
   methods: {
+    handleSizeChange (val) {
+      this.NumValue = val
+      this.getDataList()
+    },
+    handleCurrentChange (val) {
+      this.currentPage4 = val
+      this.getDataList()
+    },
     // 编辑渠道
     delchannel (id) {
       if (this.childadit === true) {
@@ -235,10 +260,14 @@ export default {
     },
     // 获取父级列表
     getDataList () {
-      this.$fetch('/admin/channel/getMaxChannel').then(res => {
-        // console.log(res.data)
+      this.$fetch('/admin/channel/getMaxChannel', {
+        page: this.currentPage4,
+        pageSize: this.NumValue
+      }).then(res => {
+        console.log(res.data)
         if (res.code === 0) {
-          this.list = res.data
+          this.list = res.data.rows
+          this.total = res.data.records
           this.list.forEach(v => {
             v.expand = false
           })
@@ -350,12 +379,20 @@ export default {
       color: #282828;
     }
   }
+  .table {
+    max-height: 720px;
+    // display: flex;
+    overflow: hidden;
+    overflow: scroll;
+    margin-bottom: 100px;
+  }
   table {
     width: 100%;
     border-collapse: collapse;
     // font-size: 17px;
     // text-align: center;
     tr {
+      width: 100%;
       border-bottom: 4px solid #f2f2f2;
       height: 70px;
       line-height: 70px;

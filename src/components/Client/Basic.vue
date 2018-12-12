@@ -7,12 +7,21 @@
             <a><img :src="o.img" alt="">{{ o.label }}</a>
           </li>
         </ul>
-        <div class="header-img">
-          <div class="img">
-            <img src="../../assets/logo.png" alt="">
+          <div class="header-img">
+            <div class="img">
+              <img src="../../assets/logo.png" alt="">
+            </div>
+            <el-dropdown>
+              <p>蓝途boss</p>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>黄金糕</el-dropdown-item>
+                <el-dropdown-item>狮子头</el-dropdown-item>
+                <el-dropdown-item>螺蛳粉</el-dropdown-item>
+                <el-dropdown-item disabled>双皮奶</el-dropdown-item>
+                <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
-          <p>蓝途boss</p>
-        </div>
       </div>
     </header>
     <router-view :key="$route.fullpath"></router-view>
@@ -142,6 +151,9 @@ export default {
           display: inline-block;
           vertical-align: top;
           color: white;
+        }
+        .el-dropdown{
+          vertical-align: text-bottom;
         }
       }
     }

@@ -15,6 +15,7 @@
       ref="multipleTable"
       :data="tableData3"
       tooltip-effect="dark"
+      height="450"
       border
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>

@@ -16,6 +16,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
@@ -25,7 +26,7 @@
       <el-table-column label="付款计划表">
         <template slot-scope="scope">
           <img src="../../../assets/img/list1.png" alt="">
-          <el-button type="text">点击查看报价单</el-button>
+          <el-button type="text" @click="watchPrice(scope.row.requisitionId)">点击查看报价单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,6 +39,46 @@
       layout="prev, pager, next, total, jumper"
       :total="pagination.total">
     </el-pagination>
+
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="1000px"
+      :show-close=false
+      title="付款计划表"
+      custom-class="dialog">
+      <!-- <template  slot="title">
+        <div class="header">
+          <span>批次：</span>
+          <span>企业名称：</span>
+          <span>险种：</span>
+          <span>车辆数：</span>
+          <span>预收款合计：</span>
+        </div>
+      </template> -->
+      <div class="inventory schadule">
+        <h4>付款计划表</h4>
+        <table>
+          <tr>
+            <th>期数</th>
+            <th>付款日期</th>
+            <th>还款金额</th>
+            <th>是否付款</th>
+          </tr>
+          <tr v-for="(i, index) in orderList" :key="index">
+            <td>{{i.stagesPeriods}}</td>
+            <td>{{i.stagesRepaymentTime}}</td>
+            <td>{{i.stagesProfit}}</td>
+            <td>{{i.stagesState | payed}}</td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <!-- <p>合计：{{sum}}</p> -->
+              <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,9 +99,11 @@ export default {
         pageSize: 10,
         pageSizes: [10, 20, 30, 40, 50],
         currentPage: 1,
-        total: 0,
-        list: [] // 渠道列表
-      }
+        total: 0
+      },
+      list: [], // 渠道列表
+      dialogVisible: false,
+      orderList: []
     }
   },
   mounted () {
@@ -111,10 +154,25 @@ export default {
           this.pagination.total = res.data.records
         }
       })
+    },
+    watchPrice (id) {
+      this.dialogVisible = true
+      this.$fetch('/user/byStages/stagingList_particulars', {
+        requisitionId: id
+      }).then(res => {
+        this.orderList = res.data
+      })
     }
   },
   components: {
     Selector
+  },
+  filters: {
+    payed (val) {
+      if (val === 2) return '已逾期'
+      if (val === 1) return '已付款'
+      if (val === 0) return '未付款'
+    }
   }
 }
 </script>
@@ -136,4 +194,115 @@ export default {
     }
   }
 }
+.order-table {
+    margin: 20px 23px 0;
+    .order-table-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 26px;
+      font-size: 16px;
+      font-weight:bold;
+      background:rgba(248,248,248,1);
+      height:58px;
+      box-sizing: border-box;
+      border: 1px solid #E5E5E5;
+      border-bottom: 0;
+    }
+    table {
+      border-collapse: collapse;
+      // height: calc(100% - 58px);
+      // display: block;
+      width: 100%;
+      // // height: 58px;
+      // overflow: scroll;
+      input {
+        border: none;
+        padding: 0 10px;
+        width: 11.5%;
+      }
+      td, th{
+        border: 1px solid #E5E5E5;
+        text-align: left;
+        height: 50px;
+        color: #262626;
+        font-weight: normal;
+        text-indent: 13px;
+        input {
+          width: 100%;
+          display: block;
+          padding: 0;
+          text-indent: 13px;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+    }
+  }
+  .schadule {
+    border: 0;
+    table {
+      margin-top: 20px;
+      margin-bottom: 35px;
+      td {
+        p {
+          float: left;
+          &:last-child {
+            float: right;
+          }
+        }
+      }
+    }
+    .t {
+      text-align: right;
+      line-height: 50px;
+    }
+  }
+  .inventory {
+    // margin: 20px 23px 0;
+    padding: 15px 191px 32px;
+    border-bottom: 13px solid #f2f2f2;
+    p {
+      font-size: 15px;
+      line-height: 30px;
+    }
+    .order-table-header {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 26px;
+      font-size: 16px;
+      font-weight:bold;
+      background:rgba(248,248,248,1);
+      height:58px;
+      box-sizing: border-box;
+      border: 1px solid #E5E5E5;
+      border-bottom: 0;
+    }
+    table {
+      border-collapse: collapse;
+      // display: block;
+      width: 100%;
+      input {
+        border: none;
+        padding: 0 10px;
+        width: 11.5%;
+      }
+      td, th{
+        border: 1px solid #E5E5E5;
+        text-align: left;
+        height: 50px;
+        color: #262626;
+        font-weight: normal;
+        text-indent: 13px;
+        input {
+          width: 100%;
+          display: block;
+          padding: 0;
+          text-indent: 13px;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+    }
+  }
 </style>

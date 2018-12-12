@@ -18,18 +18,18 @@
           :value="item.value">
         </el-option>
       </el-select> -->
-      <el-button class="up"><input type="file" @click="uploadfile">上传</el-button>
+      <el-button class="up"><input type="file" @change="uploadfile($event)">上传</el-button>
       <el-button>清空</el-button>
       <el-button class="up" @click="downDemo">下载模板</el-button>
     </div>
 
-    <div class="order-table">
+    <div class="order-table" v-show="listShow">
       <div class="order-table-header">
-        <span>批次：</span>
-        <span>企业名称：</span>
-        <span>险种：</span>
-        <span>车辆数：</span>
-        <span>预收款合计：</span>
+        <span>批次：{{ orderList.header.batch }}</span>
+        <span>企业名称：{{ orderList.header.channelName }}</span>
+        <span>险种：{{ orderList.header.coverageName }}</span>
+        <span>车辆数：{{ orderList.header.sumCar }}</span>
+        <span>预收款合计：{{ orderList.header.sumMoney }}</span>
       </div>
       <table>
         <tr>
@@ -42,36 +42,36 @@
           <th>首付款</th>
           <th>服务费</th>
         </tr>
-        <tr v-for="(item, index) in orderList" :key="index">
-          <td><input type="text" v-model="item.chepaihao"></td>
-          <td><input type="text" v-model="item.shangyexian"></td>
-          <td><input type="text" v-model="item.baofei"></td>
-          <td><input type="text" v-model="item.shenqing"></td>
-          <td><input type="text" v-model="item.pingtai"></td>
-          <td><input type="text" v-model="item.meiyue"></td>
-          <td><input type="text" v-model="item.shoufu"></td>
-          <td><input type="text" v-model="item.fuwu"></td>
+        <tr v-for="(item, index) in orderList.middle" :key="index">
+          <td><input type="text" v-model="item.carNumber"></td>
+          <td><input type="text" v-model="item.ead"></td>
+          <td><input type="text" v-model="item.premium"></td>
+          <td><input type="text" v-model="item.appliedAmount"></td>
+          <td><input type="text" v-model="item.platformLicensing"></td>
+          <td><input type="text" v-model="item.eachPayment"></td>
+          <td><input type="text" v-model="item.downPayment"></td>
+          <td><input type="text" v-model="item.serviceCharge"></td>
         </tr>
         <tr>
           <td>小计(元):</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{ orderList.subtotal.eadSum }}</td>
+          <td>{{ orderList.subtotal.premiumSum }}</td>
+          <td>{{ orderList.subtotal.appliedAmountSum }}</td>
+          <td>{{ orderList.subtotal.platformLicensingSum }}</td>
+          <td>{{ orderList.subtotal.eachPaymentSum }}</td>
+          <td>{{ orderList.subtotal.downPaymentSum }}</td>
+          <td>{{ orderList.subtotal.serviceChargeSum }}</td>
         </tr>
         <tr>
-          <td colspan="8">合计(元):</td>
+          <td colspan="8">合计(元):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ orderList.sum }}</td>
         </tr>
       </table>
     </div>
 
-    <div class="btn">
+    <!-- <div class="btn">
       <el-button class="cancel">取消</el-button>
       <el-button class="submit">确定</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -83,7 +83,21 @@ export default {
     return {
       options: [],
       value4: '',
-      orderList: [],
+      listShow: false,
+      orderList: {
+        header: {},
+        middle: [],
+        subtotal: {
+          appliedAmountSum: '',
+          downPaymentSum: '',
+          eachPaymentSum: '',
+          eadSum: '',
+          platformLicensingSum: '',
+          premiumSum: '',
+          serviceChargeSum: ''
+        },
+        sum: ''
+      },
       selectAllChannel: []
     }
   },
@@ -99,7 +113,7 @@ export default {
         })
       } else {
         var formData = new FormData()
-        formData.append('policyFile', file)
+        formData.append('file', file)
         formData.append('ChannelId', this.value4)
         let config = {
           headers: {
@@ -108,18 +122,28 @@ export default {
           }
         }
         this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
-          console.log(res)
+          console.log(res.data)
           if (res.code === 0) {
-            this.$message(res.msg)
+            this.$message(res.data.msg)
+            file = {}
           } else {
-            this.$message(res.msg)
+            this.$message(res.data.msg)
           }
+          this.$fetch('/admin/requisition/showQuotationList', {channelId: this.value4}).then(res => {
+            console.log(res)
+            if (res.code === 0) {
+              this.listShow = true
+              this.orderList = res.data
+            } else {
+              this.$message(res.msg)
+            }
+          })
         })
       }
     },
     // 下载模板
     downDemo () {
-      this.$post('/admin/requisition/downloadFiles').then(res => {
+      this.$fetch('/admin/requisition/downloadFiles').then(res => {
         console.log(res)
         if (res.code === 0) {
           window.location.href = Req + res.data
@@ -135,7 +159,6 @@ export default {
       if (val === true) {
         this.selectAllChannel = []
         this.$fetch('/admin/channel/selectAllChannel').then(res => {
-          // console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
               this.selectAllChannel.push({value: v.channelId, label: v.channelName})

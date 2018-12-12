@@ -24,7 +24,7 @@
       <el-table-column prop="createTime" label="投保时间"></el-table-column>
       <el-table-column>
         <template slot-scope="scope">
-          <el-button type="text">查看详情</el-button>
+          <el-button type="text" @click="watchDetail(scope.row.requisitionId)">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,6 +108,24 @@ export default {
         if (res.code === 0) {
           this.tableData3 = res.data.rows
           this.pagination.total = res.data.records
+        }
+      })
+    },
+    watchDetail (id) {
+      this.$post('/user/urequisition/getFilesAddress', {
+        requisitionId: id
+      }).then(res => {
+        if (res.code === 0) {
+          location.href = res.data
+          this.$message({
+            message: res.msg,
+            type: 'success'
+          })
+        } else if (res.code === 1) {
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     }

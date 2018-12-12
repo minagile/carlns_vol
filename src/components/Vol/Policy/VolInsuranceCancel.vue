@@ -17,6 +17,7 @@
       :data="tableData3"
       tooltip-effect="dark"
       border
+      max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -24,7 +25,11 @@
       <el-table-column prop="carNumber" label="车牌" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司"></el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>
-      <el-table-column prop="createTime" label="投保时间"></el-table-column>
+      <el-table-column label="投保时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeChange }}
+        </template>
+      </el-table-column>
       <el-table-column prop="remark" label="退保原因"></el-table-column>
     </el-table>
 
@@ -62,22 +67,24 @@
         <el-button class="check" @click="checkAllData">查询</el-button>
         <el-button>清空</el-button>
       </div>
-      <table>
-        <tr>
-          <th>车牌号</th>
-          <th>公司</th>
-          <th>险种</th>
-          <th>投保时间</th>
-          <th>操作</th>
-        </tr>
-        <tr>
-          <td>沪A00000</td>
-          <td>xxxx股份有限公司</td>
-          <td>商业险</td>
-          <td>2018-12-03</td>
-          <td><el-button size="small" @click="innerVisible = true, id == 1">退保</el-button></td>
-        </tr>
-      </table>
+      <div class="table">
+        <table>
+          <tr>
+            <th>车牌号</th>
+            <th>公司</th>
+            <th>险种</th>
+            <th>投保时间</th>
+            <th>操作</th>
+          </tr>
+          <tr v-for="(o, i) in tableList" :key="i">
+            <td>沪A00000</td>
+            <td>{{ o.channelName }}</td>
+            <td>{{ o.coverageName }}</td>
+            <td>{{ o.createTime | timeChange }}</td>
+            <td><el-button size="small" @click="tuibaobtn(o.carId)">退保</el-button></td>
+          </tr>
+        </table>
+      </div>
       <el-dialog
         width="420px"
         :visible.sync="innerVisible"
@@ -113,20 +120,28 @@ export default {
       NumValue: 10,
       total: 0,
       reason: '',
-      id: ''
+      id: '',
+      tableList: []
     }
   },
   mounted () {
     this.getData()
   },
   methods: {
+    tuibaobtn (id) {
+      this.innerVisible = true
+      this.id = id
+    },
     out () {
-      this.$fetch('/admin/car/dropCar', {
+      this.$post('/admin/car/dropCar', {
         carId: this.id,
         remark: this.reason
       }).then(res => {
         console.log(res)
         if (res.code === 0) {
+          this.innerVisible = false
+          this.centerDialogVisible = false
+          this.getData()
         } else {
           this.$message(res.msg)
         }
@@ -140,6 +155,7 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.code === 0) {
+          this.tableList = res.data
           // res.data.forEach(v => {
           //   this.selectAllChannel.push({value: v.channelId, label: v.channelName})
           // })
@@ -199,10 +215,12 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {
@@ -216,7 +234,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/car/getSurrenderCar', data).then(res => {
         if (res.code === 0) {
-          console.log(res.data)
+          // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records
         } else {
@@ -227,7 +245,20 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    timeChange (data) {
+      let date = new Date(data)
+      return date.getFullYear() + '-' + zero(date.getMonth() + 1) + '-' + zero(date.getDate())
+    },
+    time (data) {
+      return data.split(' ')[0].replace('-', '.').replace('-', '.')
+    }
   }
+}
+function zero (data) {
+  if (data < 10) return '0' + data
+  return data
 }
 </script>
 
@@ -276,15 +307,19 @@ export default {
         border-color:rgba(40,40,40,1);
       }
     }
+    .table {
+      height: 500px;
+      overflow: scroll;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
-      height: 500px;
       th {
         height: 60px;
       }
       tr {
         text-align: center;
+        height: 50px;
       }
     }
   }

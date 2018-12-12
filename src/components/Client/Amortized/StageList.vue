@@ -2,7 +2,6 @@
   <!-- 已分期列表 -->
   <div class="StageList">
     <selector
-      :all="true"
       :refresh="true"
       @sort="sort"
       @page="page"
@@ -12,14 +11,14 @@
 
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="date" label="还款时间" width="180"></el-table-column>
-        <el-table-column prop="name" label="还款金额" width="180"></el-table-column>
-        <el-table-column prop="name" label="批次"></el-table-column>
-        <el-table-column prop="date" label="公司名称"></el-table-column>
+        <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+        <el-table-column prop="date" label="公司名称" width="180"></el-table-column>
+        <el-table-column prop="name" label="车辆数" width="180"></el-table-column>
         <el-table-column prop="name" label="投保时间"></el-table-column>
+        <el-table-column prop="date" label="投保金额"></el-table-column>
+        <!-- <el-table-column prop="name" label="投保时间"></el-table-column> -->
         <el-table-column prop="name" label="险种"></el-table-column>
-        <el-table-column prop="name" label="车辆数"></el-table-column>
+        <el-table-column prop="name" label="分期状态"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <el-button type="text">查看详情</el-button>
@@ -27,8 +26,8 @@
         </el-table-column>
       </el-table>
     </div>
-
-    <el-pagination v-if="total > NumValue"
+<!-- v-if="total > NumValue -->
+    <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"

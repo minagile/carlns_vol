@@ -15,6 +15,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -22,10 +23,14 @@
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column prop="carSum" label="车辆数"></el-table-column>
       <el-table-column prop="sumMoney" label="金额"></el-table-column>
-      <el-table-column prop="createTime" label="投保时间"></el-table-column>
+      <el-table-column label="投保时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeChange }}
+        </template>
+      </el-table-column>
       <el-table-column>
         <template slot-scope="scope">
-          <el-button type="text">查看详情</el-button>
+          <el-button type="text" @click="look(scope.row.requisitionId)">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,6 +66,16 @@ export default {
     this.getData()
   },
   methods: {
+    look (id) {
+      this.$post('/admin/requisition/getFilesAddress', {requisitionId: id}).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          window.open(res.data)
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
@@ -80,10 +95,12 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {
@@ -97,7 +114,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/requisition/getRequisitionList', data).then(res => {
         if (res.code === 0) {
-          console.log(res.data)
+          // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records
         } else {
@@ -108,7 +125,20 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    timeChange (data) {
+      let date = new Date(data)
+      return date.getFullYear() + '-' + zero(date.getMonth() + 1) + '-' + zero(date.getDate())
+    },
+    time (data) {
+      return data.split(' ')[0].replace('-', '.').replace('-', '.')
+    }
   }
+}
+function zero (data) {
+  if (data < 10) return '0' + data
+  return data
 }
 </script>
 

@@ -16,6 +16,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
@@ -25,7 +26,7 @@
       <el-table-column label="报价单">
         <template slot-scope="scope">
           <img src="../../../assets/img/list1.png" alt="">
-          <el-button type="text">点击查看报价单</el-button>
+          <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,6 +39,67 @@
       layout="prev, pager, next, total, jumper"
       :total="pagination.total">
     </el-pagination>
+
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="1000px"
+      :show-close=false
+      title="报价单"
+      custom-class="dialog">
+      <!-- <template  slot="title">
+        <div class="header">
+          <span>批次：</span>
+          <span>企业名称：</span>
+          <span>险种：</span>
+          <span>车辆数：</span>
+          <span>预收款合计：</span>
+        </div>
+      </template> -->
+      <div class="order-table">
+        <div class="order-table-header">
+          <span>批次：{{ orderList.header.batch }}</span>
+          <span>企业名称：{{ orderList.header.channelName }}</span>
+          <span>险种：{{ orderList.header.coverageName }}</span>
+          <span>车辆数：{{ orderList.header.sumCar }}</span>
+          <span>预收款合计：{{ orderList.header.sumMoney }}</span>
+        </div>
+        <table>
+          <tr>
+            <th>车牌号</th>
+            <th>商业险</th>
+            <th>保费总额</th>
+            <th>申请金额</th>
+            <th>平台费率</th>
+            <th>每月还款</th>
+            <th>首付款</th>
+            <th>服务费</th>
+          </tr>
+          <tr v-for="(item, index) in orderList.middle" :key="index">
+            <td><input type="text" v-model="item.carNumber"></td>
+            <td><input type="text" v-model="item.ead"></td>
+            <td><input type="text" v-model="item.premium"></td>
+            <td><input type="text" v-model="item.appliedAmount"></td>
+            <td><input type="text" v-model="item.platformLicensing"></td>
+            <td><input type="text" v-model="item.eachPayment"></td>
+            <td><input type="text" v-model="item.downPayment"></td>
+            <td><input type="text" v-model="item.serviceCharge"></td>
+          </tr>
+          <tr>
+            <td>小计(元):</td>
+            <td>{{ orderList.subtotal.eadSum }}</td>
+            <td>{{ orderList.subtotal.premiumSum }}</td>
+            <td>{{ orderList.subtotal.appliedAmountSum }}</td>
+            <td>{{ orderList.subtotal.platformLicensingSum }}</td>
+            <td>{{ orderList.subtotal.eachPaymentSum }}</td>
+            <td>{{ orderList.subtotal.downPaymentSum }}</td>
+            <td>{{ orderList.subtotal.serviceChargeSum }}</td>
+          </tr>
+          <tr>
+            <td colspan="8">合计(元):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ orderList.sum }}</td>
+          </tr>
+        </table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -59,7 +121,22 @@ export default {
       SortValue: '1',
       // NumValue: 10,
       tableData3: [],
-      list: [] // 渠道列表
+      list: [], // 渠道列表
+      dialogVisible: false,
+      orderList: {
+        header: {},
+        middle: [],
+        subtotal: {
+          appliedAmountSum: '',
+          downPaymentSum: '',
+          eachPaymentSum: '',
+          eadSum: '',
+          platformLicensingSum: '',
+          premiumSum: '',
+          serviceChargeSum: ''
+        },
+        sum: ''
+      }
     }
   },
   mounted () {
@@ -110,6 +187,15 @@ export default {
           this.pagination.total = res.data.records
         }
       })
+    },
+    watchPrice (id, convarge) {
+      this.dialogVisible = true
+      this.$fetch('/user/urequisition/quotationdetails', {
+        requisitionId: id,
+        convarge: convarge
+      }).then(res => {
+        this.orderList = res.data
+      })
     }
   },
   components: {
@@ -135,4 +221,51 @@ export default {
     }
   }
 }
+.dialog {
+  .order-table {
+    margin: 20px 23px 0;
+    .order-table-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 26px;
+      font-size: 16px;
+      font-weight:bold;
+      background:rgba(248,248,248,1);
+      height:58px;
+      box-sizing: border-box;
+      border: 1px solid #E5E5E5;
+      border-bottom: 0;
+    }
+    table {
+      border-collapse: collapse;
+      // height: calc(100% - 58px);
+      // display: block;
+      width: 100%;
+      // // height: 58px;
+      // overflow: scroll;
+      input {
+        border: none;
+        padding: 0 10px;
+        width: 11.5%;
+      }
+      td, th{
+        border: 1px solid #E5E5E5;
+        text-align: left;
+        height: 50px;
+        color: #262626;
+        font-weight: normal;
+        text-indent: 13px;
+        input {
+          width: 100%;
+          display: block;
+          padding: 0;
+          text-indent: 13px;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+    }
+  }
+}
+
 </style>

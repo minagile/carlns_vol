@@ -11,7 +11,6 @@
 
     <div class="Amortized-table">
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="date" label="车牌" width="180"></el-table-column>
         <el-table-column prop="name" label="批次"></el-table-column>
         <el-table-column prop="date" label="公司名称"></el-table-column>
@@ -63,9 +62,6 @@ export default {
   mounted () {
   },
   methods: {
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
     giveParams (data) {
       // console.log(data)
       this.serchDate = data

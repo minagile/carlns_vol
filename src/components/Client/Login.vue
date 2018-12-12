@@ -14,8 +14,9 @@
         </div>
         <button @click="login">登 录</button>
         <p class="last">
-          <a @click="forget = !forget">忘记密码？</a>
-          <a class="l" @click="$router.push({name: 'ChannelApplication'})">点我进行渠道代理申请</a>
+          <el-checkbox v-model="remember"><span class="yes">记住密码</span></el-checkbox>
+          <!-- <a @click="forget = !forget">忘记密码？</a> -->
+          <!-- <a class="l" @click="$router.push({name: 'ChannelApplication'})">点我进行渠道代理申请</a> -->
         </p>
       </div>
     </el-card>
@@ -50,22 +51,31 @@
 </template>
 
 <script>
+import { setCookie, getCookie } from '../../assets/js/cookie.js'
 export default {
   name: 'Login',
   data () {
     return {
-      user: '12345678955',
-      psd: '123456',
+      user: '',
+      psd: '',
       forget: true,
       count: 60,
       code: '',
       forgetpsd: '',
       forgetpsdconfirm: '',
       clock: '',
-      jump: false
+      jump: false,
+      remember: false
     }
   },
-  mounted () {},
+  mounted () {
+    if (getCookie('phone')) {
+      this.user = getCookie('phone')
+      this.psd = getCookie('pwd')
+      // this.login()
+      this.remember = true
+    }
+  },
   methods: {
     // 获取验证码
     getCode (e) {
@@ -132,6 +142,10 @@ export default {
     },
     // 登录
     login () {
+      if (this.remember === true) {
+        setCookie('phone', this.user, 1000 * 60)
+        setCookie('pwd', this.psd, 1000 * 60)
+      }
       if (this.user === '') {
         this.$message({
           type: 'error',
@@ -198,6 +212,7 @@ export default {
       font-size: 14px;
       &.last {
         padding-top: 35px;
+        text-indent: 0;
         a {
           float: left;
           cursor: pointer;
@@ -251,6 +266,13 @@ export default {
       right: 28px;
       cursor: pointer;
     }
+  }
+}
+.last {
+  padding-right: 10px;
+  text-align: right;
+  .yes {
+    color: #fff;
   }
 }
 </style>

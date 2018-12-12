@@ -242,6 +242,8 @@ export default {
     },
     createPlan () { // 生成付款计划表
       this.showList = true
+      this.orderList = []
+      this.orderList1 = []
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
         batch: this.batch

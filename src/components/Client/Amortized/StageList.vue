@@ -74,14 +74,33 @@
             <td><input type="text" v-model="item.shenqing"></td>
           </tr> -->
         </table>
-        <h4>付款计划表</h4>
-        <table>
+        <h4 v-if="orderList.length > 0">商业险付款计划表</h4>
+        <table v-if="orderList.length > 0">
           <tr>
             <th>期数</th>
             <th>付款日期</th>
             <th>还款金额</th>
           </tr>
           <tr v-for="(i, index) in orderList" :key="index">
+            <td>{{i.periods}}</td>
+            <td>{{i.date}}</td>
+            <td>{{i.money}}</td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <p>合计：{{sum}}</p>
+              <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
+            </td>
+          </tr>
+        </table>
+        <h4 v-if="orderList1.length > 0">交强险付款计划表</h4>
+        <table v-if="orderList1.length > 0">
+          <tr>
+            <th>期数</th>
+            <th>付款日期</th>
+            <th>还款金额</th>
+          </tr>
+          <tr v-for="(i, index) in orderList1" :key="index">
             <td>{{i.periods}}</td>
             <td>{{i.date}}</td>
             <td>{{i.money}}</td>
@@ -127,7 +146,9 @@ export default {
       tableData: [],
       centerDialogVisible: false,
       orderList: [],
-      sum: 0
+      orderList1: [],
+      sum: 0,
+      sum1: 0
     }
   },
   mounted () {
@@ -136,6 +157,8 @@ export default {
   methods: {
     look (id) {
       this.centerDialogVisible = true
+      this.orderList = []
+      this.orderList1 = []
       // GET /user/byStages/stagingList_particulars
       this.$fetch('/user/byStages/stagingList_particulars', {
         requisitionId: id
@@ -148,9 +171,16 @@ export default {
           })
           this.head = res.data.head
           this.middle = res.data.middle
-          this.orderList = res.data.trailVo1
-          const length = this.orderList.length - 1
-          this.sum = this.orderList[length].sum
+          if (res.data.trailVo1) {
+            this.orderList = res.data.trailVo1
+            const length = this.orderList.length - 1
+            this.sum = this.orderList[length].sum
+          }
+          if (res.data.trailVo2) {
+            this.orderList1 = res.data.trailVo2
+            const length1 = this.orderList1.length - 1
+            this.sum1 = this.orderList1[length1].sum
+          }
         } else {
           this.$message.error(res.msg)
         }

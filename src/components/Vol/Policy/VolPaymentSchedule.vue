@@ -56,11 +56,11 @@
             <th>期数</th>
             <th>付款日期</th>
             <th>还款金额</th>
-            <th>付款状态</th>
+            <th>是否付款</th>
           </tr>
           <tr v-for="(i, index) in orderList" :key="index">
             <td>{{i.stagesPeriods}}</td>
-            <td>{{i.stagesRepaymentTime | timeChange}}</td>
+            <td>{{i.stagesRepaymentTime}}</td>
             <td>{{i.stagesRepaymentAmount}}</td>
             <td>{{i.stagesState | payed}}</td>
           </tr>
@@ -172,7 +172,7 @@ export default {
     payed (val) {
       if (val === 2) return '已逾期'
       if (val === 1) return '已付款'
-      if (val === 0) return '待付款'
+      if (val === 0) return '未付款'
     }
   }
 }

@@ -184,7 +184,7 @@ export default {
           title: 'this is a title'
         }
       ],
-      channelId: '',
+      channelId: null,
       options2: [{
         label: '江苏',
         cities: []
@@ -205,7 +205,7 @@ export default {
   },
   methods: {
     allc () {
-      this.channelId = ''
+      this.channelId = null
       this.allchannel = true
       this.getData()
     },

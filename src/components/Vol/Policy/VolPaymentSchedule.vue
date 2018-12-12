@@ -31,7 +31,7 @@
       <el-table-column label="付款计划表">
         <template slot-scope="scope">
           <img src="../../../assets/img/img.png" alt="">
-          <el-button type="text">点击查看付款计划表</el-button>
+          <el-button type="text"  @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -45,6 +45,46 @@
       layout="prev, pager, next, total, jumper"
       :total="total">
     </el-pagination>
+
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="1000px"
+      :show-close=false
+      title="付款计划表"
+      custom-class="dialog">
+      <!-- <template  slot="title">
+        <div class="header">
+          <span>批次：</span>
+          <span>企业名称：</span>
+          <span>险种：</span>
+          <span>车辆数：</span>
+          <span>预收款合计：</span>
+        </div>
+      </template> -->
+      <div class="inventory schadule">
+        <h4>付款计划表</h4>
+        <table>
+          <tr>
+            <th>期数</th>
+            <th>付款日期</th>
+            <th>还款金额</th>
+            <th>是否付款</th>
+          </tr>
+          <tr v-for="(i, index) in orderList" :key="index">
+            <td>{{i.stagesPeriods}}</td>
+            <td>{{i.stagesRepaymentTime}}</td>
+            <td>{{i.stagesProfit}}</td>
+            <td>{{i.stagesState | payed}}</td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <!-- <p>合计：{{sum}}</p> -->
+              <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -60,7 +100,9 @@ export default {
       SortValue: '1',
       NumValue: 10,
       value: '',
-      total: 0
+      total: 0,
+      dialogVisible: false,
+      orderList: []
     }
   },
   mounted () {
@@ -112,6 +154,14 @@ export default {
           this.$message(res.msg)
         }
       })
+    },
+    watchPrice (id) {
+      this.dialogVisible = true
+      this.$fetch('/admin/requisition/stagingList_particulars', {
+        requisitionId: id
+      }).then(res => {
+        this.orderList = res.data
+      })
     }
   },
   components: {
@@ -124,6 +174,11 @@ export default {
     },
     time (data) {
       return data.split(' ')[0].replace('-', '.').replace('-', '.')
+    },
+    payed (val) {
+      if (val === 2) return '已逾期'
+      if (val === 1) return '已付款'
+      if (val === 0) return '未付款'
     }
   }
 }
@@ -140,6 +195,54 @@ function zero (data) {
 .VolPaymentSchedule {
   .header {
     padding-bottom: 20px;
+  }
+  .inventory {
+    // margin: 20px 23px 0;
+    padding: 15px 191px 32px;
+    border-bottom: 13px solid #f2f2f2;
+    p {
+      font-size: 15px;
+      line-height: 30px;
+    }
+    .order-table-header {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 26px;
+      font-size: 16px;
+      font-weight:bold;
+      background:rgba(248,248,248,1);
+      height:58px;
+      box-sizing: border-box;
+      border: 1px solid #E5E5E5;
+      border-bottom: 0;
+    }
+    table {
+      border-collapse: collapse;
+      // display: block;
+      width: 100%;
+      input {
+        border: none;
+        padding: 0 10px;
+        width: 11.5%;
+      }
+      td, th{
+        border: 1px solid #E5E5E5;
+        text-align: left;
+        height: 50px;
+        color: #262626;
+        font-weight: normal;
+        text-indent: 13px;
+        input {
+          width: 100%;
+          display: block;
+          padding: 0;
+          text-indent: 13px;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+    }
   }
 }
 </style>

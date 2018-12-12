@@ -52,7 +52,7 @@
         </el-option>
       </el-select>
       <span>条</span>
-      <el-button v-if="refresh" @click="reload"></el-button>
+      <el-button v-if="refresh" @click="refurbish"></el-button>
     </div>
   </div>
 </template>
@@ -88,9 +88,6 @@ export default {
   mounted () {
   },
   methods: {
-    reload () {
-      this.$emit('reload')
-    },
     clearTime (val) {
       if (val === 0) {
         this.startTime = ''
@@ -113,6 +110,9 @@ export default {
         selectChannel: this.selectChannel
       }
       this.$emit('giveParams', selectData)
+    },
+    refurbish () {
+      this.$emit('getData')
     }
   },
   props: {

@@ -7,6 +7,7 @@
       @page="handleSizeChange"
       @giveParams="giveParams"
       :channelList="list"
+      @getData="getData"
     >
     </selector>
 
@@ -15,6 +16,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>

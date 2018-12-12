@@ -2,7 +2,6 @@
   <!-- 还款明细 -->
   <div class="ReimbursementDetail">
     <selector
-      :all="true"
       :refresh="true"
       @sort="sort"
       @page="page"
@@ -65,9 +64,6 @@ export default {
     this.getData()
   },
   methods: {
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
     giveParams (data) {
       // console.log(data)
       this.serchDate = data

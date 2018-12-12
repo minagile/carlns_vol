@@ -104,7 +104,11 @@
       <div class="dialog-header">{{title}}</div>
       <el-form :model="form">
         <el-form-item label="手机号：" label-width="150px" v-if="title === '添加账号'">
-          <el-input v-model="form.phone" autocomplete="off" placeholder="请输入账号"></el-input>
+          <el-input
+            v-model="form.phone"
+            autocomplete="off"
+            placeholder="请输入手机号">
+            </el-input>
         </el-form-item>
         <el-form-item label="账号：" label-width="150px" v-if="title === '添加账号'">
           <el-input v-model="form.username" autocomplete="off" placeholder="请输入账号"></el-input>
@@ -223,7 +227,7 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         this.$post('/admin/account/deleteAdmin', {
-          id: id
+          adminId: id
         }).then(res => {
           // console.log(res)
           if (res.code === 0) {

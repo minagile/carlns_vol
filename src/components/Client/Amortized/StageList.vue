@@ -2,7 +2,6 @@
   <!-- 已分期列表 -->
   <div class="StageList">
     <selector
-      :all="true"
       :refresh="true"
       @sort="sort"
       @page="page"
@@ -25,11 +24,11 @@
       <el-table-column prop="money" label="投保金额"></el-table-column>
       <el-table-column prop="coverage" label="险种"></el-table-column>
       <el-table-column prop="state" label="分期状态"></el-table-column>
-      <!-- <el-table-column>
+      <el-table-column>
         <template slot-scope="scope">
-          <el-button type="text">查看详情</el-button>
+          <el-button type="text" @click="look(scope.row.requisitionId)">查看付款计划表</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
 
     <el-pagination v-if="total > NumValue"
@@ -41,7 +40,65 @@
       layout="prev, pager, next, total, jumper"
       :total="total">
     </el-pagination>
-    </div>
+
+    <el-dialog :visible.sync="centerDialogVisible" width="770px">
+      <div class="dialog-header">付款计划表</div>
+      <div class="dia">
+        <p>致：上海锦锭科技有限公司</p>
+        <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
+        <div class="order-table-header">
+          <span>批次：{{head.batch}}</span>
+          <span>企业名称：{{head.name}}</span>
+          <span>险种：{{head.coverage}}</span>
+          <span>车辆数：{{head.carNumber}}</span>
+          <span>投保时间{{head.qdate}}</span>
+        </div>
+        <table>
+          <tr>
+            <th>车牌号</th>
+            <th>车架号</th>
+            <th>保险公司</th>
+            <th>车险保单号</th>
+          </tr>
+          <tr v-for="(item, index) in middle" :key="index">
+            <th>{{item.plateNumber}}</th>
+            <th>{{item.vin}}</th>
+            <th>{{item.ICBC}}</th>
+            <th>{{item.policyNumber}}</th>
+          </tr>
+          <!-- <tr v-for="(item, index) in orderList" :key="index">
+            <td><input type="text" v-model="item.chepaihao"></td>
+            <td><input type="text" v-model="item.shangyexian"></td>
+            <td><input type="text" v-model="item.baofei"></td>
+            <td><input type="text" v-model="item.shenqing"></td>
+          </tr> -->
+        </table>
+        <h4>付款计划表</h4>
+        <table>
+          <tr>
+            <th>期数</th>
+            <th>付款日期</th>
+            <th>还款金额</th>
+          </tr>
+          <tr v-for="(i, index) in orderList" :key="index">
+            <td>{{i.periods}}</td>
+            <td>{{i.date}}</td>
+            <td>{{i.money}}</td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <p>合计：{{sum}}</p>
+              <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
+            </td>
+          </tr>
+        </table>
+        <p>本业务清单及付款计划表属于《商户合作协议书》不可分割的部分，作为附件与 《商户合作协议书》主文具备同等法律效力。我司对业务清单所列之被保险车辆信息的真实性负责，并承诺按照付款计划表所列进度进行付款</p>
+        <p class="t">{{head.name}}</p>
+        <p class="t">{{head.qdate}}</p>
+      </div>
+    </el-dialog>
+
+  </div>
 </template>
 
 <script>
@@ -50,6 +107,15 @@ export default {
   name: 'StageList',
   data () {
     return {
+      head: {
+        name: '',
+        rdate: '',
+        qdate: '',
+        coverage: '',
+        batch: '',
+        carNumber: ''
+      },
+      middle: [],
       options: [],
       currentPage4: 1,
       value: '',
@@ -57,13 +123,38 @@ export default {
       SortValue: '1',
       NumValue: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      centerDialogVisible: false,
+      orderList: [],
+      sum: 0
     }
   },
   mounted () {
     this.getData()
   },
   methods: {
+    look (id) {
+      this.centerDialogVisible = true
+      // GET /user/byStages/stagingList_particulars
+      this.$fetch('/user/byStages/stagingList_particulars', {
+        requisitionId: id
+      }).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+          this.head = res.data.head
+          this.middle = res.data.middle
+          this.orderList = res.data.trailVo1
+          const length = this.orderList.length - 1
+          this.sum = this.orderList[length].sum
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
@@ -121,6 +212,78 @@ export default {
 .StageList {
   .Amortized-table {
     padding: 0 3.44% 23px 3.44%;
+  }
+}
+.dia {
+  padding: 0 15px;
+  height: 600px;
+  overflow: scroll;
+}
+.el-dialog {
+  .dialog-header {
+    background: #4977FC;
+    color: #fff;
+  }
+  padding: 15px 191px 32px;
+  p {
+    font-size: 15px;
+    line-height: 30px;
+  }
+  .order-table-header {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding: 21px 26px;
+    font-size: 16px;
+    font-weight:bold;
+    background:rgba(248,248,248,1);
+    height:58px;
+    box-sizing: border-box;
+    border: 1px solid #E5E5E5;
+    border-bottom: 0;
+  }
+  table {
+    border-collapse: collapse;
+    // display: block;
+    width: 100%;
+    input {
+      border: none;
+      padding: 0 10px;
+      width: 11.5%;
+    }
+    td, th{
+      border: 1px solid #E5E5E5;
+      text-align: left;
+      height: 50px;
+      color: #262626;
+      font-weight: normal;
+      text-indent: 13px;
+      input {
+        width: 100%;
+        display: block;
+        padding: 0;
+        text-indent: 13px;
+        height: 50px;
+        line-height: 50px;
+      }
+    }
+  }
+  border: 0;
+  table {
+    // margin-top: 20px;
+    margin-bottom: 35px;
+    td {
+      p {
+        float: left;
+        &:last-child {
+          float: right;
+        }
+      }
+    }
+  }
+  .t {
+    text-align: right;
+    line-height: 50px;
   }
 }
 </style>

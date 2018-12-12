@@ -143,7 +143,7 @@ export default {
     },
     // 下载模板
     downDemo () {
-      this.$post('/admin/requisition/downloadFiles').then(res => {
+      this.$fetch('/admin/requisition/downloadFiles').then(res => {
         console.log(res)
         if (res.code === 0) {
           window.location.href = Req + res.data
@@ -159,7 +159,6 @@ export default {
       if (val === true) {
         this.selectAllChannel = []
         this.$fetch('/admin/channel/selectAllChannel').then(res => {
-          // console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
               this.selectAllChannel.push({value: v.channelId, label: v.channelName})

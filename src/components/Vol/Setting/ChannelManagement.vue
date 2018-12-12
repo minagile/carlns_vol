@@ -12,7 +12,7 @@
           <td>地址：{{ item.channelAddress }}</td>
           <td>负责人：{{ item.channelPrincipal }}</td>
           <td>联系方式：{{ item.channelPhone }}</td>
-          <td>密码：{{ item.channelPwd }}</td>
+          <td>密码：{{ item.plaintextPwd }}</td>
           <td><el-button type="text" @click="addchild(item.channelId)">添加子公司</el-button></td>
           <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
           <td>
@@ -191,6 +191,9 @@ export default {
           })
         } else {
           if (this.addtext === '编辑渠道' || this.addtext === '编辑子公司') {
+            if (this.addtext === '编辑渠道') {
+              this.id = '0'
+            }
             this.$post('/admin/channel/updateChannel', {
               channelId: this.channelId,
               channelName: this.ruleForm.channelName,

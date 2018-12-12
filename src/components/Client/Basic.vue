@@ -8,11 +8,11 @@
           </li>
         </ul>
           <div class="header-img">
-            <div class="img">
+            <!-- <div class="img">
               <img src="../../assets/logo.png" alt="">
-            </div>
+            </div> -->
             <el-dropdown>
-              <p>蓝途boss</p>
+              <p><span class="iconfont">&#xe626;</span>{{name}}</p>
               <el-dropdown-menu slot="dropdown">
                 <span @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></span>
               </el-dropdown-menu>
@@ -57,7 +57,8 @@ export default {
           href: 'Setting'
         }
       ],
-      num: 0
+      num: 0,
+      name: ''
     }
   },
   mounted () {
@@ -73,6 +74,7 @@ export default {
         this.num = 2
       }
     })
+    this.name = sessionStorage.getItem('username')
   },
   methods: {
     tab (i) {
@@ -135,6 +137,10 @@ export default {
       .header-img {
         float: right;
         padding-right: 49px;
+        .iconfont {
+          font-size: 25px;
+          vertical-align: middle;
+        }
         .img {
           width:61px;
           height:61px;

@@ -182,7 +182,7 @@ export default {
           title: 'this is a title'
         }
       ],
-      channelId: '1'
+      channelId: ''
     }
   },
   mounted () {

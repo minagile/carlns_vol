@@ -72,7 +72,7 @@
       </table>
     </div>
 
-    <div class="inventory schadule" v-show="showList">
+    <div class="inventory schadule" v-show="showList && orderList.length > 0">
       <h4>付款计划表</h4>
       <table>
         <tr>
@@ -96,6 +96,30 @@
       <p class="t">{{head.name}}</p>
       <p class="t">{{head.qdate}}</p>
     </div>
+    <div class="inventory schadule" v-show="showList && orderList1.length > 0">
+      <h4>付款计划表</h4>
+      <table>
+        <tr>
+          <th>期数</th>
+          <th>付款日期</th>
+          <th>还款金额</th>
+        </tr>
+        <tr v-for="(i, index) in orderList1" :key="index">
+          <td>{{i.periods}}</td>
+          <td>{{i.date}}</td>
+          <td>{{i.money}}</td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <p>合计：{{sum1}}</p>
+            <p>（注：付款日期遇如遇法定节假日，需提前至工作日完成支付）</p>
+          </td>
+        </tr>
+      </table>
+      <p>本业务清单及付款计划表属于《商户合作协议书》不可分割的部分，作为附件与 《商户合作协议书》主文具备同等法律效力。我司对业务清单所列之被保险车辆信息的真实性负责，并承诺按照付款计划表所列进度进行付款</p>
+      <p class="t">{{head.name}}</p>
+      <p class="t">{{head.qdate}}</p>
+    </div>
 
     <!-- <div class="btn">
       <el-button class="cancel">取消</el-button>
@@ -111,20 +135,12 @@ export default {
   data () {
     return {
       showList: false,
-      selectAllChannel: [
-        {
-          value: '1072062971435315200',
-          label: '渠道1'
-        }
-      ],
+      selectAllChannel: [],
       options1: [],
       channelId: '',
-      batch: 0,
-      orderList: [
-        {
-          name: 123
-        }
-      ],
+      batch: null,
+      orderList: [],
+      orderList1: [],
       head: {
         name: '',
         rdate: '',
@@ -137,7 +153,8 @@ export default {
       file1: {},
       file2: {},
       file3: {},
-      sum: 0
+      sum: 0,
+      sum1: 0
     }
   },
   mounted () {
@@ -230,16 +247,22 @@ export default {
         batch: this.batch
       }).then(res => {
         if (res.code === 0) {
-          console.log(res.data)
           this.$message({
             type: 'success',
             message: res.msg
           })
           this.head = res.data.head
           this.middle = res.data.middle
-          this.orderList = res.data.trailVo1
-          const length = this.orderList.length - 1
-          this.sum = this.orderList[length].sum
+          if (res.data.trailVo1) {
+            this.orderList = res.data.trailVo1
+            const length = this.orderList.length - 1
+            this.sum = this.orderList[length].sum
+          }
+          if (res.data.trailVo2) {
+            this.orderList1 = res.data.trailVo2
+            const length1 = this.orderList1.length - 1
+            this.sum1 = this.orderList1[length1].sum
+          }
         }
       })
     }

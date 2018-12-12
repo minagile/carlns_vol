@@ -122,22 +122,24 @@ export default {
           }
         }
         this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
-          console.log(res.data)
-          if (res.code === 0) {
-            this.$message(res.data.msg)
+          // console.log(res.data)
+          if (res.data.code === 0) {
+            // this.$message(res.data.msg)
+            this.$fetch('/admin/requisition/showQuotationList', {channelId: this.value4}).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                this.listShow = true
+                this.orderList = res.data
+              } else {
+                this.$message(res.msg)
+              }
+            })
             file = {}
+          } else if (res.data.code === 506) {
+            this.$router.push('/MLogin')
           } else {
             this.$message(res.data.msg)
           }
-          this.$fetch('/admin/requisition/showQuotationList', {channelId: this.value4}).then(res => {
-            console.log(res)
-            if (res.code === 0) {
-              this.listShow = true
-              this.orderList = res.data
-            } else {
-              this.$message(res.msg)
-            }
-          })
         })
       }
     },

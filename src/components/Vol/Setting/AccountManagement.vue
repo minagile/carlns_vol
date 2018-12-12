@@ -7,7 +7,8 @@
     <table>
       <tr v-for="(item, index) in list" :key="index">
         <td><div class="index">{{ index + 1 }}</div></td>
-        <td>账号：{{ item.adminName }}</td>
+        <td>用户名：{{ item.adminName }}</td>
+        <td>账号：{{ item.adminPhone }}</td>
         <td>密码：{{ item.reversiblePassword }}</td>
         <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
         <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
@@ -104,15 +105,15 @@
     <el-dialog :visible.sync="centerDialogVisible" width="683px">
       <div class="dialog-header">{{title}}</div>
       <el-form :model="form">
-        <el-form-item label="手机号：" label-width="150px" v-if="title === '添加账号'">
+        <el-form-item label="账号：" label-width="150px" v-if="title === '添加账号'">
           <el-input
             v-model="form.phone"
             autocomplete="off"
             placeholder="请输入手机号">
             </el-input>
         </el-form-item>
-        <el-form-item label="账号：" label-width="150px" v-if="title === '添加账号'">
-          <el-input v-model="form.username" autocomplete="off" placeholder="请输入账号"></el-input>
+        <el-form-item label="用户名：" label-width="150px" v-if="title === '添加账号'">
+          <el-input v-model="form.username" autocomplete="off" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码：" label-width="150px">
           <el-input v-model="form.password" autocomplete="off" placeholder="请输入密码"></el-input>

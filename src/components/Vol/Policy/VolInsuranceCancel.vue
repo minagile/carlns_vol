@@ -77,7 +77,7 @@
             <th>操作</th>
           </tr>
           <tr v-for="(o, i) in tableList" :key="i">
-            <td>沪A00000</td>
+            <td>{{ o.carNumber }}</td>
             <td>{{ o.channelName }}</td>
             <td>{{ o.coverageName }}</td>
             <td>{{ o.createTime | timeChange }}</td>

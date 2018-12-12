@@ -122,6 +122,9 @@ export default {
 .Volbasic {
   height: calc(100% - 48px);
   // background: #EAEFF3;
+  background-image: -webkit-linear-gradient(top,#FFC107 0%,#FFC107 42%,#EAEFF3 42%,#EAEFF3 100%);
+  background-image: -o-linear-gradient(top,#FFC107 0%,#FFC107 42%,#EAEFF3 42%,#EAEFF3 100%);
+  background-image: -moz-linear-gradient(top,#FFC107 0%,#FFC107 42%,#EAEFF3 42%,#EAEFF3 100%);
   background-image: linear-gradient(top,#FFC107 0%,#FFC107 42%,#EAEFF3 42%,#EAEFF3 100%);
   padding: 0 0 48px;
   overflow: auto;

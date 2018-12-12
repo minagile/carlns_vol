@@ -37,7 +37,7 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <!-- <el-table-column prop="date" label="序号"  width="180"></el-table-column> -->
         <el-table-column prop="channelName" label="公司名称" width="180"></el-table-column>
-        <el-table-column prop="address" label="联系地址"></el-table-column>
+        <el-table-column prop="channelAddress" label="联系地址"></el-table-column>
         <el-table-column prop="channelPhone" label="联系方式"></el-table-column>
         <el-table-column prop="channelEmail" label="邮箱"></el-table-column>
         <el-table-column prop="createTime" label="添加时间"></el-table-column>

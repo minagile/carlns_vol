@@ -44,6 +44,28 @@ axios.interceptors.response.use(
         // 从哪个页面跳转
       })
     }
+    if (response.data.code === 606) {
+      Message({
+        message: response.data.msg,
+        type: 'info'
+      })
+      router.push({
+        path: '/',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
+    if (response.data.code === 607) {
+      Message({
+        message: response.data.msg,
+        type: 'info'
+      })
+      router.push({
+        path: '/MLogin',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
     if (response.data.code === 102) {
       Message({
         message: response.data.msg,

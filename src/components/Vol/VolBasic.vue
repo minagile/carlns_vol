@@ -113,10 +113,6 @@ export default {
     tab (i) {
       this.num = i
       this.$router.push({name: this.tabList[i].href})
-    },
-    logout () {
-      sessionStorage.clear()
-      this.$router.push('/MLogin')
     }
   }
 }

@@ -143,16 +143,7 @@ export default {
     },
     // 下载模板
     downDemo () {
-      this.$fetch('/admin/requisition/downloadFiles').then(res => {
-        console.log(res)
-        if (res.code === 0) {
-          window.location.href = Req + res.data
-          window.open(Req + res.data)
-        } else {
-          window.open(Req + res.data)
-          this.$message(res.msg)
-        }
-      })
+      location.href = `${Req}/admin/requisition/downloadFiles`
     },
     // 选择渠道
     select (val) {

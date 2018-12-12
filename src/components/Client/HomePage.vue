@@ -3,152 +3,154 @@
 
     <div class="company">
       <el-row class="home-header">
-        <el-col :span="4" v-for="(o, i) in companyList" :key="i">
+        <div class="el-col" v-for="(o, i) in companyList" :key="i">
           <div class="grid-content total" :class="{companyactive: companyNum === i}" @click="companyTab(i)">
             <p>{{ o.name }}</p>
             <p>{{o.number}}<span>辆</span></p>
             <p v-if="i === 0">查看全部</p>
           </div>
-        </el-col>
+        </div>
       </el-row>
 
-      <el-row class="home-body">
-        <el-col :span="12">
-          <div class="home-body-title">
-            <img src="../../assets/img/shouqi.png" alt="">
-            首期应付款
-          </div>
-           <el-table
-              :data="tableData"
-              style="width: 100%">
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                prop="batch"
-                label="批次"
-                width=50>
-              </el-table-column>
-              <el-table-column
-                prop="time"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="公司">
-              </el-table-column>
-              <el-table-column
-                prop="carNumber"
-                label="车辆数">
-              </el-table-column>
-              <el-table-column
-                prop="coverage"
-                label="险种">
-              </el-table-column>
-              <el-table-column
-                prop="money"
-                label="金额">
-              </el-table-column>
-            </el-table>
-        </el-col>
+      <div class="body">
+        <el-row class="home-body">
+          <el-col :span="12">
+            <div class="home-body-title">
+              <img src="../../assets/img/shouqi.png" alt="">
+              首期应付款
+            </div>
+            <el-table
+                :data="tableData"
+                style="width: 98%; margin: 0 auto">
+                <!-- <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column> -->
+                <el-table-column
+                  prop="batch"
+                  label="批次"
+                  width=50>
+                </el-table-column>
+                <el-table-column
+                  prop="time"
+                  label="时间">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="公司">
+                </el-table-column>
+                <el-table-column
+                  prop="carNumber"
+                  label="车辆数">
+                </el-table-column>
+                <el-table-column
+                  prop="coverage"
+                  label="险种">
+                </el-table-column>
+                <el-table-column
+                  prop="money"
+                  label="金额">
+                </el-table-column>
+              </el-table>
+          </el-col>
 
-        <el-col :span="12">
-          <div class="home-body-title">
-            <img src="../../assets/img/thisweek.png" alt="">
-            本周待还
-          </div>
-           <el-table
-              :data="tableData1"
-              style="width: 100%">
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                prop="batch"
-                label="批次"
-                width=50>
-              </el-table-column>
-              <el-table-column
-                prop="time"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="公司">
-              </el-table-column>
-              <el-table-column
-                prop="carNumber"
-                label="车辆数">
-              </el-table-column>
-              <el-table-column
-                prop="coverage"
-                label="险种">
-              </el-table-column>
-              <el-table-column
-                prop="money"
-                label="金额">
-              </el-table-column>
-            </el-table>
-        </el-col>
-      </el-row>
-      <el-row class="home-body">
-        <el-col :span="12">
-          <div class="home-body-title">
-            <img src="../../assets/img/warning.png" alt="">
-            逾期警告
-          </div>
-           <el-table
-              :data="tableData2"
-              style="width: 100%">
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                prop="batch"
-                label="批次"
-                width=50>
-              </el-table-column>
-              <el-table-column
-                prop="time"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="公司">
-              </el-table-column>
-              <el-table-column
-                prop="carNumber"
-                label="车辆数">
-              </el-table-column>
-              <el-table-column
-                prop="coverage"
-                label="险种">
-              </el-table-column>
-              <el-table-column
-                prop="money"
-                label="金额">
-              </el-table-column>
-              <el-table-column
-                prop="daysOverdue"
-                label="逾期天数"
-                class-name="yuqi">
-              </el-table-column>
-            </el-table>
-        </el-col>
+          <el-col :span="12">
+            <div class="home-body-title">
+              <img src="../../assets/img/thisweek.png" alt="">
+              本周待还
+            </div>
+            <el-table
+                :data="tableData1"
+                style="width: 98%; margin: 0 auto">
+                <!-- <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column> -->
+                <el-table-column
+                  prop="batch"
+                  label="批次"
+                  width=50>
+                </el-table-column>
+                <el-table-column
+                  prop="time"
+                  label="时间">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="公司">
+                </el-table-column>
+                <el-table-column
+                  prop="carNumber"
+                  label="车辆数">
+                </el-table-column>
+                <el-table-column
+                  prop="coverage"
+                  label="险种">
+                </el-table-column>
+                <el-table-column
+                  prop="money"
+                  label="金额">
+                </el-table-column>
+              </el-table>
+          </el-col>
+        </el-row>
+        <el-row class="home-body">
+          <el-col :span="12">
+            <div class="home-body-title">
+              <img src="../../assets/img/warning.png" alt="">
+              逾期警告
+            </div>
+            <el-table
+                :data="tableData2"
+                style="width: 98%; margin: 0 auto">
+                <!-- <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column> -->
+                <el-table-column
+                  prop="batch"
+                  label="批次"
+                  width=50>
+                </el-table-column>
+                <el-table-column
+                  prop="time"
+                  label="时间">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="公司">
+                </el-table-column>
+                <el-table-column
+                  prop="carNumber"
+                  label="车辆数">
+                </el-table-column>
+                <el-table-column
+                  prop="coverage"
+                  label="险种">
+                </el-table-column>
+                <el-table-column
+                  prop="money"
+                  label="金额">
+                </el-table-column>
+                <el-table-column
+                  prop="daysOverdue"
+                  label="逾期天数"
+                  class-name="yuqi">
+                </el-table-column>
+              </el-table>
+          </el-col>
 
-        <el-col :span="12">
-          <div class="home-body-title">
-            <img src="../../assets/img/calender.png" alt="">
-            还款日历
-          </div>
-          <el-card class="box-card" :body-style="{ padding: '0px' }">
-            <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
-          </el-card>
-        </el-col>
-      </el-row>
+          <el-col :span="12">
+            <div class="home-body-title">
+              <img src="../../assets/img/calender.png" alt="">
+              还款日历
+            </div>
+            <el-card class="box-card" :body-style="{ padding: '0px' }">
+              <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
@@ -218,6 +220,12 @@ export default {
 <style lang="less" scoped>
 .home-header {
   margin-bottom: 37px;
+  overflow: auto;
+  height: 150px;
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  white-space: nowrap;
+  margin-right: 20px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -226,6 +234,9 @@ export default {
     width: 19.14%;
     box-shadow:0px 12px 36px 0px rgba(211,215,221,0.4);
     border-radius:5px;
+    margin-right: 10px;
+    display: inline-block;
+    border:1px solid rgba(216,226,240,1);
   }
   .total {
     background-image: url(../../assets/img/com.png);
@@ -273,11 +284,13 @@ export default {
   margin: 0 34px;
   padding-top: 58px;
 }
-.el-row {
-  display: flex;
-  justify-content: space-between;
-  margin-left: 20px;
-  margin-right: 20px;
+.body {
+  .el-row {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
 .home-body {
   // .el-col:nth-of-type(1) {

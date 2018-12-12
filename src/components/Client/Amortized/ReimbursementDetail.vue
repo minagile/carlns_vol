@@ -6,6 +6,7 @@
       @sort="sort"
       @page="page"
       @giveParams="giveParams"
+      @getData="getData"
     >
     </selector>
 
@@ -80,10 +81,14 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      // console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      // console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {
@@ -98,7 +103,6 @@ export default {
       // console.log(data)
       // GET /user/byStages/reimbursementDetail
       this.$fetch('/user/byStages/reimbursementDetail', data).then(res => {
-        console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records

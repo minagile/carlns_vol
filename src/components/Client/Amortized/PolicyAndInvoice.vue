@@ -2,12 +2,12 @@
   <!-- 保单及发票管理 -->
   <div class="PolicyAndInvoice">
     <selector
-      :all="true"
       :refresh="true"
       @sort="sort"
       @page="page"
       @giveParams="giveParams"
       @reload="reload"
+      @getData="getData"
     >
     </selector>
 
@@ -98,10 +98,14 @@ export default {
       this.getData()
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      // console.log(`每页 ${val} 条`)
+      this.NumValue = val
+      this.getData()
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      // console.log(`当前页: ${val}`)
+      this.currentPage4 = val
+      this.getData()
     },
     getData () {
       var data = {

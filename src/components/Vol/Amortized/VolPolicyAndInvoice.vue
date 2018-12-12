@@ -112,7 +112,7 @@ export default {
         page: this.currentPage4,
         pageSize: this.NumValue
       }
-      console.log(data)
+      // console.log(data)
       this.$fetch('/admin/byStages_a/insuranceInvoice_a', data).then(res => {
         console.log(res)
         if (res.code === 0) {

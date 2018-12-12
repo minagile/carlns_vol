@@ -159,13 +159,13 @@ export default {
     },
     clearTime (val) {
       if (val === 0) {
-        this.startTime = ''
-        this.endTime = ''
+        this.startTime = null
+        this.endTime = null
         this.alltime = false
       } else {
         this.allchannel = false
         this.channelId = ''
-        this.selectChannel = ''
+        this.selectChannel = null
       }
       this.giveParams()
     },

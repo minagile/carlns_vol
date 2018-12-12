@@ -15,7 +15,7 @@
       ref="multipleTable"
       :data="tableData3"
       tooltip-effect="dark"
-      height="450"
+      max-height="450"
       border
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
@@ -26,7 +26,7 @@
       <el-table-column prop="remark" label="退保原因"></el-table-column>
     </el-table>
 
-    <el-pagination
+    <el-pagination  v-if="pagination.total > pagination.pageSize"
       @current-change="handleCurrentChange"
       :current-page="pagination.currentPage"
       :page-sizes="pagination.pageSizes"

@@ -152,8 +152,9 @@ export default {
       }).then(res => {
         this.orderList = res.data
         this.orderList.forEach(v => {
-          this.sum += v.stagesRepaymentAmount
+          this.sum += parseFloat(v.stagesRepaymentAmount)
         })
+        this.sum = this.sum.toFixed(2)
       })
     }
   },

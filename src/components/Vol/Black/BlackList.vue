@@ -40,7 +40,11 @@
         <el-table-column prop="channelAddress" label="联系地址"></el-table-column>
         <el-table-column prop="channelPhone" label="联系方式"></el-table-column>
         <el-table-column prop="channelEmail" label="邮箱"></el-table-column>
-        <el-table-column prop="createTime" label="添加时间"></el-table-column>
+        <el-table-column label="添加时间">
+          <template slot-scope="scope">
+            {{ scope.row.createTime | timeChange }}
+          </template>
+        </el-table-column>
         <el-table-column prop="remark" label="加入原因"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
@@ -279,7 +283,17 @@ export default {
     sort (val) { // 点击排序
       this.getBlackList()
     }
+  },
+  filters: {
+    timeChange (data) {
+      let date = new Date(data)
+      return date.getFullYear() + '-' + zero(date.getMonth() + 1) + '-' + zero(date.getDate())
+    }
   }
+}
+function zero (data) {
+  if (data < 10) return '0' + data
+  return data
 }
 </script>
 

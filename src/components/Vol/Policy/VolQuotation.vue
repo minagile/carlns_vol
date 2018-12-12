@@ -33,6 +33,11 @@
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
+      <el-table-column width="70">
+        <template slot-scope="scope">
+          <el-button type="text" @click="deleteD(scope.row.requisitionId)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination v-if="total > NumValue"
@@ -56,7 +61,7 @@
           <span>企业名称：{{ orderList.header.channelName }}</span>
           <span>险种：{{ orderList.header.coverageName }}</span>
           <span>车辆数：{{ orderList.header.sumCar }}</span>
-          <span>预收款合计：{{ orderList.header.sumMoney }}</span>
+          <span>保费合计：{{ orderList.header.sumMoney }}</span>
         </div>
         <table>
           <tr>
@@ -86,11 +91,11 @@
             <td>{{ orderList.subtotal.appliedAmountSum }}</td>
             <td>{{ orderList.subtotal.platformLicensingSum }}</td>
             <td>{{ orderList.subtotal.eachPaymentSum }}</td>
-            <td>{{ orderList.subtotal.downPaymentSum }}</td>
-            <td>{{ orderList.subtotal.serviceChargeSum }}</td>
+            <td><span class="red">{{ orderList.subtotal.downPaymentSum }}</span></td>
+            <td><span class="red">{{ orderList.subtotal.serviceChargeSum }}</span></td>
           </tr>
           <tr>
-            <td colspan="8">合计(元):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ orderList.sum }}</td>
+            <td colspan="8">首期应付(元):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="red">{{ orderList.sum }}</span></td>
           </tr>
         </table>
       </div>
@@ -183,6 +188,36 @@ export default {
       }).then(res => {
         this.orderList = res.data
       })
+    },
+    // 删除
+    deleteD (id) {
+      this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$post('/admin/requisition/delByRequisitionId', {
+          requisitionId: id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+            this.getData()
+          } else if (res.code === 1) {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   },
   components: {
@@ -256,5 +291,8 @@ function zero (data) {
       }
     }
   }
+}
+.red {
+  color: red;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    <selector :all="true" @giveParams="allTime" :channelList="channelList"></selector>
+    <selector :all="true" @giveParams="allTime" :channelList="channelList" :sortTable="false"></selector>
     <chart @getChartData="getChartData" :chartData="chartData"></chart>
   </div>
 </template>

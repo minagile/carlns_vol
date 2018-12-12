@@ -6,10 +6,8 @@ import { Message } from 'element-ui'
 axios.defaults.timeout = 10000
 // axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
 // axios.defaults.baseURL = 'http://192.168.1.145:80'
-axios.defaults.baseURL = 'http://192.168.1.117:80'
-// axios.defaults.baseURL = 'http://192.168.1.136:80'
-// axios.defaults.baseURL = 'http://192.168.1.136:80'
-// axios.defaults.baseURL = 'http://192.168.1.145:80'
+// axios.defaults.baseURL = 'http://192.168.1.117:80'
+axios.defaults.baseURL = 'http://192.168.1.136:80'
 // axios.defaults.baseURL = 'http://www.easyfq.com/carins'
 
 // http request 拦截器
@@ -40,6 +38,28 @@ axios.interceptors.response.use(
       })
       router.push({
         path: '/',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
+    if (response.data.code === 606) {
+      Message({
+        message: response.data.msg,
+        type: 'info'
+      })
+      router.push({
+        path: '/',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
+    if (response.data.code === 607) {
+      Message({
+        message: response.data.msg,
+        type: 'info'
+      })
+      router.push({
+        path: '/MLogin',
         querry: { redirect: router.currentRoute.fullPath }
         // 从哪个页面跳转
       })

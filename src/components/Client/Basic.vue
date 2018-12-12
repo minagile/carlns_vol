@@ -14,11 +14,7 @@
             <el-dropdown>
               <p>蓝途boss</p>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>黄金糕</el-dropdown-item>
-                <el-dropdown-item>狮子头</el-dropdown-item>
-                <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-                <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+                <span @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></span>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -82,6 +78,11 @@ export default {
     tab (i) {
       this.num = i
       this.$router.push({name: this.tabList[i].href})
+    },
+    logout () {
+      sessionStorage.clear()
+      this.$router.push('/')
+      this.$fetch('/login/logout')
     }
   }
 }

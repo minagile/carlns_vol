@@ -8,7 +8,7 @@
       <tr v-for="(item, index) in list" :key="index">
         <td><div class="index">{{ index + 1 }}</div></td>
         <td>账号：{{ item.adminName }}</td>
-        <td><el-button type="text" @click="set(item.adminId)">设置权限</el-button></td>
+        <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
         <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
         <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
       </tr>
@@ -29,7 +29,7 @@
     <el-dialog :visible.sync="childDialogVisible" width="1000px">
       <div class="dialog-header">权限设置</div>
       <div class="top">
-        <span>账号：123</span>
+        <span>账号：{{name}}</span>
         <el-button class="setBtn" size="small"  @click="childDialogVisible = false">返回</el-button>
         <el-button class="setBtn" size="small" @click="sureUpdate">确定</el-button>
       </div>
@@ -81,12 +81,12 @@
             <el-checkbox v-model="scope.row.add" @change="boxchecked($event, scope, 1)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="删除" align="center">
+        <el-table-column label="编辑" align="center">
           <template slot-scope="scope">
             <el-checkbox v-model="scope.row.del" @change="boxchecked($event, scope, 2)"></el-checkbox>
           </template>
         </el-table-column>
-        <el-table-column label="编辑" align="center">
+        <el-table-column label="删除" align="center">
           <template slot-scope="scope">
             <el-checkbox v-model="scope.row.adit" @change="boxchecked($event, scope, 3)"></el-checkbox>
           </template>
@@ -150,14 +150,16 @@ export default {
       currentPage4: 1,
       total: 0,
       id: '',
-      title: '添加账号'
+      title: '添加账号',
+      name: ''
     }
   },
   mounted () {
     this.getDataList()
   },
   methods: {
-    set (id) {
+    set (id, name) {
+      this.name = name
       this.id = id
       this.$post('/admin/Menu/findByAdminId', {
         adminId: id

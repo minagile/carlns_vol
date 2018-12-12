@@ -8,6 +8,7 @@
       <tr v-for="(item, index) in list" :key="index">
         <td><div class="index">{{ index + 1 }}</div></td>
         <td>账号：{{ item.adminName }}</td>
+        <td>密码：{{ item.reversiblePassword }}</td>
         <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
         <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
         <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>

@@ -3,7 +3,7 @@
     <header>
       <div class="tab">
         <ul>
-          <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)"><a>{{ o.label }}</a></li>
+          <li v-for="(o, i) in tabList" :key="i" :class="{active: num === i}" @click="tab(i)" v-show="o.show"><a>{{ o.label }}</a></li>
         </ul>
         <div class="header-img">
           <p><img src="../../assets/img/person.png" >{{username}}</p>
@@ -22,39 +22,39 @@ export default {
     return {
       tabList: [
         {
-          img: '',
           label: '首页',
-          href: 'VolHomePage'
+          href: 'VolHomePage',
+          show: true
         },
         {
-          img: '',
           label: '订单申请',
-          href: 'QuotationOrder'
+          href: 'QuotationOrder',
+          show: false
         },
         {
-          img: '',
           label: '保单管理',
-          href: 'VolDebitNote'
+          href: 'VolDebitNote',
+          show: false
         },
         {
-          img: '',
           label: '已分期',
-          href: 'VolStageList'
+          href: 'VolStageList',
+          show: false
         },
         {
-          img: '',
           label: '决策支持',
-          href: 'VolDecision'
+          href: 'VolDecision',
+          show: false
         },
         {
-          img: '',
           label: '黑名单管理',
-          href: 'BlackList'
+          href: 'BlackList',
+          show: false
         },
         {
-          img: '',
           label: '系统设置',
-          href: 'ChannelManagement'
+          href: 'ChannelManagement',
+          show: false
         }
       ],
       username: '',
@@ -82,6 +82,25 @@ export default {
       }
       if (path.split('/')[2] === 'VolSetting') {
         this.num = 6
+      }
+    })
+    // GET /Menu/getPermission
+    this.$fetch('/admin/Menu/getPermission').then(res => {
+      // console.log(res.data)
+      if (res.code === 0) {
+        var arr = ['首页']
+        res.data.forEach(v => {
+          arr.push(v.menuName)
+          this.tabList.forEach(m => {
+            // console.log(m.label)
+            if (m.label === v.menuName) {
+              m.show = true
+            }
+          })
+        })
+        sessionStorage.setItem('settingList', JSON.stringify(arr))
+      } else {
+        this.$message(res.msg)
       }
     })
   },

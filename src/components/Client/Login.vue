@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { setCookie, getCookie } from '../../assets/js/cookie.js'
+import { setCookie, getCookie, delCookie } from '../../assets/js/cookie.js'
 export default {
   name: 'Login',
   data () {
@@ -145,6 +145,8 @@ export default {
       if (this.remember === true) {
         setCookie('phone', this.user, 1000 * 60)
         setCookie('pwd', this.psd, 1000 * 60)
+      } else {
+        delCookie('phone')
       }
       if (this.user === '') {
         this.$message({

@@ -27,39 +27,39 @@
             <img src="../../assets/vimg/first.png" alt="">
             首期应付款
           </div>
-            <el-table
-              :data="tableData"
-              style="width: 98%; margin: 0 auto">
-              <!-- <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column> -->
-              <el-table-column
-                prop="batch"
-                label="批次"
-                width=80>
-              </el-table-column>
-              <el-table-column
-                prop="time"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="公司">
-              </el-table-column>
-              <el-table-column
-                prop="carNumber"
-                label="车辆数">
-              </el-table-column>
-              <el-table-column
-                prop="coverage"
-                label="险种">
-              </el-table-column>
-              <el-table-column
-                prop="money"
-                label="金额">
-              </el-table-column>
-            </el-table>
+          <el-table
+            :data="tableData"
+            style="width: 98%; margin: 0 auto">
+            <!-- <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column> -->
+            <el-table-column
+              prop="batch"
+              label="批次"
+              width=80>
+            </el-table-column>
+            <el-table-column
+              prop="time"
+              label="时间">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="公司">
+            </el-table-column>
+            <el-table-column
+              prop="carNumber"
+              label="车辆数">
+            </el-table-column>
+            <el-table-column
+              prop="coverage"
+              label="险种">
+            </el-table-column>
+            <el-table-column
+              prop="money"
+              label="金额">
+            </el-table-column>
+          </el-table>
         </el-col>
 
         <el-col :span="12">

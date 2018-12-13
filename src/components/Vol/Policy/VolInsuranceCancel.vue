@@ -48,15 +48,32 @@
     <el-dialog :visible.sync="centerDialogVisible" width="760px">
       <div class="dialog-header">新增退保</div>
       <div class="top">
-        <el-select v-model="value" placeholder="请输入公司名称" @visible-change="select">
+        <!-- <el-select v-model="value" placeholder="请输入公司名称" @visible-change="select">
           <el-option
             v-for="item in selectAllChannel"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
-        <el-select v-model="value1" placeholder="请输入车牌号" @visible-change="getAllCar">
+        </el-select> -->
+        <el-cascader @visible-change="select"
+          placeholder="请选择公司名称"
+          :options="options2"
+          @change="changechan"
+          :show-all-levels="false"
+          @active-item-change="handleItemChange"
+          clearable
+          :props="props"
+        ></el-cascader>
+        <el-select
+          v-model="value1"
+          placeholder="请输入车牌号"
+          @visible-change="getAllCar"
+          filterable
+          remote
+          default-first-option
+          clearable
+          >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -121,7 +138,16 @@ export default {
       total: 0,
       reason: '',
       id: '',
-      tableList: []
+      tableList: [],
+      // 二级级联
+      channelId: '',
+      options2: [],
+      props: {
+        // value: 'label',
+        label: 'label',
+        value: 'value',
+        children: 'cities'
+      }
     }
   },
   mounted () {
@@ -180,15 +206,55 @@ export default {
         })
       }
     },
+    changechan (val) {
+      // console.log(val)
+      this.value = val[val.length - 1]
+      // console.log(this.channelId)
+      // this.getData()
+    },
+    handleItemChange (val) {
+      // console.log(val)
+      setTimeout(_ => {
+        var id = ''
+        // POST /admin/channel/getNextChannel
+        this.options2.forEach((v, k) => {
+          if (v.value === val[0]) {
+            id = v.value
+            this.$post('/admin/channel/getNextChannel', {
+              parentId: id
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                v.cities = []
+                if (res.data.length > 0) {
+                  v.cities = [{ label: v.label, value: v.value }]
+                  res.data.forEach(m => {
+                    v.cities.push({ label: m.channelName, value: m.channelId })
+                  })
+                } else {
+                  v.cities.push({ label: v.label, value: v.value })
+                }
+              }
+            })
+          }
+        })
+      }, 300)
+    },
+    change () {
+      this.getData()
+    },
     // 查询所有渠道
     select (val) {
       if (val === true) {
-        this.selectAllChannel = []
-        this.$fetch('/admin/channel/selectAllChannel').then(res => {
-          // console.log(res)
+        // this.selectAllChannel = []
+        this.options2 = []
+        // GET /admin/channel/getOneChannel
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          // console.log(res.data)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+              this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+              // this.selectAllChannel.push({value: v.channelId, label: v.channelName})
             })
           } else {
             this.$message(res.msg)

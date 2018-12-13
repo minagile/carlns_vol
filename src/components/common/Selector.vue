@@ -31,7 +31,9 @@
       <el-cascader @visible-change="select"
         :options="options2"
         @change="changechan"
+        :show-all-levels="false"
         @active-item-change="handleItemChange"
+        clearable
         :props="props"
       ></el-cascader>
       <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
@@ -116,7 +118,7 @@ export default {
       // this.getData()
     },
     handleItemChange (val) {
-      // console.log(val)
+      console.log(val)
       setTimeout(_ => {
         var id = ''
         // POST /admin/channel/getNextChannel
@@ -128,8 +130,9 @@ export default {
             }).then(res => {
               // console.log(res)
               if (res.code === 0) {
+                v.cities = []
                 if (res.data.length > 0) {
-                  v.cities = []
+                  v.cities = [{ label: v.label, value: v.value }]
                   res.data.forEach(m => {
                     v.cities.push({ label: m.channelName, value: m.channelId })
                   })

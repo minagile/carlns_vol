@@ -97,7 +97,7 @@ export default {
     color: #fff;
   }
   height: calc(100% - 48px);
-  background: #EAEFF3 url(../../assets/img/homebg.png) no-repeat;
+  background: #EAEFF3 url(../../../static/homebg.png) no-repeat;
   // background: #4977FC;
   padding: 0 0 48px;
   overflow: auto;

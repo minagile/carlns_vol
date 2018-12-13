@@ -28,8 +28,8 @@
       <el-table-column prop="state" label="分期状态"></el-table-column>
       <el-table-column label="操作(可撤销)">
         <template slot-scope="scope">
-          <el-button type="danger" plain v-if="scope.row.condition === 0" @click="gotopay(scope.row.stagesId)">待还款</el-button>
-          <el-button type="primary" plain v-if="scope.row.condition === 1" @click="gotopay1(scope.row.stagesId)">已还款</el-button>
+          <el-button type="danger" plain v-if="scope.row.condition === 0" @click="gotopay(scope.row.condition, scope.row.stagesId)">待还款</el-button>
+          <el-button type="primary" plain v-if="scope.row.condition === 1" @click="gotopay(scope.row.condition, scope.row.stagesId)">已还款</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,21 +68,28 @@ export default {
     this.getData()
   },
   methods: {
-    gotopay (id) {
-      this.$confirm('是否确定还款', '还款', {
+    gotopay (type, id) {
+      let tip = ''
+      if (type === 0) {
+        tip = '确定'
+      } else {
+        tip = '撤销'
+      }
+      this.$confirm(`是否${tip}还款`, tip, {
         distinguishCancelAndClose: true,
-        confirmButtonText: '还款',
+        confirmButtonText: tip,
         cancelButtonText: '取消'
       }).then(() => {
         // GET /admin/stager/affirm
         this.$fetch('/admin/stager/affirm', {
-          stagesId: id
+          stagesId: id,
+          type: type
         }).then(res => {
           console.log(res)
           if (res.code === 0) {
             this.$message({
               type: 'success',
-              message: '已确认还款'
+              message: `已${tip}还款`
             })
             this.getData()
           } else {
@@ -93,38 +100,43 @@ export default {
           }
         })
       }).catch(action => {
-        this.$message({
-          type: 'info',
-          message: '取消还款'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '取消还款'
+        // })
       })
     },
-    gotopay1 (id) {
-      this.$confirm('是否撤销还款', '撤销还款', {
-        distinguishCancelAndClose: true,
-        confirmButtonText: '还款',
-        cancelButtonText: '取消'
-      }).then(() => {
-        // GET /admin/stager/affirm
-        this.$fetch('/admin/stager/affirm', {
-          stagesId: id
-        }).then(res => {
-          console.log(res)
-          // if (res.code === 0) {
-          //   this.$message({
-          //     type: 'success',
-          //     message: '已撤销还款'
-          //   })
-          //   this.getData()
-          // } else {
-          //   this.$message({
-          //     type: 'info',
-          //     message: res.msg
-          //   })
-          // }
-        })
-      })
-    },
+    // gotopay1 (id) {
+    //   this.$confirm('是否撤销还款', '撤销还款', {
+    //     distinguishCancelAndClose: true,
+    //     confirmButtonText: '撤销',
+    //     cancelButtonText: '取消'
+    //   }).then(() => {
+    //     // GET /admin/stager/affirm
+    //     this.$fetch('/admin/stager/affirm', {
+    //       stagesId: id
+    //     }).then(res => {
+    //       console.log(res)
+    //       // if (res.code === 0) {
+    //       //   this.$message({
+    //       //     type: 'success',
+    //       //     message: '已撤销还款'
+    //       //   })
+    //       //   this.getData()
+    //       // } else {
+    //       //   this.$message({
+    //       //     type: 'info',
+    //       //     message: res.msg
+    //       //   })
+    //       // }
+    //     })
+    //   }).catch(action => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '取消撤销'
+    //     })
+    //   })
+    // },
     giveParams (data) {
       // console.log(data)
       this.serchDate = data

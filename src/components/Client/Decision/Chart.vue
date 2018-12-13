@@ -10,8 +10,9 @@
         {{btn.name}}
       </button>
     </div>
-    <div id="main" v-show="this.url !== 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
     <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -60,7 +61,7 @@ export default {
         },
         {
           name: '还款总金额趋势图',
-          url: 'CoverageOf'
+          url: 'ChannelRepaymentAmountTrend'
         }
       ],
       num: 0,
@@ -84,7 +85,13 @@ export default {
           chartYY.push(v.commercialRate)
         })
         this.getEchartDb(chartX, chartY, chartYY)
-      } else {
+      } else if (this.url === 'ChannelRepaymentAmountTrend') {
+        this.chartData.bdf.forEach(v => {
+          chartX.push(v.channelName)
+          chartY.push(v.carrtafficRate)
+        })
+        this.getEchartZhe()
+      }else {
         this.chartData.forEach(v => {
           chartX.push(v.channelName)
           chartY.push(v.price)
@@ -253,6 +260,114 @@ export default {
           }
         ]
       })
+    },
+    getEchartZhe () {
+      var myChart6 = echarts.init(document.getElementById('main1'))
+      // var seriesArr = []
+      // // this.Data.series.forEach(v => {
+      //   var oneOfSeries = {
+      //     name: v.name,
+      //     type: 'line',
+      //     symbol: 'circle',
+      //     symbolSize: '16',
+      //     itemStyle: {
+      //       borderWidth: 2,
+      //       borderColor: '#fff',
+      //       shadowColor: 'rgba(0, 0, 0, 0.3)',
+      //       shadowBlur: 4
+      //     },
+      //     lineStyle: {
+      //       width: 4
+      //     },
+      //     data: v.data
+      //   }
+      //   seriesArr.push(oneOfSeries)
+      // })
+      // console.log(seriesArr)
+      myChart6.setOption({
+        color: ['#87e5da', '#92a4c0', '#f4adad', '#e58cdb', '#d0efb5', '#eb7878', '#2f3e75', '#f3e595', '#eda1c1', '#fab2ac', '#bee4d2', '#d7f8f7'],
+        tooltip: {
+          trigger: this.Data.tooltip.trigger
+        },
+        legend: {
+          type: 'plain',
+          data: this.Data.legend.data
+        },
+        grid: {
+          top: '20%',
+          left: '18%',
+          height: '60%',
+          width: '64%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          name: '时间',
+          type: 'category',
+          boundaryGap: false,
+          splitLine: {
+            show: true
+          },
+          data: [xx, xxx ,xx ],
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          name: '物业费(￥)',
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        series: [
+          {
+            name: 'v.name',
+            type: 'line',
+            symbol: 'circle',
+            symbolSize: '16',
+            itemStyle: {
+              borderWidth: 2,
+              borderColor: '#fff',
+              shadowColor: 'rgba(0, 0, 0, 0.3)',
+              shadowBlur: 4
+            },
+            lineStyle: {
+              width: 4
+            },
+            data: [1, 22, 55, 588]
+          },
+          {
+            name: v.name,
+            type: 'line',
+            symbol: 'circle',
+            symbolSize: '16',
+            itemStyle: {
+              borderWidth: 2,
+              borderColor: '#fff',
+              shadowColor: 'rgba(0, 0, 0, 0.3)',
+              shadowBlur: 4
+            },
+            lineStyle: {
+              width: 4
+            },
+            data: [1, 22, 55, 588]
+          }
+        ]
+      }, true)
     }
   }
 }

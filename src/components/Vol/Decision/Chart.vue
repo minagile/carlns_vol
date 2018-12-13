@@ -18,6 +18,7 @@
       </div>
       <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf'"></div>
       <div id="main1"  style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
+      <div id="main2" v-show="this.url === 'xqj'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
@@ -79,6 +80,10 @@ export default {
         {
           name: '险种占比',
           url: 'CoverageOf'
+        },
+        {
+          name: '还款总金额趋势图',
+          url: 'xqj'
         }
       ],
       num: 0,
@@ -111,10 +116,12 @@ export default {
         // this.chartData.forEach(i => {
         //   i.sum = sum
         // })
-        if (data !== 'CoverageOf') {
-          this.getEchart()
-        } else {
+        if (data === 'CoverageOf') {
           this.getEchartDb()
+        } else if (data === 'xqj') {
+          this.getEchartDb()
+        } else {
+          this.getEchart()
         }
       })
     },

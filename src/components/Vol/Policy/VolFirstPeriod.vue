@@ -30,8 +30,8 @@
       </el-table-column>
       <el-table-column label="支付操作">
         <template slot-scope="scope">
-          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini">已支付</el-button>
-          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini">未支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row.stagesType, scope.row.requisitionId)">已支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini" @click="changeType(scope.row.stagesType, scope.row.requisitionId)">未支付</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -112,6 +112,9 @@ export default {
           this.$message(res.msg)
         }
       })
+    },
+    changeType (type, id) {
+      console.log(type, id)
     }
   },
   components: {

@@ -4,20 +4,14 @@
     <div class="company">
       <div class="xuanze">
         <span>选择渠道：</span>
-        <!-- <el-select v-model="channelId" placeholder="请选择渠道"  @visible-change="select" @change="change">
-          <el-option
-            v-for="item in selectAllChannel"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select> -->
-        <el-button @click="allc" :class="{all: allchannel === true}">全部渠道</el-button>
+        <!-- <el-button @click="allc" :class="{all: allchannel === true}">全部渠道</el-button> -->
         <el-cascader @visible-change="select"
           :options="options2"
           @change="changechan"
           @active-item-change="handleItemChange"
           :props="props"
+          :show-all-levels="false"
+          :clearable="true"
         ></el-cascader>
       </div>
 
@@ -29,7 +23,8 @@
           </div>
             <el-table
               :data="tableData"
-              style="width: 98%; margin: 0 auto">
+              style="width: 98%; margin: 0 auto"
+              @row-click="jump('VolFirstPeriod')">
               <!-- <el-table-column
                 type="selection"
                 width="55">
@@ -69,7 +64,8 @@
           </div>
             <el-table
               :data="tableData1"
-              style="width: 98%; margin: 0 auto">
+              style="width: 98%; margin: 0 auto"
+              @row-click="jump('VolReimbursementDetail')">
               <!-- <el-table-column
                 type="selection"
                 width="55">
@@ -110,7 +106,8 @@
           </div>
             <el-table
               :data="tableData2"
-              style="width: 98%; margin: 0 auto">
+              style="width: 98%; margin: 0 auto"
+              @row-click="jump('VolReimbursementDetail')">
               <!-- <el-table-column
                 type="selection"
                 width="55">
@@ -210,8 +207,6 @@ export default {
       this.getData()
     },
     changechan (val) {
-      // console.log(val)
-      // console.log(Array.reverse(val))
       this.channelId = val[val.length - 1]
       this.allchannel = false
       this.getData()
@@ -229,8 +224,9 @@ export default {
             }).then(res => {
               // console.log(res)
               if (res.code === 0) {
+                v.cities = []
                 if (res.data.length > 0) {
-                  v.cities = []
+                  v.cities = [{ label: v.label, value: v.value }]
                   res.data.forEach(m => {
                     v.cities.push({ label: m.channelName, value: m.channelId })
                   })
@@ -289,6 +285,11 @@ export default {
           this.tableData1 = res.data
         }
       })
+    },
+    // 点击跳转
+    jump (name) {
+      console.log(name)
+      this.$router.push({name: name})
     }
   }
 }
@@ -332,7 +333,7 @@ export default {
     vertical-align: middle;
   }
   .xuanze {
-    width: 450px;
+    width: 350px;
     height:56px;
     background:rgba(255,255,255,1);
     border-radius:28px;

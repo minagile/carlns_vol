@@ -26,10 +26,10 @@
       <el-table-column prop="coverage" label="险种"></el-table-column>
       <el-table-column prop="repaymentAmount" label="本期待还"></el-table-column>
       <el-table-column prop="state" label="分期状态"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作(可撤销)">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.condition === 0" style="color: red" @click="gotopay(scope.row.stagesId)">待还款</el-button>
-          <el-button type="text" v-if="scope.row.condition === 1" style="color: #333">已还款</el-button>
+          <el-button type="danger" plain v-if="scope.row.condition === 0" @click="gotopay(scope.row.stagesId)">待还款</el-button>
+          <el-button type="primary" plain v-if="scope.row.condition === 1" @click="gotopay1(scope.row.stagesId)">已还款</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -99,6 +99,32 @@ export default {
         })
       })
     },
+    gotopay1 (id) {
+      this.$confirm('是否撤销还款', '撤销还款', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '还款',
+        cancelButtonText: '取消'
+      }).then(() => {
+        // GET /admin/stager/affirm
+        this.$fetch('/admin/stager/affirm', {
+          stagesId: id
+        }).then(res => {
+          console.log(res)
+          // if (res.code === 0) {
+          //   this.$message({
+          //     type: 'success',
+          //     message: '已撤销还款'
+          //   })
+          //   this.getData()
+          // } else {
+          //   this.$message({
+          //     type: 'info',
+          //     message: res.msg
+          //   })
+          // }
+        })
+      })
+    },
     giveParams (data) {
       // console.log(data)
       this.serchDate = data
@@ -147,6 +173,13 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    condition (val) {
+      if (val === 0) return '待还款'
+      if (val === 1) return '已还款'
+      if (val === 3) return '已逾期'
+    }
   }
 }
 </script>

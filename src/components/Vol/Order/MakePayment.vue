@@ -193,21 +193,14 @@ export default {
     },
     upfile (e, i) {
       var file = e.target.files[0]
-      if (file.name.split('.')[1] !== 'xls' && file.name.split('.')[1] !== 'xlsx') {
-        this.$message({
-          type: 'info',
-          message: '请上传.xls/.xlsx文件'
-        })
-      } else {
-        if (i === 1) {
-          this.file1 = file
-        }
-        if (i === 2) {
-          this.file2 = file
-        }
-        if (i === 3) {
-          this.file3 = file
-        }
+      if (i === 1) {
+        this.file1 = file
+      }
+      if (i === 2) {
+        this.file2 = file
+      }
+      if (i === 3) {
+        this.file3 = file
       }
     },
     uploadfile () {

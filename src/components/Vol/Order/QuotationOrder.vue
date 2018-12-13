@@ -13,7 +13,9 @@
       <el-cascader @visible-change="select"
         :options="options2"
         @change="changechan"
+        :show-all-levels="false"
         @active-item-change="handleItemChange"
+        clearable
         :props="props"
       ></el-cascader>
       <!-- <el-select v-model="value4" clearable placeholder="请选择">
@@ -106,13 +108,7 @@ export default {
       },
       selectAllChannel: [],
       channelId: '',
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
+      options2: [],
       props: {
         // value: 'label',
         label: 'label',
@@ -186,8 +182,9 @@ export default {
             }).then(res => {
               // console.log(res)
               if (res.code === 0) {
+                v.cities = []
                 if (res.data.length > 0) {
-                  v.cities = []
+                  v.cities = [{ label: v.label, value: v.value }]
                   res.data.forEach(m => {
                     v.cities.push({ label: m.channelName, value: m.channelId })
                   })

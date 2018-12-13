@@ -30,8 +30,8 @@
       </el-table-column>
       <el-table-column label="支付操作">
         <template slot-scope="scope">
-          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row.stagesType, scope.row.requisitionId)">已支付</el-button>
-          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini" @click="changeType(scope.row.stagesType, scope.row.requisitionId)">未支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row.requisitionId)">已支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini">未支付</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -113,8 +113,36 @@ export default {
         }
       })
     },
-    changeType (type, id) {
-      console.log(type, id)
+    changeType (id) {
+      this.$confirm('是否确认已付首付', '确认已付', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '已付',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.$fetch('/admin/stager/updatef', {
+          type: 1,
+          requisitionId: id
+        }).then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+            this.getData()
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: '取消'
+        })
+      })
     }
   },
   components: {
@@ -143,6 +171,11 @@ function zero (data) {
 .VolFirstPeriod {
   .header {
     padding-bottom: 20px;
+  }
+  .yellow{
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
   }
 }
 </style>

@@ -57,6 +57,10 @@ export default {
         {
           name: '险种占比',
           url: 'CoverageOf'
+        },
+        {
+          name: '还款总金额趋势图',
+          url: 'CoverageOf'
         }
       ],
       num: 0,

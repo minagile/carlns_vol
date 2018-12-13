@@ -3,15 +3,29 @@
   <div class="MakePayment">
     <div class="header">
       <div class="select">
-        <el-select v-model="channelId" size="small" clearable placeholder="请选择渠道" @visible-change="select">
+        <!-- <el-select v-model="channelId" size="small" clearable placeholder="请选择渠道" @visible-change="select">
           <el-option
             v-for="item in selectAllChannel"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
-        <el-select v-model="batch" size="small" clearable placeholder="请选择对应批次" @visible-change="selectBatch">
+        </el-select> -->
+        <el-cascader @visible-change="select"
+          size="small"
+          :options="options2"
+          @change="changechan"
+          :show-all-levels="false"
+          @active-item-change="handleItemChange"
+          clearable
+          :props="props"
+        ></el-cascader>
+        <el-select v-model="batch" size="small"
+          clearable
+          filterable
+          remote
+          default-first-option
+          placeholder="请选择对应批次" @visible-change="selectBatch">
           <el-option
             v-for="item in options1"
             :key="item.value"
@@ -137,7 +151,6 @@ export default {
       showList: false,
       selectAllChannel: [],
       options1: [],
-      channelId: '',
       batch: null,
       orderList: [],
       orderList1: [],
@@ -154,7 +167,16 @@ export default {
       file2: {},
       file3: {},
       sum: 0,
-      sum1: 0
+      sum1: 0,
+      // 二级级联
+      channelId: '',
+      options2: [],
+      props: {
+        // value: 'label',
+        label: 'label',
+        value: 'value',
+        children: 'cities'
+      }
     }
   },
   mounted () {
@@ -167,7 +189,7 @@ export default {
           // console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.options1.push({value: v.requisitionBatch, label: v.requisitionBatch})
+              this.options1.push({value: v.requisitionId, label: v.requisitionId})
             })
           } else {
             this.$message(res.msg)
@@ -175,15 +197,55 @@ export default {
         })
       }
     },
-    // 选择渠道
+    changechan (val) {
+      // console.log(val)
+      this.channelId = val[val.length - 1]
+      // console.log(this.channelId)
+      // this.getData()
+    },
+    handleItemChange (val) {
+      // console.log(val)
+      setTimeout(_ => {
+        var id = ''
+        // POST /admin/channel/getNextChannel
+        this.options2.forEach((v, k) => {
+          if (v.value === val[0]) {
+            id = v.value
+            this.$post('/admin/channel/getNextChannel', {
+              parentId: id
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                v.cities = []
+                if (res.data.length > 0) {
+                  v.cities = [{ label: v.label, value: v.value }]
+                  res.data.forEach(m => {
+                    v.cities.push({ label: m.channelName, value: m.channelId })
+                  })
+                } else {
+                  v.cities.push({ label: v.label, value: v.value })
+                }
+              }
+            })
+          }
+        })
+      }, 300)
+    },
+    change () {
+      this.getData()
+    },
+    // 查询所有渠道
     select (val) {
       if (val === true) {
-        this.selectAllChannel = []
-        this.$fetch('/admin/channel/selectAllChannel').then(res => {
-          // console.log(res)
+        // this.selectAllChannel = []
+        this.options2 = []
+        // GET /admin/channel/getOneChannel
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          // console.log(res.data)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.selectAllChannel.push({value: v.channelId, label: v.channelName})
+              this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+              // this.selectAllChannel.push({value: v.channelId, label: v.channelName})
             })
           } else {
             this.$message(res.msg)
@@ -280,6 +342,7 @@ export default {
       margin-right: 29px;
       .el-select {
         margin-bottom: 11px;
+        margin-top: 11px;
       }
     }
     .upfile {

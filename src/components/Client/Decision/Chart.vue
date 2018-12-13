@@ -12,7 +12,7 @@
     </div>
     <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
     <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
-    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 80%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -68,11 +68,7 @@ export default {
       url: ''
     }
   },
-  props: {
-    chartData: {
-      type: Array
-    }
-  },
+  props: ['chartData'],
   watch: {
     chartData (val) {
       let chartX = []
@@ -86,12 +82,8 @@ export default {
         })
         this.getEchartDb(chartX, chartY, chartYY)
       } else if (this.url === 'ChannelRepaymentAmountTrend') {
-        this.chartData.bdf.forEach(v => {
-          chartX.push(v.channelName)
-          chartY.push(v.carrtafficRate)
-        })
-        this.getEchartZhe()
-      }else {
+        this.getEchartZhe(this.chartData)
+      } else {
         this.chartData.forEach(v => {
           chartX.push(v.channelName)
           chartY.push(v.price)
@@ -261,37 +253,46 @@ export default {
         ]
       })
     },
-    getEchartZhe () {
-      var myChart6 = echarts.init(document.getElementById('main1'))
-      // var seriesArr = []
-      // // this.Data.series.forEach(v => {
-      //   var oneOfSeries = {
-      //     name: v.name,
-      //     type: 'line',
-      //     symbol: 'circle',
-      //     symbolSize: '16',
-      //     itemStyle: {
-      //       borderWidth: 2,
-      //       borderColor: '#fff',
-      //       shadowColor: 'rgba(0, 0, 0, 0.3)',
-      //       shadowBlur: 4
-      //     },
-      //     lineStyle: {
-      //       width: 4
-      //     },
-      //     data: v.data
-      //   }
-      //   seriesArr.push(oneOfSeries)
-      // })
-      // console.log(seriesArr)
+    getEchartZhe (data) {
+      // console.log(data)
+      var dateArr = data[0]
+      var seriesData = []
+      var name = ''
+      let legend = []
+      data[2].forEach((m, n) => {
+        name = m.channelName
+        legend.push(name)
+        seriesData.push({
+          name: name,
+          type: 'line',
+          stack: '总量',
+          data: [],
+          name: name,
+          symbol: 'circle',
+          symbolSize: '16',
+          itemStyle: {
+            borderWidth: 2,
+            borderColor: '#fff',
+            shadowColor: 'rgba(0, 0, 0, 0.3)',
+            shadowBlur: 4
+          },
+          lineStyle: {
+            width: 4
+          }
+        })
+        data[1].forEach((v, k) => {
+          seriesData[n].data.push(v.value[name])
+        })
+      })
+      var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
         color: ['#87e5da', '#92a4c0', '#f4adad', '#e58cdb', '#d0efb5', '#eb7878', '#2f3e75', '#f3e595', '#eda1c1', '#fab2ac', '#bee4d2', '#d7f8f7'],
         tooltip: {
-          trigger: this.Data.tooltip.trigger
+          trigger: 'item'
         },
         legend: {
           type: 'plain',
-          data: this.Data.legend.data
+          data: legend
         },
         grid: {
           top: '20%',
@@ -312,7 +313,7 @@ export default {
           splitLine: {
             show: true
           },
-          data: [xx, xxx ,xx ],
+          data: dateArr,
           axisLine: {
             show: false
           },
@@ -321,7 +322,7 @@ export default {
           }
         },
         yAxis: {
-          name: '物业费(￥)',
+          name: '金额(￥)',
           type: 'value',
           splitLine: {
             show: true
@@ -333,40 +334,7 @@ export default {
             show: false
           }
         },
-        series: [
-          {
-            name: 'v.name',
-            type: 'line',
-            symbol: 'circle',
-            symbolSize: '16',
-            itemStyle: {
-              borderWidth: 2,
-              borderColor: '#fff',
-              shadowColor: 'rgba(0, 0, 0, 0.3)',
-              shadowBlur: 4
-            },
-            lineStyle: {
-              width: 4
-            },
-            data: [1, 22, 55, 588]
-          },
-          {
-            name: v.name,
-            type: 'line',
-            symbol: 'circle',
-            symbolSize: '16',
-            itemStyle: {
-              borderWidth: 2,
-              borderColor: '#fff',
-              shadowColor: 'rgba(0, 0, 0, 0.3)',
-              shadowBlur: 4
-            },
-            lineStyle: {
-              width: 4
-            },
-            data: [1, 22, 55, 588]
-          }
-        ]
+        series: seriesData
       }, true)
     }
   }

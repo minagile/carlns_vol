@@ -27,9 +27,8 @@
                   width="55">
                 </el-table-column> -->
                 <el-table-column
-                  prop="batch"
-                  label="批次"
-                  width=50>
+                  prop="requisitionId"
+                  label="订单号">
                 </el-table-column>
                 <el-table-column
                   prop="time"
@@ -67,9 +66,8 @@
                   width="55">
                 </el-table-column> -->
                 <el-table-column
-                  prop="batch"
-                  label="批次"
-                  width=50>
+                  prop="requisitionId"
+                  label="订单号">
                 </el-table-column>
                 <el-table-column
                   prop="time"
@@ -108,9 +106,8 @@
                   width="55">
                 </el-table-column> -->
                 <el-table-column
-                  prop="batch"
-                  label="批次"
-                  width=50>
+                  prop="requisitionId"
+                  label="订单号">
                 </el-table-column>
                 <el-table-column
                   prop="time"

@@ -31,6 +31,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="退保原因"></el-table-column>
+      <el-table-column>
+        <template slot-scope="scope">
+          <el-button type="text" @click="cancel(scope.row.carId)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- 分页 -->
@@ -306,6 +311,29 @@ export default {
         } else {
           this.$message(res.msg)
         }
+      })
+    },
+    cancel (id) {
+      this.$confirm('此操作将永久删除信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$post('/admin/car/delete', {
+        carId: id
+      }).then(res => {
+        if (res.code === 0) {
+          this.$message.success(res.msg)
+          this.getData()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })        
       })
     }
   },

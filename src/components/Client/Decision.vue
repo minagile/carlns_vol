@@ -48,7 +48,6 @@ export default {
       this.url = data
       this.$post(`/user/report/${data}`, this.selectData).then(res => {
         this.chartData = res
-        console.log(res)
       })
     },
     getChannelList () {

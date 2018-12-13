@@ -13,11 +13,13 @@
           <td>负责人：{{ item.channelPrincipal }}</td>
           <td>联系方式：{{ item.channelPhone }}</td>
           <td>密码：{{ item.plaintextPwd }}</td>
-          <td><el-button type="text" @click="addchild(item.channelId)">添加子公司</el-button></td>
+          <td><el-button type="text" @click="addchild(index, item.channelId, item)">添加子公司</el-button></td>
           <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
+          <td><el-button type="text" @click="remove(item.channelId)">删除</el-button></td>
           <td>
-            <div class="zhankai" v-show="!item.expand" @click="expand(item, index, item.channelId)">展开 <span></span></div>
-            <div class="shouqi" v-show="item.expand" @click="expand(item, index)">收起 <span></span></div>
+            <!-- <div class="zhankai" @click="expand(item, index, item.channelId)" v-show="!item.expand" >展开 <span></span></div> -->
+            <!-- <div class="shouqi" @click="expand(item, index, item.channelId)" v-show="item.expand" >收起 <span></span></div> -->
+            <div class="zhankai" @click="expand(item, index, item.channelId, $event)" >展开 <span></span></div>
           </td>
         </tr>
       </table>
@@ -92,6 +94,7 @@ export default {
   name: 'ChannelManagement',
   data () {
     return {
+      text: '展开',
       currentPage4: 1,
       NumValue: 9,
       total: 0,
@@ -127,13 +130,44 @@ export default {
       addtext: '新增渠道',
       childadit: false,
       channelId: '',
-      clickData: []
+      clickData: [],
+      whichOneExpand: []
     }
   },
   mounted () {
     this.getDataList()
   },
   methods: {
+    remove (id) {
+      this.$confirm('是否删除这个渠道？', '删除渠道', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '删除',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.$post('/admin/channel/delChannel', {
+          channelId: id
+        }).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '已删除成功'
+            })
+            this.getDataList()
+          } else {
+            this.$message({
+              type: 'info',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: '取消删除'
+        })
+      })
+    },
     handleSizeChange (val) {
       this.NumValue = val
       this.getDataList()
@@ -168,10 +202,12 @@ export default {
       })
     },
     // 添加子公司
-    addchild (id) {
+    addchild (i, id, item) {
       this.childDialogVisible = true
       this.id = id
       this.addtext = '添加子公司'
+      this.whichOneExpand = [i, item]
+      // console.log(this.whichOneExpand)
     },
     addNewChannel (data) {
       if (this.ruleForm.channelName === '') {
@@ -242,10 +278,14 @@ export default {
                 this.$message.success(res.msg)
                 if (data !== 'id') {
                   this.centerDialogVisible = false
+                  this.getDataList()
                 } else {
                   this.childDialogVisible = false
+                  if (this.whichOneExpand[1].expand === true) {
+                    $('.childrenTr' + this.whichOneExpand[0]).remove()
+                    this.childListData(this.whichOneExpand[1], this.whichOneExpand[0], this.whichOneExpand[1].channelId)
+                  }
                 }
-                this.getDataList()
                 this.ruleForm = {
                   channelName: '',
                   address: '',
@@ -282,12 +322,15 @@ export default {
       })
     },
     // 展开收起
-    expand (item, index, id) {
-      // console.log(item, index, id)
+    expand (item, index, id, e) {
+      // console.log(item.expand)
       if (item.expand === false) {
+        item.expand = true
+        e.target.className = 'shouqi'
         this.childListData(item, index, id)
       } else {
         item.expand = false
+        e.target.className = 'zhankai'
         $('.childrenTr' + index).remove()
       }
     },
@@ -309,9 +352,9 @@ export default {
                 <td>公司名称：${v.channelName}</td>
                 <td colspan="2" style="text-align:center;">负责人：${v.channelPrincipal}</td>
                 <td style="text-align:center;">地址：${v.channelAddress}</td>
-                <td>联系方式：${v.channelPhone}</td>
-                <td><button class="del" style="background: #fff;color:#4977FC;">删除</button></td>
+                <td colspan="2" >联系方式：${v.channelPhone}</td>
                 <td><button class="aidt" style="background: #fff;color:#4977FC;">编辑</button></td>
+                <td><button class="del" style="background: #fff;color:#4977FC;">删除</button></td>
                 <td></td>
               </tr>`
             })

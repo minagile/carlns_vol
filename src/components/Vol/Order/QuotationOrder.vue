@@ -42,7 +42,7 @@
       <table>
         <tr>
           <th>车牌号</th>
-          <th>商业险</th>
+          <th>{{ orderList.header.coverageName }}</th>
           <th>保费总额</th>
           <th>申请金额</th>
           <th>平台费率</th>
@@ -226,6 +226,7 @@ export default {
 <style lang="less" scoped>
 .QuotationOrder {
   // height: 100%;
+  padding-bottom: 20px;
   .header {
     height: 70px;
     padding-top: 37px;
@@ -248,7 +249,7 @@ export default {
     }
   }
   .order-table {
-    margin: 20px 23px 0;
+    margin: 20px 23px 30px;
     .order-table-header {
       display: flex;
       justify-content: space-between;

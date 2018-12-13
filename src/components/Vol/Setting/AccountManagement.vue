@@ -10,6 +10,7 @@
         <td>用户名：{{ item.adminName }}</td>
         <td>账号：{{ item.adminPhone }}</td>
         <td>密码：{{ item.reversiblePassword }}</td>
+        <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
         <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
         <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
         <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
@@ -26,6 +27,34 @@
       layout="prev, pager, next, total, jumper"
       :total="total">
     </el-pagination>
+
+    <!-- 设置渠道 -->
+    <el-dialog :visible.sync="childDialogVisiblequdao" width="700px">
+      <div class="dialog-header">设置渠道</div>
+      <el-form :model="form">
+        <el-form-item label="选择渠道" label-width="150px">
+          <el-select v-model="form.channelId"
+            @visible-change="getAllCar"
+            filterable
+            remote
+            default-first-option
+            clearable
+            multiple
+            placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button class="cancel" @click="childDialogVisiblequdao = false">取 消</el-button>
+        <el-button class="submit" type="primary" @click="surechangchannel">确 定</el-button>
+      </div>
+    </el-dialog>
 
     <!-- 权限设置 -->
     <el-dialog :visible.sync="childDialogVisible" width="1000px">
@@ -121,6 +150,23 @@
         <el-form-item label="新密码：" label-width="150px" v-if="title === '修改密码'">
           <el-input v-model="form.newPass" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
+        <el-form-item label="选择渠道" label-width="150px">
+          <el-select v-model="form.channelId"
+            @visible-change="getAllCar"
+            filterable
+            remote
+            default-first-option
+            clearable
+            multiple
+            placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button class="cancel" @click="centerDialogVisible = false">取 消</el-button>
@@ -136,6 +182,7 @@ export default {
   name: 'AccountManagement',
   data () {
     return {
+      childDialogVisiblequdao: false,
       checked: false,
       tableData5: [],
       list: [],
@@ -145,7 +192,8 @@ export default {
         phone: '',
         username: '',
         password: '',
-        newPass: ''
+        newPass: '',
+        channelId: []
       },
       formLabelWidth: '209px',
       NumValue: 10,
@@ -153,13 +201,53 @@ export default {
       total: 0,
       id: '',
       title: '添加账号',
-      name: ''
+      name: '',
+      options: [],
+      channelIdchange: ''
     }
   },
   mounted () {
     this.getDataList()
   },
   methods: {
+    surechangchannel () {
+      var channel = ''
+      this.form.channelId.forEach(v => {
+        channel += v + ','
+      })
+      this.$post('/admin/account/insertAdminChannel', {
+        adminId: this.channelIdchange,
+        channelId: channel
+      }).then(res => {
+        // console.log(res)
+        if (res.code === 0) {
+          this.childDialogVisiblequdao = false
+          this.getDataList()
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    qudao (id) {
+      this.form.channelId = []
+      this.channelIdchange = id
+      this.childDialogVisiblequdao = true
+    },
+    getAllCar (val) {
+      if (val === true) {
+        this.options = []
+        this.$fetch('/admin/channel/getOneChannel').then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            res.data.forEach(v => {
+              this.options.push({value: v.channelId, label: v.channelName})
+            })
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
     set (id, name) {
       this.name = name
       this.id = id
@@ -175,11 +263,17 @@ export default {
       })
     },
     adduser () {
+      // console.log(this.form)
+      var channel = ''
+      this.form.channelId.forEach(v => {
+        channel += v + ','
+      })
       if (this.title === '添加账号') {
         this.$post('/admin/account/insertAdmin', {
           phone: this.form.phone,
           username: this.form.username,
-          password: this.form.password
+          password: this.form.password,
+          channelId: channel
         }).then(res => {
           // console.log(res)
           if (res.code === 0) {
@@ -189,7 +283,8 @@ export default {
             this.form = {
               phone: '',
               username: '',
-              password: ''
+              password: '',
+              channelId: []
             }
           } else {
             this.$message(res.msg)

@@ -166,17 +166,7 @@ export default {
       tableData1: [],
       tableData2: [],
       channel: '1',
-      demoEvents: [
-        {
-          date: '2018/12/15',
-          title: 'eat',
-          desc: 'longlonglong description'
-        },
-        {
-          date: '2018/12/12',
-          title: 'this is a title'
-        }
-      ],
+      demoEvents: [],
       companyNum: 0
     }
   },
@@ -211,6 +201,13 @@ export default {
       }).then(res => {
         this.companyList = res.data
         // console.log(this.tableData2)
+      })
+      // GET /user/homePage_c/calendar
+      this.$fetch('/user/homePage_c/calendar').then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.demoEvents = res.data
+        }
       })
     }
   }
@@ -334,7 +331,7 @@ export default {
 .item {
   height: 45px;
 }
-.events-wrapper {
+.home_page .events-wrapper {
   background-color: #4977FC!important;
 }
 .el-card__body{

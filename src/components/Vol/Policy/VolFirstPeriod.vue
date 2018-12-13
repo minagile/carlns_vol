@@ -30,8 +30,8 @@
       </el-table-column>
       <el-table-column label="支付操作">
         <template slot-scope="scope">
-          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row.requisitionId)">已支付</el-button>
-          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini">未支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row, '已支付')">已支付</el-button>
+          <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini" @click="changeType(scope.row, '未支付')">未支付</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -113,15 +113,21 @@ export default {
         }
       })
     },
-    changeType (id) {
-      this.$confirm('是否确认已付首付', '确认已付', {
+    changeType (id, str) {
+      var type = 1
+      if (str === '已支付') {
+        type = 1
+      } else {
+        type = 0
+      }
+      this.$confirm('是否确认' + str + '首付', '确认' + str, {
         distinguishCancelAndClose: true,
-        confirmButtonText: '已付',
+        confirmButtonText: str,
         cancelButtonText: '取消'
       }).then(() => {
         this.$fetch('/admin/stager/updatef', {
-          type: 1,
-          requisitionId: id
+          type: type,
+          requisitionId: id.requisitionId
         }).then(res => {
           console.log(res)
           if (res.code === 0) {
@@ -173,8 +179,8 @@ function zero (data) {
     padding-bottom: 20px;
   }
   .yellow{
-    pointer-events: none;
-    cursor: default;
+    // pointer-events: none;
+    // cursor: default;
     opacity: 0.6;
   }
 }

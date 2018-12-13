@@ -187,7 +187,7 @@ export default {
       }
       this.channelId = id
       this.$post('/admin/channel/selectByChannelId', {channelId: id}).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.ruleForm = {
             channelName: res.data.channelName,
@@ -391,7 +391,7 @@ export default {
         this.$post('/admin/channel/delChannel', {
           channelId: cid
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             this.$message({
               type: 'success',

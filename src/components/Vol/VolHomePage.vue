@@ -170,17 +170,7 @@ export default {
       tableData: [],
       tableData1: [],
       tableData2: [],
-      demoEvents: [
-        {
-          date: '2018/12/15',
-          title: 'eat',
-          desc: 'longlonglong description'
-        },
-        {
-          date: '2018/12/12',
-          title: 'this is a title'
-        }
-      ],
+      demoEvents: [],
       channelId: null,
       options2: [{
         label: '江苏',
@@ -283,6 +273,13 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData1 = res.data
+        }
+      })
+      // GET /admin/homePage_a/calendar
+      this.$fetch('/admin/homePage_a/calendar').then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.demoEvents = res.data
         }
       })
     },
@@ -402,6 +399,24 @@ export default {
 .el-card__body{
   height: 395px;
   overflow: auto;
+}
+.Volhome_page .events-wrapper {
+  background-color: #FFC107!important;
+}
+.Volhome_page .is-event {
+  border-color: #FFC107!important;
+}
+.Volhome_page .event .date-num {
+  color: #FFC107!important;
+}
+.Volhome_page .selected-day .date-num {
+  color: #fff!important;
+}
+.Volhome_page .selected-day .is-event {
+  background-color: #FFC107!important;
+}
+.Volhome_page .is-today {
+  background-color: #FFC107!important;
 }
 .yuqi {
   color: red

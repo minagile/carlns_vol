@@ -3,16 +3,7 @@
   <div class="MakePayment">
     <div class="header">
       <div class="select">
-        <!-- <el-select v-model="channelId" size="small" clearable placeholder="请选择渠道" @visible-change="select">
-          <el-option
-            v-for="item in selectAllChannel"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select> -->
         <el-cascader @visible-change="select"
-          size="small"
           :options="options2"
           @change="changechan"
           :show-all-levels="false"
@@ -20,7 +11,7 @@
           clearable
           :props="props"
         ></el-cascader>
-        <el-select v-model="batch" size="small"
+        <el-select v-model="batch"
           clearable
           filterable
           remote
@@ -34,7 +25,7 @@
           </el-option>
         </el-select>
       </div>
-      <div class="upfile">
+      <!-- <div class="upfile">
         <img src="../../../assets/vimg/upload.png" alt="">
         <p>上传保单</p>
         <input type="file" @change="upfile($event, 1)">
@@ -48,12 +39,40 @@
         <img src="../../../assets/vimg/upload.png" alt="">
         <p>上传发票扫描件</p>
         <input type="file"  @change="upfile($event, 3)">
-      </div>
-      <el-button class="up" @click="uploadfile">上传</el-button>
-      <el-button>清空</el-button>
-      <button class="round" @click="createPlan">生成付款计划表</button>
+      </div> -->
+      <!-- <el-button class="up" @click="uploadfile">上传</el-button> -->
+      <!-- <el-button>清空</el-button>
+      <button class="round" @click="createPlan">生成付款计划表</button> -->
     </div>
+    <div class="nextHeader" style="border: none">
+      <div class="upfilekuang">
+        <div class="upfile">
+          <img src="../../../assets/vimg/upload.png" alt="">
+          <p>上传保单</p>
+          <input type="file" @change="upfile($event, 1)">
+        </div>
+        <div class="upfile">
+          <img src="../../../assets/vimg/upload.png" alt="">
+          <p>上传付款计划表</p>
+          <input type="file"  @change="upfile($event, 2)">
+        </div>
+        <div class="upfile">
+          <img src="../../../assets/vimg/upload.png" alt="">
+          <p>上传发票扫描件</p>
+          <input type="file"  @change="upfile($event, 3)">
+        </div>
+        <el-button class="up" @click="uploadfile">上传</el-button>
+      </div>
 
+      <div class="addNumber">
+        <input type="text" v-model="addbaodanhao">
+        <button @click="addbaodan">添加保单号</button>
+      </div>
+
+      <div class="creatTable">
+        <button class="round" @click="createPlan">生成付款计划表</button>
+      </div>
+    </div>
     <div class="inventory" v-show="showList">
       <p>致：上海锦锭科技有限公司</p>
       <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
@@ -148,6 +167,7 @@ export default {
   name: 'MakePayment',
   data () {
     return {
+      addbaodanhao: '',
       showList: false,
       selectAllChannel: [],
       options1: [],
@@ -182,6 +202,20 @@ export default {
   mounted () {
   },
   methods: {
+    addbaodan () {
+      // GET /admin/stager/addPolicyNumber
+      this.$fetch('/admin/stager/addPolicyNumber', {
+        channelId: this.channelId,
+        requisitionId: this.batch,
+        policyNumber: this.addbaodanhao
+      }).then(res => {
+        if (res.code === 0) {
+          this.$message(res.msg)
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
     selectBatch (val) {
       if (val === true) {
         this.options1 = []
@@ -278,7 +312,7 @@ export default {
         formData.append('scheduleFile', this.file2)
         formData.append('invoiceFile', this.file3)
         formData.append('channelId', this.channelId)
-        formData.append('batch', this.batch)
+        formData.append('requisitionId', this.batch)
         let config = {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -288,22 +322,22 @@ export default {
         this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
           console.log(res)
           if (res.code === 0) {
-            this.$message.success(res.msg)
+            this.$message.success(res.data.msg)
           } else {
-            this.$message(res.msg)
+            this.$message(res.data.msg)
           }
         })
       }
     },
     createPlan () { // 生成付款计划表
-      this.showList = true
       this.orderList = []
       this.orderList1 = []
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
-        batch: this.batch
+        requisitionId: this.batch
       }).then(res => {
         if (res.code === 0) {
+          this.showList = true
           this.$message({
             type: 'success',
             message: res.msg
@@ -320,6 +354,8 @@ export default {
             const length1 = this.orderList1.length - 1
             this.sum1 = this.orderList1[length1].sum
           }
+        } else {
+          this.$message(res.msg)
         }
       })
     }
@@ -336,61 +372,14 @@ export default {
     padding-left: 43px;
     border-bottom: 13px solid #EDEDED;
     .select {
-      float: left;
-      width: 220px;
+      // float: left;
+      // width: 220px;
       padding-top: 14px;
       margin-right: 29px;
       .el-select {
-        margin-bottom: 11px;
-        margin-top: 11px;
+        margin-left: 30px;
+        margin-top: 20px;
       }
-    }
-    .upfile {
-      float: left;
-      width:145px;
-      height:75px;
-      background:rgba(255,255,255,1);
-      border:1px solid rgba(217,217,217,1);
-      border-radius:4px;
-      text-align: center;
-      margin-top: 14px;
-      margin-right: 43px;
-      cursor: pointer;
-      position: relative;
-      img {
-        margin-top: 8px;
-      }
-      p {
-        line-height: 30px;
-        font-size: 12px;
-      }
-      input {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-      }
-    }
-    .up {
-      background:rgba(255,193,7,1);
-      border-color:rgba(255,193,7,1);
-      margin-left: 40px;
-      margin-top: 37px;
-    }
-    .round {
-      width:151px;
-      height:40px;
-      background:rgba(255,193,7,1);
-      border-radius:4px;
-      float: right;
-      margin: 35px 117px 0 0;
-      // line-height: 66px;
-      font-size: 15px;
-      text-align: center;
-      // cursor: pointer;
     }
   }
   .inventory {
@@ -474,6 +463,98 @@ export default {
       color: #fff;
       margin-left: 166px;
       border-color:#282828;
+    }
+  }
+}
+.nextHeader {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 43px;
+  padding-top: 12px;
+  padding-bottom: 80px;
+  .upfilekuang{
+    width:609px;
+    height:106px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 1px 5px 0px rgba(181,181,181,0.3);
+    border-radius:10px;
+    // margin-top: 12px;
+    // margin-left: 43px;
+    .up {
+      background:rgba(255,193,7,1);
+      border-color:rgba(255,193,7,1);
+      margin-left: 40px;
+      margin-top: 37px;
+    }
+    .upfile {
+      float: left;
+      width:145px;
+      height:75px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      border-radius:4px;
+      text-align: center;
+      margin-top: 14px;
+      margin-left: 15px;
+      cursor: pointer;
+      position: relative;
+      img {
+        margin-top: 8px;
+      }
+      p {
+        line-height: 30px;
+        font-size: 12px;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+  }
+  .addNumber {
+    width:448px;
+    height:106px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 1px 5px 0px rgba(181,181,181,0.3);
+    border-radius:10px;
+    padding: 36px 16px;
+    box-sizing: border-box;
+    input {
+      width:308px;
+      height:40px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      border-radius:4px;
+    }
+    button {
+      width:75px;
+      height:40px;
+      background:rgba(255,193,7,1);
+      border-radius:4px;
+    }
+  }
+  .creatTable {
+    width:225px;
+    height:106px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 1px 5px 0px rgba(181,181,181,0.3);
+    border-radius:10px;
+    padding: 32px 32px;
+    box-sizing: border-box;
+    .round {
+      width:151px;
+      height:40px;
+      background:rgba(255,193,7,1);
+      border-radius:4px;
+      // line-height: 66px;
+      font-size: 15px;
+      text-align: center;
+      // cursor: pointer;
     }
   }
 }

@@ -10,8 +10,9 @@
         {{btn.name}}
       </button>
     </div>
-    <div id="main" v-show="this.url !== 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
     <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 80%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -60,18 +61,14 @@ export default {
         },
         {
           name: '还款总金额趋势图',
-          url: 'CoverageOf'
+          url: 'ChannelRepaymentAmountTrend'
         }
       ],
       num: 0,
       url: ''
     }
   },
-  props: {
-    chartData: {
-      type: Array
-    }
-  },
+  props: ['chartData'],
   watch: {
     chartData (val) {
       let chartX = []
@@ -84,6 +81,8 @@ export default {
           chartYY.push(v.commercialRate)
         })
         this.getEchartDb(chartX, chartY, chartYY)
+      } else if (this.url === 'ChannelRepaymentAmountTrend') {
+        this.getEchartZhe(this.chartData)
       } else {
         this.chartData.forEach(v => {
           chartX.push(v.channelName)
@@ -253,6 +252,90 @@ export default {
           }
         ]
       })
+    },
+    getEchartZhe (data) {
+      // console.log(data)
+      var dateArr = data[0]
+      var seriesData = []
+      var name = ''
+      let legend = []
+      data[2].forEach((m, n) => {
+        name = m.channelName
+        legend.push(name)
+        seriesData.push({
+          name: name,
+          type: 'line',
+          stack: '总量',
+          data: [],
+          name: name,
+          symbol: 'circle',
+          symbolSize: '16',
+          itemStyle: {
+            borderWidth: 2,
+            borderColor: '#fff',
+            shadowColor: 'rgba(0, 0, 0, 0.3)',
+            shadowBlur: 4
+          },
+          lineStyle: {
+            width: 4
+          }
+        })
+        data[1].forEach((v, k) => {
+          seriesData[n].data.push(v.value[name])
+        })
+      })
+      var myChart6 = echarts.init(document.getElementById('main2'))
+      myChart6.setOption({
+        color: ['#87e5da', '#92a4c0', '#f4adad', '#e58cdb', '#d0efb5', '#eb7878', '#2f3e75', '#f3e595', '#eda1c1', '#fab2ac', '#bee4d2', '#d7f8f7'],
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          type: 'plain',
+          data: legend
+        },
+        grid: {
+          top: '20%',
+          left: '18%',
+          height: '60%',
+          width: '64%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          name: '时间',
+          type: 'category',
+          boundaryGap: false,
+          splitLine: {
+            show: true
+          },
+          data: dateArr,
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          name: '金额(￥)',
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        series: seriesData
+      }, true)
     }
   }
 }

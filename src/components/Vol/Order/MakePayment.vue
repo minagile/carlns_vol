@@ -16,7 +16,7 @@
           filterable
           remote
           default-first-option
-          placeholder="请选择对应批次" @visible-change="selectBatch">
+          placeholder="请选择订单号" @visible-change="selectBatch">
           <el-option
             v-for="item in options1"
             :key="item.value"
@@ -77,11 +77,11 @@
       <p>致：上海锦锭科技有限公司</p>
       <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
       <div class="order-table-header">
-        <span>批次：{{head.batch}}</span>
+        <span>订单号：{{head.batch}}</span>
         <span>企业名称：{{head.name}}</span>
         <span>险种：{{head.coverage}}</span>
         <span>车辆数：{{head.carNumber}}</span>
-        <span>投保时间{{head.qdate}}</span>
+        <!-- <span>投保时间{{head.qdate}}</span> -->
       </div>
       <table>
         <tr>
@@ -354,8 +354,11 @@ export default {
             const length1 = this.orderList1.length - 1
             this.sum1 = this.orderList1[length1].sum
           }
-        } else {
-          this.$message(res.msg)
+        } else if (res.code === 1) {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
         }
       })
     }

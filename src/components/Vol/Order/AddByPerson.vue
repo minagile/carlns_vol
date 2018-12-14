@@ -93,7 +93,7 @@ export default {
       var carId = ''
       var policyNumber = ''
       this.list.forEach(v => {
-        carId += v.carNumber + ','
+        carId += v.carId + ','
         policyNumber += v.baodan + ','
       })
       // GET /admin/stager/addPolicyNumber

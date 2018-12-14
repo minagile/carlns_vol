@@ -76,8 +76,13 @@ export default {
       this.getData()
     },
     lookDetail (id) {
-      window.open(id.invoice)
-      window.open(id.policy)
+      if (id.invoice) {
+        window.open(id.invoice)
+      } else if (id.policy) {
+        window.open(id.policy)
+      } else {
+        this.$message('没有文件')
+      }
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

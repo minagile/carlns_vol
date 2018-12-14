@@ -260,7 +260,7 @@ export default {
 .event-item {
   cursor: pointer;
   &:hover {
-    background: #99b3fd10;
+    // background: #ecf2ff70;
   }
 }
 .grid-content {

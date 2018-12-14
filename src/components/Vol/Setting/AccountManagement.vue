@@ -4,18 +4,20 @@
     <el-button class="add" @click="open('添加账号')">+ 添加账号</el-button>
 
     <!-- table -->
-    <table>
-      <tr v-for="(item, index) in list" :key="index">
-        <td><div class="index">{{ index + 1 }}</div></td>
-        <td>用户名：{{ item.adminName }}</td>
-        <td>账号：{{ item.adminPhone }}</td>
-        <td>密码：{{ item.reversiblePassword }}</td>
-        <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
-        <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
-        <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
-        <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
-      </tr>
-    </table>
+    <div class="table">
+      <table>
+        <tr v-for="(item, index) in list" :key="index">
+          <td><div class="index">{{ index + 1 }}</div></td>
+          <td>用户名：{{ item.adminName }}</td>
+          <td>账号：{{ item.adminPhone }}</td>
+          <td>密码：{{ item.reversiblePassword }}</td>
+          <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
+          <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
+          <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
+          <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
+        </tr>
+      </table>
+    </div>
 
     <!-- 分页 -->
     <el-pagination
@@ -133,8 +135,8 @@
     <!-- 添加账号 -->
     <el-dialog :visible.sync="centerDialogVisible" width="683px">
       <div class="dialog-header">{{title}}</div>
-      <el-form :model="form">
-        <el-form-item label="账号：" label-width="150px" v-if="title === '添加账号'">
+      <el-form :model="form"  :rules="rules" ref="form" class="demo-ruleForm">
+        <el-form-item label="账号：" prop="phone" label-width="150px" v-if="title === '添加账号'">
           <el-input
             v-model="form.phone"
             autocomplete="off"
@@ -182,6 +184,12 @@ export default {
   name: 'AccountManagement',
   data () {
     return {
+      rules: {
+        phone: [
+          { required: true, message: '请输入联系方式', trigger: 'blur' },
+          { pattern: /^[1][0-9][0-9]{9}$/, message: '请输入正确的联系方式', trigger: 'blur' }
+        ]
+      },
       childDialogVisiblequdao: false,
       checked: false,
       tableData5: [],
@@ -196,7 +204,7 @@ export default {
         channelId: []
       },
       formLabelWidth: '209px',
-      NumValue: 10,
+      NumValue: 9,
       currentPage4: 1,
       total: 0,
       id: '',
@@ -276,27 +284,31 @@ export default {
         channel += v + ','
       })
       if (this.title === '添加账号') {
-        this.$post('/admin/account/insertAdmin', {
-          phone: this.form.phone,
-          username: this.form.username,
-          password: this.form.password,
-          channelId: channel
-        }).then(res => {
-          // console.log(res)
-          if (res.code === 0) {
-            this.centerDialogVisible = false
-            this.$message(res.msg)
-            this.getDataList()
-            this.form = {
-              phone: '',
-              username: '',
-              password: '',
-              channelId: []
+        if (!/^[1][0-9][0-9]{9}$/.test(this.form.phone)) {
+          this.$message.error('请输入正确的手机号')
+        } else {
+          this.$post('/admin/account/insertAdmin', {
+            phone: this.form.phone,
+            username: this.form.username,
+            password: this.form.password,
+            channelId: channel
+          }).then(res => {
+            // console.log(res)
+            if (res.code === 0) {
+              this.centerDialogVisible = false
+              this.$message(res.msg)
+              this.getDataList()
+              this.form = {
+                phone: '',
+                username: '',
+                password: '',
+                channelId: []
+              }
+            } else {
+              this.$message(res.msg)
             }
-          } else {
-            this.$message(res.msg)
-          }
-        })
+          })
+        }
       } else {
         this.$post('/admin/account/updateAdminIndex', {
           nextPassword: this.form.newPass,
@@ -508,6 +520,13 @@ export default {
     &:hover {
       color: #282828;
     }
+  }
+  .table {
+    max-height: 720px;
+    // display: flex;
+    overflow: hidden;
+    overflow: scroll;
+    margin-bottom: 100px;
   }
   table {
     width: 100%;

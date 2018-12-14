@@ -53,7 +53,7 @@
         <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
         <div class="order-table-header">
           <span>订单号：{{head.batch}}</span>
-          <span>企业名称：{{head.name}}</span>
+          <!-- <span>企业名称：{{head.name}}</span> -->
           <span>险种：{{head.coverage}}</span>
           <span>车辆数：{{head.carNumber}}</span>
           <!-- <span>投保时间{{head.qdate}}</span> -->

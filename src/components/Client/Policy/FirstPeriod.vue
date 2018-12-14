@@ -23,7 +23,12 @@
       <el-table-column prop="carSum" label="车辆数"></el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>
       <el-table-column prop="createTime" label="投保时间"></el-table-column>
-      <el-table-column label="支付操作" prop="stagesType"></el-table-column>
+      <el-table-column label="支付状态" prop="stagesType">
+        <template slot-scope="scope">
+          <span v-if="scope.row.stagesType === '未支付'" style="color:red">{{ scope.row.stagesType }}</span>
+          <span v-if="scope.row.stagesType === '已支付'">{{ scope.row.stagesType }}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination  v-if="pagination.total > pagination.pageSize"

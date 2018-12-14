@@ -188,6 +188,7 @@ export default {
     this.tabList.forEach((v, k) => {
       if (path.split('/')[2] === v.href || path.split('/')[3] === v.vhref) {
         this.num = k
+        // console.log(k)
       }
     })
   },

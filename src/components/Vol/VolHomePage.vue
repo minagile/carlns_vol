@@ -31,27 +31,33 @@
               </el-table-column> -->
               <el-table-column
                 prop="requisitionId"
-                label="订单号">
+                label="订单号"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
-                label="时间">
+                label="时间"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="公司">
+                label="公司"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="carNumber"
-                label="车辆数">
+                label="车辆数"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
-                label="险种">
+                label="险种"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="money"
-                label="金额">
+                label="金额"
+                :show-overflow-tooltip="true">
               </el-table-column>
             </el-table>
         </el-col>
@@ -71,27 +77,33 @@
               </el-table-column> -->
               <el-table-column
                 prop="requisitionId"
-                label="订单号">
+                label="订单号"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
-                label="时间">
+                label="时间"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="公司">
+                label="公司"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="carNumber"
-                label="车辆数">
+                label="车辆数"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
-                label="险种">
+                label="险种"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="money"
-                label="金额">
+                label="金额"
+                :show-overflow-tooltip="true">
               </el-table-column>
             </el-table>
         </el-col>
@@ -112,32 +124,39 @@
               </el-table-column> -->
               <el-table-column
                 prop="requisitionId"
-                  label="订单号">
+                label="订单号"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
-                label="时间">
+                label="时间"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="公司">
+                label="公司"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="carNumber"
-                label="车辆数">
+                label="车辆数"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
-                label="险种">
+                label="险种"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="money"
-                label="金额">
+                label="金额"
+                :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="daysOverdue"
                 label="逾期天数"
-                class-name="yuqi">
+                class-name="yuqi"
+                :show-overflow-tooltip="true">
               </el-table-column>
             </el-table>
         </el-col>

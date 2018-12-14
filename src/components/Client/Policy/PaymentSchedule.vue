@@ -234,6 +234,8 @@ export default {
   }
   .schadule {
     border: 0;
+    height: 600px;
+    overflow: auto;
     table {
       margin-top: 20px;
       margin-bottom: 35px;

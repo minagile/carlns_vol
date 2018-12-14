@@ -67,7 +67,7 @@
           <tr v-for="(item, index) in middle" :key="index">
             <th>{{item.plateNumber}}</th>
             <th>{{item.vin}}</th>
-            <th>{{item.ICBC}}</th>
+            <th>{{item.iCBC}}</th>
             <th>{{item.policyNumber}}</th>
           </tr>
           <!-- <tr v-for="(item, index) in orderList" :key="index">

@@ -4,7 +4,7 @@
     <el-button class="add" @click="open('添加账号')">+ 添加账号</el-button>
 
     <!-- table -->
-    <div class="table">
+    <div style="height: 600px; overflow: auto; margin-top: 20px;">
       <table>
         <tr v-for="(item, index) in list" :key="index">
           <td><div class="index">{{ index + 1 }}</div></td>
@@ -18,7 +18,6 @@
         </tr>
       </table>
     </div>
-
     <!-- 分页 -->
     <el-pagination
       v-if="total > NumValue"

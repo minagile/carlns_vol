@@ -20,14 +20,14 @@
     <div class="Selector-main">
       <button @click="clearTime(1)" class="all" v-if="all" :class="{isVol : vol == 1, chooseall: allchannel === true}">全部渠道</button>
 
-      <!-- <el-select v-model="selectChannel" placeholder="选择渠道">
+      <el-select v-model="selectChannel" placeholder="选择渠道" v-if="!double">
         <el-option
           v-for="item in channelList"
           :key="item.channelId"
           :label="item.channelName"
           :value="item.channelId">
         </el-option>
-      </el-select> -->
+      </el-select>
       <el-cascader @visible-change="select"
         :options="options2"
         @change="changechan"
@@ -35,6 +35,7 @@
         @active-item-change="handleItemChange"
         clearable
         :props="props"
+        v-if="double"
       ></el-cascader>
       <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
     </div>
@@ -200,7 +201,7 @@ export default {
       default: false
     },
     channelList: {
-      type: Array
+      type: Array || Object
     },
     sortTable: {
       type: Boolean,
@@ -209,6 +210,10 @@ export default {
     refresh: {
       type: Boolean,
       default: false
+    },
+    double: {
+      type: Boolean,
+      default: true
     }
   }
 }

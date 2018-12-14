@@ -61,6 +61,12 @@ export default {
       num: 0
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    if (to.name === 'VolReimbursementDetail') {
+      this.num = 3
+    }
+    next()
+  },
   mounted () {
     this.username = sessionStorage.getItem('username')
     let path = this.$router.history.current.fullPath

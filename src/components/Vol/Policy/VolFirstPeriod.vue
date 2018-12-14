@@ -19,7 +19,7 @@
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column prop="carSum" label="车辆数"></el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>

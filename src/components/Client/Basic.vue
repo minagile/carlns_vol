@@ -61,6 +61,12 @@ export default {
       name: ''
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    if (to.name === 'ReimbursementDetail') {
+      this.num = 3
+    }
+    next()
+  },
   mounted () {
     let path = this.$router.history.current.fullPath
     this.tabList.forEach((v, k) => {

@@ -75,8 +75,12 @@ export default {
   },
   methods: {
     lookDetail (id) {
-      window.open(id.invoice)
-      window.open(id.policy)
+      if (id.invoice) {
+        window.open(id.invoice)
+      }
+      if (id.policy) {
+        window.open(id.policy)
+      }
     },
     // 查询按钮
     giveParams (data) {

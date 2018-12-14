@@ -19,17 +19,21 @@
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="repaymentTime" label="还款时间"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="name" label="公司名称"></el-table-column>
       <el-table-column prop="carNumber" label="车辆数"></el-table-column>
       <el-table-column prop="forTheTime" label="投保时间"></el-table-column>
       <el-table-column prop="coverage" label="险种"></el-table-column>
       <el-table-column prop="repaymentAmount" label="本期待还"></el-table-column>
       <el-table-column prop="state" label="分期状态"></el-table-column>
-      <el-table-column label="操作(可撤销)">
+      <el-table-column label="操作(可撤销)" width="180">
         <template slot-scope="scope">
           <el-button type="danger" plain v-if="scope.row.condition === 0" @click="gotopay(scope.row.condition, scope.row.stagesId)">待还款</el-button>
           <el-button type="primary" plain v-if="scope.row.condition === 1" @click="gotopay(scope.row.condition, scope.row.stagesId)">已还款</el-button>
+          <p v-if="scope.row.condition === 2">
+            <el-button type="warning" plain @click="gotopay(scope.row.condition, scope.row.stagesId)">去还款</el-button>
+            <el-button type="text" style="color:red;">已逾期</el-button>
+          </p>
         </template>
       </el-table-column>
     </el-table>
@@ -70,10 +74,12 @@ export default {
   methods: {
     gotopay (type, id) {
       let tip = ''
-      if (type === 0) {
-        tip = '确定'
-      } else {
+      if (type === 1) {
         tip = '撤销'
+        type = 0
+      } else {
+        tip = '确定'
+        type = 1
       }
       this.$confirm(`是否${tip}还款`, tip, {
         distinguishCancelAndClose: true,

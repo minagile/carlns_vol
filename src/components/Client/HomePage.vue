@@ -143,7 +143,20 @@
               还款日历
             </div>
             <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <vue-event-calendar :events="demoEvents" @month-changed="changedMonth($event)"></vue-event-calendar>
+              <vue-event-calendar :events="demoEvents"  @month-changed="changedMonth($event)">
+              <template slot-scope="props">
+                <div v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'ReimbursementDetail'})">
+                  <div class="calendar-events">
+                    <div class="wrapper">
+                      <h3 class="title">{{ event.title }}</h3>
+                      <p class="time">{{ event.period }}</p>
+                      <p class="desc">{{event.desc}}</p>
+                      <p class="desc">{{event.date}}</p>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </vue-event-calendar>
             </el-card>
           </el-col>
         </el-row>
@@ -242,6 +255,12 @@ export default {
     cursor: pointer;
     transition: 1s;
     color: #fff;
+  }
+}
+.event-item {
+  cursor: pointer;
+  &:hover {
+    background: #99b3fd10;
   }
 }
 .grid-content {

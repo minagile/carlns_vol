@@ -20,7 +20,20 @@
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
-      <el-table-column prop="carSum" label="车辆数"></el-table-column>
+      <el-table-column label="车辆数">
+        <template slot-scope="scope">
+          <el-popover
+            placement="right"
+            @show="showCarList(scope.row.requisitionId)"
+            @hide="hide"
+            trigger="click">
+            <el-table :data="gridData" :show-header="false">
+              <el-table-column property="carNumber"></el-table-column>
+            </el-table>
+            <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carSum }}</el-button>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>
       <el-table-column prop="createTime" label="投保时间"></el-table-column>
       <el-table-column label="报价单">
@@ -99,6 +112,7 @@ export default {
   name: 'Quotation',
   data () {
     return {
+      gridData: [],
       options: [],
       value: '',
       pagination: {
@@ -134,6 +148,18 @@ export default {
     this.getList()
   },
   methods: {
+    hide () {
+      this.gridData = []
+    },
+    showCarList (id) {
+      this.$fetch('/user/ucar/getCarByRequisitionId', {
+        requisitionId: id
+      }).then(res => {
+        if (res.code === 0) {
+          this.gridData = res.data
+        }
+      })
+    },
     getList () {
       this.$post('/user/uchannel/getNextChannel').then(res => {
         this.list = res.data

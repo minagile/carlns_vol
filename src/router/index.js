@@ -44,6 +44,7 @@ import Chart from '@/components/Vol/Decision/Chart'
 
 import QuotationOrder from '@/components/Vol/Order/QuotationOrder'
 import MakePayment from '@/components/Vol/Order/MakePayment'
+import AddByPerson from '@/components/Vol/Order/AddByPerson'
 
 import BlackList from '@/components/Vol/Black/BlackList'
 
@@ -59,6 +60,9 @@ export default new Router({
       path: '/Basic',
       name: 'Basic',
       component: Basic,
+      meta: {
+        title: '车险客户端'
+      },
       children: [
         {
           path: '/HomePage',
@@ -134,12 +138,18 @@ export default new Router({
     {
       path: '/MLogin',
       name: 'MLogin',
-      component: MLogin
+      component: MLogin,
+      meta: {
+        title: '登录'
+      }
     },
     {
       path: '/vol',
       name: 'VolBasic',
       component: VolBasic,
+      meta: {
+        title: '车险后台管理'
+      },
       children: [
         {
           path: '/vol/VolHomePage',
@@ -160,6 +170,11 @@ export default new Router({
               path: '/vol/VolOrderApply/MakePayment',
               name: 'MakePayment',
               component: MakePayment
+            },
+            {
+              path: '/vol/VolOrderApply/AddByPerson',
+              name: 'AddByPerson',
+              component: AddByPerson
             }
           ]
         },
@@ -268,7 +283,10 @@ export default new Router({
     {
       path: '/',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: {
+        title: '登录'
+      }
     }
   ]
 })

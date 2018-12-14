@@ -58,7 +58,8 @@ axios.interceptors.response.use(
     }
     if (response.data.code === 607) {
       Message({
-        message: response.data.msg,
+        message: '您的账号在另一设备上登录',
+        // message: response.data.msg,
         type: 'info'
       })
       router.push({

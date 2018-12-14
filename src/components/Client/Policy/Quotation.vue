@@ -25,7 +25,7 @@
       <el-table-column prop="createTime" label="投保时间"></el-table-column>
       <el-table-column label="报价单">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" alt="">
+          <img src="../../../assets/img/img.png" width="50" alt="">
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
@@ -42,7 +42,7 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      width="770px"
+      width="1200px"
       custom-class="dialog">
       <div class="dialog-header1">报价单</div>
       <div class="order-table">

@@ -18,7 +18,7 @@
       max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column prop="carSum" label="车辆数"></el-table-column>
       <el-table-column prop="coverageName" label="险种"></el-table-column>
@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="报价单">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" alt="">
+          <img src="../../../assets/img/img.png" width="40">
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>

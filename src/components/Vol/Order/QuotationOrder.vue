@@ -122,7 +122,7 @@ export default {
   methods: {
     uploadfile (e) {
       var file = e.target.files[0]
-      if (file.name.split('.')[1] !== 'xls' && file.name.split('.')[1] !== 'xlsx') {
+      if (file.name.split('.').reverse()[0] !== 'xls' && file.name.split('.').reverse()[0] !== 'xlsx') {
         this.$message({
           type: 'info',
           message: '请上传.xls/.xlsx文件'

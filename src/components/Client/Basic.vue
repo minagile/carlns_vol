@@ -50,16 +50,22 @@ export default {
           img: Topbar.decision,
           label: '决策支持',
           href: 'Decision'
-        },
-        {
-          img: Topbar.setting,
-          label: '系统设置',
-          href: 'Setting'
         }
+        // {
+        //   img: Topbar.setting,
+        //   label: '系统设置',
+        //   href: 'Setting'
+        // }
       ],
       num: 0,
       name: ''
     }
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (to.name === 'ReimbursementDetail') {
+      this.num = 2
+    }
+    next()
   },
   mounted () {
     let path = this.$router.history.current.fullPath
@@ -109,8 +115,9 @@ export default {
       padding-top: 20px;
       // padding-left: 340px;
       ul {
-        width: 950px;
+        width: 720px;
         margin: 0 auto;
+        // overflow: hidden;
       }
       li {
         float: left;

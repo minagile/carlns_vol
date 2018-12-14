@@ -18,9 +18,8 @@
       border
       max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column prop="requisitionId" label="订单号"></el-table-column>
         <el-table-column prop="carNumber" label="车辆数"></el-table-column>
-        <el-table-column prop="batch" label="批次"></el-table-column>
         <el-table-column prop="name" label="公司名称"></el-table-column>
         <el-table-column prop="time" label="投保时间"></el-table-column>
         <el-table-column prop="policy" label="保单">
@@ -35,7 +34,7 @@
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button type="text" @click="lookDetail(scope.row)">下载保单及发票</el-button>
+            <el-button type="text" @click="lookDetail(scope.row)" v-if="scope.row.invoice !== '' && scope.row.policy !== ''">下载保单及发票</el-button>
           </template>
         </el-table-column>
       </el-table>

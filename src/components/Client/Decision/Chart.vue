@@ -41,23 +41,23 @@ export default {
         },
         {
           name: '渠道占比',
-          url: 'ChannelsOf'
+          url: 'ChannelsOfPie'
         },
         {
           name: '还款率',
-          url: 'RepaymentRate'
+          url: 'RepaymentRatePie'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate'
+          url: 'OverdueRatePie'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate'
+          url: 'SurrenderRatePie'
         },
         {
           name: '险种占比',
-          url: 'CoverageOf'
+          url: 'CoverageOfPie'
         },
         {
           name: '还款总金额趋势图',
@@ -83,6 +83,8 @@ export default {
         this.getEchartDb(chartX, chartY, chartYY)
       } else if (this.url === 'ChannelRepaymentAmountTrend') {
         this.getEchartZhe(this.chartData)
+      } else if (this.url === 'ChannelsOfPie' || this.url === 'RepaymentRatePie' || this.url === 'OverdueRatePie' || this.url === 'SurrenderRatePie') {
+        this.getEchartPie()
       } else {
         this.chartData.forEach(v => {
           chartX.push(v.channelName)
@@ -118,6 +120,7 @@ export default {
         },
         xAxis: [
           {
+            show: true,
             type: 'category',
             data: x,
             axisTick: {
@@ -127,6 +130,7 @@ export default {
         ],
         yAxis: [
           {
+            show: true,
             type: 'value',
             name: '销售额',
             nameTextStyle: {
@@ -193,6 +197,7 @@ export default {
         },
         xAxis: [
           {
+            show: true,
             type: 'category',
             data: x,
             axisTick: {
@@ -202,6 +207,7 @@ export default {
         ],
         yAxis: [
           {
+            show: true,
             type: 'value',
             name: '销售额',
             nameTextStyle: {
@@ -267,7 +273,6 @@ export default {
           type: 'line',
           stack: '总量',
           data: [],
-          name: name,
           symbol: 'circle',
           symbolSize: '16',
           itemStyle: {
@@ -307,6 +312,7 @@ export default {
           }
         },
         xAxis: {
+          show: true,
           name: '时间',
           type: 'category',
           boundaryGap: false,
@@ -322,6 +328,7 @@ export default {
           }
         },
         yAxis: {
+          show: true,
           name: '金额(￥)',
           type: 'value',
           splitLine: {
@@ -336,6 +343,63 @@ export default {
         },
         series: seriesData
       }, true)
+    },
+    getEchartPie () {
+      let name = []
+      this.chartData.forEach(v => {
+        name.push(v.name)
+      })
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left',
+          data: name
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            name: '渠道占比',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: this.chartData
+          }
+        ]
+      })
     }
   }
 }

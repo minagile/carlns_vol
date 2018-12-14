@@ -1,13 +1,13 @@
 <template>
   <div class="chart animated flipInY">
-    <selector :all="true" :vol="true"  @giveParams="allTime" :channelList="channelList" :sortTable="false"></selector>
+    <selector :all="true" :vol="true"  @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector>
     <div class="con">
       <div class="btn">
         <button
           v-for="(btn, index) in btnList"
           :key="index"
           :class="{active : num == index}"
-          @click="getData(btn.url, index)"
+          @click="getData(btn.url, index, btn.table)"
         >
           {{btn.name}}
         </button>
@@ -18,7 +18,7 @@
       </div>
       <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf'"></div>
       <div id="main1"  style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <!-- <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div> -->
 
       <el-table
         :data="chartData"
@@ -63,23 +63,28 @@ export default {
         },
         {
           name: '渠道占比',
-          url: 'ChannelsOf'
+          url: 'ChannelsOf',
+          table: 'ChannelsOfPie'
         },
         {
           name: '还款率',
-          url: 'RepaymentRate'
+          url: 'RepaymentRate',
+          table: 'RepaymentRatePie'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate'
+          url: 'OverdueRate',
+          table: 'OverdueRatePie'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate'
+          url: 'SurrenderRate',
+          table: 'SurrenderRatePie'
         },
         {
           name: '险种占比',
-          url: 'CoverageOf'
+          url: 'CoverageOf',
+          table: 'CoverageOfPie'
         }
         // {
         //   name: '还款总金额趋势图',
@@ -94,7 +99,8 @@ export default {
       url: '',
       chartX: [],
       chartY: [],
-      chartYY: []
+      chartYY: [],
+      tablePie: []
     }
   },
   mounted () {
@@ -105,25 +111,29 @@ export default {
     changeChart (e) { // 切换图标和表格
       this.num1 = e
     },
-    getData (data, index) { // 选择按钮，触发父组件改变图标数据
+    getData (data, index, table) { // 选择按钮，触发父组件改变图标数据
       this.url = data
       this.num = index
       this.url = data
       // let sum = 0
       this.$post(`/admin/report/${data}`, this.selectData).then(res => {
-        // res
         this.chartData = res
-        // this.chartData.forEach(i => {
-        //   i.sum = sum
-        // })
         if (data === 'CoverageOf') {
           this.getEchartDb()
         } else if (data === 'ChannelRepaymentAmountTrend') {
           this.getEchartZhe(res)
+        } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
+          // this.getEchartPie()
         } else {
           this.getEchart()
         }
       })
+      if (table) {
+        this.$post(`/admin/report/${table}`, this.selectData).then(res => {
+          this.tablePie = res
+          this.getEchartPie()
+        })
+      }
     },
     allTime (data) { // 处理子组件数据
       if (data.selectChannel === '' && data.startTime !== '') {
@@ -173,6 +183,9 @@ export default {
             type: 'shadow'
           }
         },
+        legend: {
+          show: false
+        },
         grid: {
           left: '3%',
           right: '4%',
@@ -181,6 +194,7 @@ export default {
         },
         xAxis: [
           {
+            show: true,
             type: 'category',
             data: chartX,
             axisTick: {
@@ -190,6 +204,7 @@ export default {
         ],
         yAxis: [
           {
+            show: true,
             type: 'value',
             name: '销售额',
             nameTextStyle: {
@@ -338,7 +353,6 @@ export default {
           type: 'line',
           stack: '总量',
           data: [],
-          name: name,
           symbol: 'circle',
           symbolSize: '16',
           itemStyle: {
@@ -407,6 +421,63 @@ export default {
         },
         series: seriesData
       }, true)
+    },
+    getEchartPie () {
+      let name = []
+      this.tablePie.forEach(v => {
+        name.push(v.name)
+      })
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left',
+          data: name
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            name: '渠道占比',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: this.tablePie
+          }
+        ]
+      })
     }
   },
   components: {

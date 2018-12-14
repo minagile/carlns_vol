@@ -25,7 +25,7 @@
       <el-table-column prop="createTime" label="投保时间"></el-table-column>
       <el-table-column label="报价单">
         <template slot-scope="scope">
-          <img src="../../../assets/img/list1.png" alt="">
+          <img src="../../../assets/img/img.png" alt="">
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
@@ -47,7 +47,7 @@
       <div class="dialog-header1">报价单</div>
       <div class="order-table">
         <div class="order-table-header">
-          <span>批次：{{ orderList.header.batch }}</span>
+          <span>订单号：{{ orderList.header.requisitionId }}</span>
           <span>企业名称：{{ orderList.header.channelName }}</span>
           <span>险种：{{ orderList.header.coverageName }}</span>
           <span>车辆数：{{ orderList.header.sumCar }}</span>
@@ -81,11 +81,11 @@
             <td>{{ orderList.subtotal.appliedAmountSum }}</td>
             <td>{{ orderList.subtotal.platformLicensingSum }}</td>
             <td>{{ orderList.subtotal.eachPaymentSum }}</td>
-            <td>{{ orderList.subtotal.downPaymentSum }}</td>
-            <td>{{ orderList.subtotal.serviceChargeSum }}</td>
+            <td><span class="red"> {{orderList.subtotal.downPaymentSum }}</span></td>
+            <td><span class="red">{{ orderList.subtotal.serviceChargeSum }}</span></td>
           </tr>
           <tr>
-            <td colspan="8">合计(元):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ orderList.sum }}</td>
+            <td colspan="8">合计(元):<span class="red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ orderList.sum }}</span></td>
           </tr>
         </table>
       </div>
@@ -257,5 +257,7 @@ export default {
     }
   }
 }
-
+.red {
+  color: red;
+}
 </style>

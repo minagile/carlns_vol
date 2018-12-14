@@ -4,19 +4,20 @@
     <el-button class="add" @click="open('添加账号')">+ 添加账号</el-button>
 
     <!-- table -->
-    <table>
-      <tr v-for="(item, index) in list" :key="index">
-        <td><div class="index">{{ index + 1 }}</div></td>
-        <td>用户名：{{ item.adminName }}</td>
-        <td>账号：{{ item.adminPhone }}</td>
-        <td>密码：{{ item.reversiblePassword }}</td>
-        <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
-        <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
-        <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
-        <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
-      </tr>
-    </table>
-
+    <div style="height: 600px; overflow: auto; margin-top: 20px;">
+      <table>
+        <tr v-for="(item, index) in list" :key="index">
+          <td><div class="index">{{ index + 1 }}</div></td>
+          <td>用户名：{{ item.adminName }}</td>
+          <td>账号：{{ item.adminPhone }}</td>
+          <td>密码：{{ item.reversiblePassword }}</td>
+          <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
+          <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
+          <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
+          <td><el-button type="text" @click="delte(item.adminId)">删除</el-button></td>
+        </tr>
+      </table>
+    </div>
     <!-- 分页 -->
     <el-pagination
       v-if="total > NumValue"

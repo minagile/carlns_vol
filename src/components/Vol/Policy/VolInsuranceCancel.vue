@@ -320,20 +320,20 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$post('/admin/car/delete', {
-        carId: id
-      }).then(res => {
-        if (res.code === 0) {
-          this.$message.success(res.msg)
-          this.getData()
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
+          carId: id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message.success(res.msg)
+            this.getData()
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        })        
+        })
       })
     }
   },

@@ -33,7 +33,7 @@
 
     <div class="order-table" v-show="listShow">
       <div class="order-table-header">
-        <span>批次：{{ orderList.header.batch }}</span>
+        <span>订单号：{{ orderList.header.requisitionId }}</span>
         <span>企业名称：{{ orderList.header.channelName }}</span>
         <span>险种：{{ orderList.header.coverageName }}</span>
         <span>车辆数：{{ orderList.header.sumCar }}</span>

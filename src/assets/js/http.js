@@ -6,12 +6,13 @@ import { Message } from 'element-ui'
 axios.defaults.timeout = 10000
 // axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
 // axios.defaults.baseURL = 'http://192.168.1.145:80'
+// axios.defaults.baseURL = 'http://192.168.1.140:80'
 // axios.defaults.baseURL = 'http://192.168.1.102:8848'
 // axios.defaults.baseURL = 'http://192.168.1.136:8848'
-// axios.defaults.baseURL = 'http://192.168.1.145:8848'
+axios.defaults.baseURL = 'http://192.168.1.145:8848'
 // axios.defaults.baseURL = 'http://192.168.1.117:80'
 // axios.defaults.baseURL = 'http://192.168.1.136:80'
-axios.defaults.baseURL = 'https://www.easyfq.com'
+// axios.defaults.baseURL = 'https://www.easyfq.com'
 
 // http request 拦截器
 axios.interceptors.request.use(
@@ -34,7 +35,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    if (response.data.code === 101) {
+    if (response.data.code === 609) {
       Message({
         message: response.data.msg,
         type: 'info'
@@ -47,7 +48,7 @@ axios.interceptors.response.use(
     }
     if (response.data.code === 606) {
       Message({
-        message: response.data.msg,
+        message: '您的账号在另一设备上登录',
         type: 'info'
       })
       router.push({
@@ -68,7 +69,7 @@ axios.interceptors.response.use(
         // 从哪个页面跳转
       })
     }
-    if (response.data.code === 102) {
+    if (response.data.code === 608) {
       Message({
         message: response.data.msg,
         type: 'info'

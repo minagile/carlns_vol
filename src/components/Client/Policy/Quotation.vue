@@ -64,12 +64,12 @@
           <span>企业名称：{{ orderList.header.channelName }}</span>
           <span>险种：{{ orderList.header.coverageName }}</span>
           <span>车辆数：{{ orderList.header.sumCar }}</span>
-          <span>预收款合计：{{ orderList.header.sumMoney }}</span>
+          <span>保费合计：{{ orderList.header.sumMoney }}</span>
         </div>
         <table>
           <tr>
             <th>车牌号</th>
-            <th>商业险</th>
+            <!-- <th>商业险</th> -->
             <th>保费总额</th>
             <th>申请金额</th>
             <th>平台费率</th>
@@ -79,7 +79,7 @@
           </tr>
           <tr v-for="(item, index) in orderList.middle" :key="index">
             <td><input type="text" v-model="item.carNumber"></td>
-            <td><input type="text" v-model="item.ead"></td>
+            <!-- <td><input type="text" v-model="item.ead"></td> -->
             <td><input type="text" v-model="item.premium"></td>
             <td><input type="text" v-model="item.appliedAmount"></td>
             <td><input type="text" v-model="item.platformLicensing"></td>
@@ -89,7 +89,7 @@
           </tr>
           <tr>
             <td>小计(元):</td>
-            <td>{{ orderList.subtotal.eadSum }}</td>
+            <!-- <td>{{ orderList.subtotal.eadSum }}</td> -->
             <td>{{ orderList.subtotal.premiumSum }}</td>
             <td>{{ orderList.subtotal.appliedAmountSum }}</td>
             <td>{{ orderList.subtotal.platformLicensingSum }}</td>

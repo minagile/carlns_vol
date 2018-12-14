@@ -48,17 +48,17 @@
       <div class="upfilekuang">
         <div class="upfile">
           <img src="../../../assets/vimg/upload.png" alt="">
-          <p>上传保单</p>
+          <p>{{name}}</p>
           <input type="file" @change="upfile($event, 1)">
         </div>
         <div class="upfile">
           <img src="../../../assets/vimg/upload.png" alt="">
-          <p>上传付款计划表</p>
+          <p>{{name1}}</p>
           <input type="file"  @change="upfile($event, 2)">
         </div>
         <div class="upfile">
           <img src="../../../assets/vimg/upload.png" alt="">
-          <p>上传发票扫描件</p>
+          <p>{{name2}}</p>
           <input type="file"  @change="upfile($event, 3)">
         </div>
         <el-button class="up" @click="uploadfile">上传</el-button>
@@ -196,7 +196,10 @@ export default {
         label: 'label',
         value: 'value',
         children: 'cities'
-      }
+      },
+      name: '上传保单',
+      name1: '上传付款计划表',
+      name2: '上传发票扫描件'
     }
   },
   mounted () {
@@ -291,12 +294,15 @@ export default {
       var file = e.target.files[0]
       if (i === 1) {
         this.file1 = file
+        this.name = e.target.files[0].name
       }
       if (i === 2) {
         this.file2 = file
+        this.name1 = e.target.files[0].name
       }
       if (i === 3) {
         this.file3 = file
+        this.name2 = e.target.files[0].name
       }
     },
     uploadfile () {
@@ -507,6 +513,9 @@ export default {
       p {
         line-height: 30px;
         font-size: 12px;
+        width: 100%;
+        overflow: hidden;
+        height: 30px;
       }
       input {
         position: absolute;

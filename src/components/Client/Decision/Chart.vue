@@ -267,7 +267,6 @@ export default {
           type: 'line',
           stack: '总量',
           data: [],
-          name: name,
           symbol: 'circle',
           symbolSize: '16',
           itemStyle: {

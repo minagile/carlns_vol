@@ -64,7 +64,7 @@
         <el-button class="setBtn" size="small"  @click="childDialogVisible = false">返回</el-button>
         <el-button class="setBtn" size="small" @click="sureUpdate">确定</el-button>
       </div>
-      <el-table :data="tableData5" style="width: 100%">
+      <el-table :data="tableData5" style="width: 100%" max-height="500">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-table :data="props.row.object" style="width: 100%" :show-header="false">
@@ -256,6 +256,13 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.childDialogVisible = true
+          res.data.forEach((a, pa) => {
+            a.look = false
+            a.add = false
+            a.del = false
+            a.adit = false
+            a.all = false
+          })
           this.tableData5 = res.data
         } else {
           this.$message(res.msg)
@@ -312,7 +319,7 @@ export default {
       }
     },
     open (msg, id) {
-      console.log(id)
+      // console.log(id)
       this.form = {}
       this.id = id
       this.centerDialogVisible = true
@@ -349,11 +356,6 @@ export default {
         })
       })
     },
-    // handleSizeChange (val) {
-    //   console.log(`每页 ${val} 条`)
-    //   this.NumValue = val
-    //   this.getDataList()
-    // },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
       this.currentPage4 = val

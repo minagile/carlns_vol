@@ -141,11 +141,23 @@ export default {
         } else {
           this.getEchart()
         }
+        if (res.code === 0) {
+          this.$message({
+            type: 'error',
+            message: '没有数据'
+          })
+        }
       })
       if (table) {
         this.$post(`/admin/report/${table}`, this.selectData).then(res => {
           this.tablePie = res
           this.getEchartPie()
+          if (res.code === 0) {
+            this.$message({
+              type: 'error',
+              message: '没有数据'
+            })
+          }
         })
       }
     },

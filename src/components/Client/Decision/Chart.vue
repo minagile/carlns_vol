@@ -57,7 +57,7 @@ export default {
         },
         {
           name: '险种占比',
-          url: 'CoverageOfPie'
+          url: 'CoverageOf'
         },
         {
           name: '还款总金额趋势图',
@@ -158,7 +158,6 @@ export default {
         ],
         series: [
           {
-            name: '直接访问',
             type: 'bar',
             barWidth: '30%',
             data: y,

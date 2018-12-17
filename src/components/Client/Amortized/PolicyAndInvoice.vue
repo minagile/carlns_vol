@@ -18,8 +18,8 @@
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-      <el-table-column prop="requisitionId" label="订单号"></el-table-column>
-      <el-table-column label="车辆数">
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column label="车辆数" width="70">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -35,7 +35,7 @@
       </el-table-column>
       <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
       <el-table-column prop="name" label="公司名称"></el-table-column>
-      <el-table-column prop="time" label="投保时间"></el-table-column>
+      <el-table-column prop="time" label="投保时间" width="120"></el-table-column>
       <el-table-column prop="policy" label="保单">
         <template slot-scope="scope">
           <img src="../../../assets/img/img.png" alt="">

@@ -16,16 +16,16 @@
         <button :class="{active : num1 === 0}" @click="changeChart(0)"><span class="iconfont">&#xe698;</span></button>
         <button :class="{active : num1 === 1}" @click="changeChart(1)"><span class="iconfont">&#xe637;</span></button>
       </div>
-      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf'"></div>
+      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
       <div id="main1"  style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <!-- <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div> -->
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
         height="250"
         border
         style="width: 60.38%;margin: 100px auto 0 auto;"
-        v-show="num1 === 1"
+        v-show="num1 === 1 && this.url !== 'ChannelRepaymentAmountTrend'"
         :span-method="objectSpanMethod">
         <el-table-column prop="channelName" label="渠道"></el-table-column>
         <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
@@ -33,6 +33,8 @@
         <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf'"></el-table-column>
         <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf'"></el-table-column>
       </el-table>
+
+      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
     </div>
   </div>
 </template>
@@ -85,11 +87,11 @@ export default {
           name: '险种占比',
           url: 'CoverageOf',
           table: 'CoverageOfPie'
+        },
+        {
+          name: '还款总金额趋势图',
+          url: 'ChannelRepaymentAmountTrend'
         }
-        // {
-        //   name: '还款总金额趋势图',
-        //   url: 'ChannelRepaymentAmountTrend'
-        // }
       ],
       num: 0,
       num1: 0,
@@ -232,7 +234,7 @@ export default {
         ],
         series: [
           {
-            name: '直接访问',
+            // name: chartX,
             type: 'bar',
             barWidth: '30%',
             data: chartY,
@@ -392,6 +394,7 @@ export default {
           }
         },
         xAxis: {
+          show: true,
           name: '时间',
           type: 'category',
           boundaryGap: false,
@@ -407,6 +410,7 @@ export default {
           }
         },
         yAxis: {
+          show: true,
           name: '金额(￥)',
           type: 'value',
           splitLine: {

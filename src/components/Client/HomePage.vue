@@ -29,12 +29,14 @@
                 <el-table-column
                   prop="requisitionId"
                   label="订单号"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="180">
                 </el-table-column>
                 <el-table-column
                   prop="time"
                   label="时间"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="120">
                 </el-table-column>
                 <el-table-column
                   prop="name"
@@ -44,12 +46,14 @@
                 <el-table-column
                   prop="carNumber"
                   label="车辆数"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="coverage"
                   label="险种"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="money"
@@ -74,12 +78,14 @@
                 <el-table-column
                   prop="requisitionId"
                   label="订单号"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="180">
                 </el-table-column>
                 <el-table-column
                   prop="time"
                   label="时间"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="120">
                 </el-table-column>
                 <el-table-column
                   prop="name"
@@ -89,12 +95,14 @@
                 <el-table-column
                   prop="carNumber"
                   label="车辆数"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="coverage"
                   label="险种"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="money"
@@ -120,12 +128,14 @@
                 <el-table-column
                   prop="requisitionId"
                   label="订单号"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="180">
                 </el-table-column>
                 <el-table-column
                   prop="time"
                   label="时间"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="120">
                 </el-table-column>
                 <el-table-column
                   prop="name"
@@ -135,12 +145,14 @@
                 <el-table-column
                   prop="carNumber"
                   label="车辆数"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="coverage"
                   label="险种"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  width="70">
                 </el-table-column>
                 <el-table-column
                   prop="money"
@@ -233,7 +245,6 @@ export default {
       })
       // GET /user/homePage_c/calendar
       this.$fetch('/user/homePage_c/calendar').then(res => {
-        console.log(res)
         if (res.code === 0) {
           this.demoEvents = res.data
         }

@@ -95,7 +95,7 @@
           </div>
         </div>
         <div class="xianshi">
-          <table v-if="show8">
+          <table v-if="show8" class="table1">
             <tr>
               <th></th>
               <th>总收入</th>
@@ -125,35 +125,41 @@
               <td>{{resSoure.total.d}}</td>
             </tr>
           </table>
-          <table v-if="!show8">
+          <table v-if="!show8" class="table2">
             <tr>
               <th></th>
-              <th>总收入</th>
-              <th>盈利</th>
+              <th>应盈利</th>
+              <th>真实盈利</th>
               <th>本金</th>
               <th>我方垫付</th>
+              <th>收入</th>
+              <th>真实收入</th>
             </tr>
             <tr>
               <th>统计商业险</th>
-              <td>{{resSoure.commercials.sfs}}</td>
-              <td>{{resSoure.commercials.yls}}</td>
-              <td>{{resSoure.commercials.bjs}}</td>
-              <td>{{resSoure.commercials.jfs}}</td>
+              <td>{{this.tableList2.profit}}</td>
+              <td>{{this.tableList2.trueProfit}}</td>
+              <td>{{this.tableList2.principal}}</td>
+              <td>{{this.tableList2.advances}}</td>
+              <td>{{this.tableList2.income}}</td>
+              <td>{{this.tableList2.trueIncome}}</td>
             </tr>
             <tr>
               <th>统计交强险</th>
-              <td>{{resSoure.sali.sfc}}</td>
-              <td>{{resSoure.sali.ylc}}</td>
-              <td>{{resSoure.sali.bjc}}</td>
-              <td>{{resSoure.sali.jfc}}</td>
+              <td>{{this.tableList2.cProfit}}</td>
+              <td>{{this.tableList2.cTrueProfit}}</td>
+              <td>{{this.tableList2.cPrincipal}}</td>
+              <td>{{this.tableList2.cAdvances}}</td>
+              <td>{{this.tableList2.cIncome}}</td>
+              <td>{{this.tableList2.cTrueIncome}}</td>
             </tr>
-            <tr>
+            <!-- <tr>
               <th>合计</th>
               <td>{{resSoure.total.a}}</td>
               <td>{{resSoure.total.b}}</td>
               <td>{{resSoure.total.c}}</td>
               <td>{{resSoure.total.d}}</td>
-            </tr>
+            </tr> -->
           </table>
       </div>
       </div>
@@ -284,6 +290,7 @@ export default {
           'token': sessionStorage.getItem('token')
         }
       }
+      this.show8 = true
       // this.$post('/interestRate/calculators', this.list, {'contentType': 'application/json; charset=UTF-8'}).then(res => {
       this.$http.post(Req + '/interestRate/calculators', JSON.stringify(this.list), config).then(res => {
         // console.log(res)
@@ -358,6 +365,9 @@ export default {
       }).then(res => {
         this.show8 = false
         this.tableList2 = res.data
+        console.log(this.tableList2.cProfit)
+        console.log(this.tableList2.ctrueProfit)
+        console.log(this.tableList2.cprincipal)
       })
     }
   }
@@ -488,11 +498,20 @@ export default {
     border-radius:20px;
     margin-top: 20px;
     border: 1px solid black;
-    table {
+    .table1 {
       // background: white;
       width: 100%;
       td, th {
         width: 19%;
+        text-align: center;
+        height: 20px;
+      }
+    }
+    .table2 {
+      // background: white;
+      width: 100%;
+      td, th {
+        width: 100% / 7;
         text-align: center;
         height: 20px;
       }

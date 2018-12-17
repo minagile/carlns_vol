@@ -32,11 +32,13 @@
               <el-table-column
                 prop="requisitionId"
                 label="订单号"
+                width="180"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
                 label="时间"
+                width="120"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -47,11 +49,13 @@
               <el-table-column
                 prop="carNumber"
                 label="车辆数"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
                 label="险种"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -78,11 +82,13 @@
               <el-table-column
                 prop="requisitionId"
                 label="订单号"
+                width="180"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
                 label="时间"
+                width="120"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -93,11 +99,13 @@
               <el-table-column
                 prop="carNumber"
                 label="车辆数"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
                 label="险种"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -125,11 +133,13 @@
               <el-table-column
                 prop="requisitionId"
                 label="订单号"
+                width="180"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="time"
                 label="时间"
+                width="120"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -140,11 +150,13 @@
               <el-table-column
                 prop="carNumber"
                 label="车辆数"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
                 prop="coverage"
                 label="险种"
+                width="70"
                 :show-overflow-tooltip="true">
               </el-table-column>
               <el-table-column
@@ -167,9 +179,9 @@
             还款日历
           </div>
           <el-card class="box-card" :body-style="{ padding: '0px' }">
-            <vue-event-calendar :events="demoEvents"  @month-changed="changedMonth($event)">
+            <vue-event-calendar :events="demoEvents"  @day-changed="changedMonth($event)">
               <template slot-scope="props">
-                <div v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'VolReimbursementDetail'})">
+                <div v-show="events" v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'VolReimbursementDetail'})">
                   <div class="calendar-events">
                     <div class="wrapper">
                       <h3 class="title">{{ event.title }}</h3>
@@ -199,6 +211,7 @@ export default {
       tableData: [],
       tableData1: [],
       tableData2: [],
+      events: false,
       demoEvents: [],
       channelId: null,
       options2: [{
@@ -281,6 +294,7 @@ export default {
       }
     },
     changedMonth (e) {
+      this.events = true
     },
     getData () {
       this.$fetch('/admin/homePage_a/accountPayable_a', {

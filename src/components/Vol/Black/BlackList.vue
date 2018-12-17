@@ -28,19 +28,19 @@
       <button @click="openDialog('新增')">+ 新增</button>
     </div>
 
-    <div class="Amortized-table">
+    <!-- <div class="Amortized-table"> -->
       <el-table
         :data="tableData"
         border
-        height="550"
-        style="width: 100%;">
+        max-height="550"
+        style="width: 95%; margin: 0 auto;">
         <el-table-column type="selection" width="55"></el-table-column>
         <!-- <el-table-column prop="date" label="序号"  width="180"></el-table-column> -->
-        <el-table-column prop="channelName" label="公司名称" width="180"></el-table-column>
+        <el-table-column prop="channelName" label="公司名称"></el-table-column>
         <el-table-column prop="channelAddress" label="联系地址"></el-table-column>
         <el-table-column prop="channelPhone" label="联系方式"></el-table-column>
         <el-table-column prop="channelEmail" label="邮箱"></el-table-column>
-        <el-table-column label="添加时间">
+        <el-table-column label="添加时间"  width="120">
           <template slot-scope="scope">
             {{ scope.row.createTime | timeChange }}
           </template>
@@ -53,7 +53,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    <!-- </div> -->
 
     <!-- 新增 -->
     <el-dialog :visible.sync="centerDialogVisible" width="770px">

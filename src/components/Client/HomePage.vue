@@ -162,9 +162,9 @@
               还款日历
             </div>
             <el-card class="box-card" :body-style="{ padding: '0px' }">
-              <vue-event-calendar :events="demoEvents"  @month-changed="changedMonth($event)">
+              <vue-event-calendar :events="demoEvents"  @day-changed="changedMonth($event)">
               <template slot-scope="props">
-                <div v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'ReimbursementDetail'})">
+                <div v-show="events" v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'ReimbursementDetail'})">
                   <div class="calendar-events">
                     <div class="wrapper">
                       <h3 class="title">{{ event.title }}</h3>
@@ -196,7 +196,8 @@ export default {
       tableData2: [],
       channel: '1',
       demoEvents: [],
-      companyNum: 0
+      companyNum: 0,
+      events: false
     }
   },
   mounted () {
@@ -208,6 +209,7 @@ export default {
       this.companyNum = i
     },
     changedMonth (e) {
+      this.events = true
     },
     getHomePage () {
       this.$fetch('/user/homePage_c/accountPayable', {

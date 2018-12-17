@@ -95,7 +95,7 @@ export default {
     },
     look (id) {
       this.$post('/admin/requisition/getFilesAddress', {requisitionId: id}).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           window.open(res.data)
         } else {

@@ -24,25 +24,8 @@
             :value="item.value">
           </el-option>
         </el-select>
+        
       </div>
-      <!-- <div class="upfile">
-        <img src="../../../assets/vimg/upload.png" alt="">
-        <p>上传保单</p>
-        <input type="file" @change="upfile($event, 1)">
-      </div>
-      <div class="upfile">
-        <img src="../../../assets/vimg/upload.png" alt="">
-        <p>上传付款计划表</p>
-        <input type="file"  @change="upfile($event, 2)">
-      </div>
-      <div class="upfile">
-        <img src="../../../assets/vimg/upload.png" alt="">
-        <p>上传发票扫描件</p>
-        <input type="file"  @change="upfile($event, 3)">
-      </div> -->
-      <!-- <el-button class="up" @click="uploadfile">上传</el-button> -->
-      <!-- <el-button>清空</el-button>
-      <button class="round" @click="createPlan">生成付款计划表</button> -->
     </div>
     <div class="nextHeader" style="border: none">
       <div class="upfilekuang">
@@ -64,12 +47,17 @@
         <el-button class="up" @click="uploadfile">上传</el-button>
       </div>
 
-      <div class="addNumber">
+      <!-- <div class="addNumber">
         <input type="text" v-model="addbaodanhao">
         <button @click="addbaodan">添加保单号</button>
-      </div>
+      </div> -->
 
       <div class="creatTable">
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
         <button class="round" @click="createPlan">生成付款计划表</button>
       </div>
     </div>
@@ -96,12 +84,6 @@
           <th>{{item.ICBC}}</th>
           <th>{{item.policyNumber}}</th>
         </tr>
-        <!-- <tr v-for="(item, index) in orderList" :key="index">
-          <td><input type="text" v-model="item.chepaihao"></td>
-          <td><input type="text" v-model="item.shangyexian"></td>
-          <td><input type="text" v-model="item.baofei"></td>
-          <td><input type="text" v-model="item.shenqing"></td>
-        </tr> -->
       </table>
     </div>
 
@@ -199,7 +181,8 @@ export default {
       },
       name: '上传保单',
       name1: '上传付款计划表',
-      name2: '上传发票扫描件'
+      name2: '上传发票扫描件',
+      value1: ''
     }
   },
   mounted () {
@@ -207,17 +190,17 @@ export default {
   methods: {
     addbaodan () {
       // GET /admin/stager/addPolicyNumber
-      this.$fetch('/admin/stager/addPolicyNumber', {
-        channelId: this.channelId,
-        requisitionId: this.batch,
-        policyNumber: this.addbaodanhao
-      }).then(res => {
-        if (res.code === 0) {
-          this.$message(res.msg)
-        } else {
-          this.$message(res.msg)
-        }
-      })
+      // this.$fetch('/admin/stager/addPolicyNumber', {
+      //   channelId: this.channelId,
+      //   requisitionId: this.batch,
+      //   policyNumber: this.addbaodanhao
+      // }).then(res => {
+      //   if (res.code === 0) {
+      //     this.$message(res.msg)
+      //   } else {
+      //     this.$message(res.msg)
+      //   }
+      // })
     },
     selectBatch (val) {
       if (val === true) {
@@ -326,7 +309,7 @@ export default {
           }
         }
         this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             this.$message.success(res.data.msg)
           } else {
@@ -340,7 +323,8 @@ export default {
       this.orderList1 = []
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
-        requisitionId: this.batch
+        requisitionId: this.batch,
+        date: this.value1
       }).then(res => {
         if (res.code === 0) {
           this.showList = true
@@ -551,7 +535,7 @@ export default {
     }
   }
   .creatTable {
-    width:225px;
+    // width:225px;
     height:106px;
     background:rgba(255,255,255,1);
     box-shadow:0px 1px 5px 0px rgba(181,181,181,0.3);

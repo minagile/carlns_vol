@@ -306,7 +306,7 @@ export default {
       })
       // GET /admin/homePage_a/calendar
       this.$fetch('/admin/homePage_a/calendar').then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.demoEvents = res.data
         }
@@ -314,7 +314,7 @@ export default {
     },
     // 点击跳转
     jump (name) {
-      console.log(name)
+      // console.log(name)
       this.$router.push({name: name})
     }
   }

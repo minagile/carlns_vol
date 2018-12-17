@@ -177,7 +177,7 @@ export default {
         if (res.data.code === 0) {
           this.datalist = res.data.data1
           this.resSoure = res.data.data2
-          console.log(this.resSoure.commercials.sfs)
+          // console.log(this.resSoure.commercials.sfs)
         } else {
           this.$message(res.data.msg)
         }

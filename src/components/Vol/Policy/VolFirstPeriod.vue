@@ -155,7 +155,7 @@ export default {
           type: type,
           requisitionId: id.requisitionId
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             this.$message({
               type: 'success',

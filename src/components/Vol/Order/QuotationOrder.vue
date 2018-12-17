@@ -15,9 +15,15 @@
         @change="changechan"
         :show-all-levels="false"
         @active-item-change="handleItemChange"
+        placeholder="请选择渠道"
         clearable
         :props="props"
       ></el-cascader>
+      <el-date-picker
+        v-model="value1"
+        type="date"
+        placeholder="选择日期">
+      </el-date-picker>
       <!-- <el-select v-model="value4" clearable placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -26,8 +32,16 @@
           :value="item.value">
         </el-option>
       </el-select> -->
+      <!-- <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/">
+        <el-button class="up">
+          <input type="file" @change="uploadfile($event)">
+          上传
+        </el-button>
+      </el-upload> -->
       <el-button class="up"><input type="file" @change="uploadfile($event)">上传</el-button>
-      <el-button>清空</el-button>
+      <!-- <el-button >清空</el-button> -->
       <el-button class="up" @click="downDemo">下载模板</el-button>
     </div>
 
@@ -91,6 +105,7 @@ export default {
     return {
       options: [],
       value4: '',
+      value1: '',
       listShow: false,
       orderList: {
         header: {},
@@ -121,42 +136,49 @@ export default {
   },
   methods: {
     uploadfile (e) {
-      var file = e.target.files[0]
-      if (file.name.split('.').reverse()[0] !== 'xls' && file.name.split('.').reverse()[0] !== 'xlsx') {
-        this.$message({
-          type: 'info',
-          message: '请上传.xls/.xlsx文件'
-        })
+      if (this.channelId === '') {
+        this.$message('请选择渠道')
+      } else if (this.value1 === '') {
+        this.$message('请选择时间')
       } else {
-        var formData = new FormData()
-        formData.append('file', file)
-        formData.append('ChannelId', this.channelId)
-        let config = {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'token': sessionStorage.getItem('token')
+        var file = e.target.files[0]
+        if (file.name.split('.').reverse()[0] !== 'xls' && file.name.split('.').reverse()[0] !== 'xlsx') {
+          this.$message({
+            type: 'info',
+            message: '请上传.xls/.xlsx文件'
+          })
+        } else {
+          var formData = new FormData()
+          formData.append('file', file)
+          formData.append('beginTime', this.value1)
+          formData.append('ChannelId', this.channelId)
+          let config = {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'token': sessionStorage.getItem('token')
+            }
           }
+          this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
+            // console.log(res.data)
+            if (res.data.code === 0) {
+              // this.$message(res.data.msg)
+              this.$fetch('/admin/requisition/showQuotationList', {channelId: this.channelId}).then(res => {
+                // console.log(res)
+                if (res.code === 0) {
+                  this.listShow = true
+                  this.orderList = res.data
+                } else {
+                  this.$message(res.msg)
+                }
+              })
+              file = {}
+            } else if (res.data.code === 506) {
+              this.$router.push('/MLogin')
+            } else {
+              this.$message(res.data.msg)
+            }
+          })
         }
-        this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
-          // console.log(res.data)
-          if (res.data.code === 0) {
-            // this.$message(res.data.msg)
-            this.$fetch('/admin/requisition/showQuotationList', {channelId: this.channelId}).then(res => {
-              // console.log(res)
-              if (res.code === 0) {
-                this.listShow = true
-                this.orderList = res.data
-              } else {
-                this.$message(res.msg)
-              }
-            })
-            file = {}
-          } else if (res.data.code === 506) {
-            this.$router.push('/MLogin')
-          } else {
-            this.$message(res.data.msg)
-          }
-        })
       }
     },
     // 下载模板

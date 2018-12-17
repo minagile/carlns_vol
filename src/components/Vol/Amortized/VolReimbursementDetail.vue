@@ -117,7 +117,7 @@ export default {
           stagesId: id,
           type: type
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             this.$message({
               type: 'success',
@@ -205,7 +205,7 @@ export default {
       // console.log(data)
       // GET /admin/byStages_a/reimbursementDetail_a
       this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records

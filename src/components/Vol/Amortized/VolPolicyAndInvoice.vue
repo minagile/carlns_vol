@@ -102,9 +102,10 @@ export default {
     lookDetail (id) {
       if (id.invoice) {
         window.open(id.invoice)
-      }
-      if (id.policy) {
+      } else if (id.policy) {
         window.open(id.policy)
+      } else {
+        this.$message('没有文件')
       }
     },
     // 查询按钮
@@ -143,7 +144,7 @@ export default {
       }
       // console.log(data)
       this.$fetch('/admin/byStages_a/insuranceInvoice_a', data).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records

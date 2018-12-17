@@ -20,7 +20,20 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="requisitionId" label="订单号"></el-table-column>
       <el-table-column prop="name" label="公司名称"></el-table-column>
-      <el-table-column prop="carNumber" label="车辆数"></el-table-column>
+      <el-table-column label="车辆数">
+        <template slot-scope="scope">
+          <el-popover
+            placement="right"
+            @show="showCarList(scope.row.requisitionId)"
+            @hide="hide"
+            trigger="click">
+            <el-table :data="gridData" :show-header="false">
+              <el-table-column property="carNumber"></el-table-column>
+            </el-table>
+            <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carNumber }}</el-button>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column prop="time" label="投保时间"></el-table-column>
       <el-table-column prop="money" label="投保金额"></el-table-column>
       <el-table-column prop="coverage" label="险种"></el-table-column>
@@ -42,14 +55,14 @@
       :total="total">
     </el-pagination>
 
-    <el-dialog :visible.sync="centerDialogVisible" width="770px">
+    <el-dialog :visible.sync="centerDialogVisible" width="1200px">
       <div class="dialog-header">付款计划表</div>
       <div class="dia">
         <p>致：上海锦锭科技有限公司</p>
         <p>根据我司 {{head.name}} 与贵司于 {{head.rdate}}签订的《商户合作协议书》，我司 {{head.qdate}}投保 {{head.coverage}} 的车辆业务清单如下：</p>
         <div class="order-table-header">
           <span>批次：{{head.batch}}</span>
-          <span>企业名称：{{head.name}}</span>
+          <!-- <span>企业名称：{{head.name}}</span> -->
           <span>险种：{{head.coverage}}</span>
           <span>车辆数：{{head.carNumber}}</span>
           <span>投保时间{{head.qdate}}</span>
@@ -64,7 +77,7 @@
           <tr v-for="(item, index) in middle" :key="index">
             <th>{{item.plateNumber}}</th>
             <th>{{item.vin}}</th>
-            <th>{{item.ICBC}}</th>
+            <th>{{item.iCBC}}</th>
             <th>{{item.policyNumber}}</th>
           </tr>
           <!-- <tr v-for="(item, index) in orderList" :key="index">
@@ -127,6 +140,7 @@ export default {
   name: 'StageList',
   data () {
     return {
+      gridData: [],
       head: {
         name: '',
         rdate: '',
@@ -155,6 +169,18 @@ export default {
     this.getData()
   },
   methods: {
+    hide () {
+      this.gridData = []
+    },
+    showCarList (id) {
+      this.$fetch('/user/ucar/getCarByRequisitionId', {
+        requisitionId: id
+      }).then(res => {
+        if (res.code === 0) {
+          this.gridData = res.data
+        }
+      })
+    },
     look (id) {
       this.centerDialogVisible = true
       this.orderList = []

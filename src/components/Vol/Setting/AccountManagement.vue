@@ -151,7 +151,7 @@
         <el-form-item label="新密码：" label-width="150px" v-if="title === '修改密码'">
           <el-input v-model="form.newPass" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
-        <el-form-item label="选择渠道" label-width="150px">
+        <el-form-item label="选择渠道" label-width="150px" v-if="title === '添加账号'">
           <el-select v-model="form.channelId"
             @visible-change="getAllCar"
             filterable
@@ -279,34 +279,38 @@ export default {
     adduser () {
       // console.log(this.form)
       var channel = ''
-      this.form.channelId.forEach(v => {
-        channel += v + ','
-      })
+      if (this.form.channelId) {
+        this.form.channelId.forEach(v => {
+          channel += v + ','
+        })
+      }
       if (this.title === '添加账号') {
-        if (!/^[1][0-9][0-9]{9}$/.test(this.form.phone)) {
-          this.$message.error('请输入正确的手机号')
-        } else {
-          this.$post('/admin/account/insertAdmin', {
-            phone: this.form.phone,
-            username: this.form.username,
-            password: this.form.password,
-            channelId: channel
-          }).then(res => {
-            // console.log(res)
-            if (res.code === 0) {
-              this.centerDialogVisible = false
-              this.$message(res.msg)
-              this.getDataList()
-              this.form = {
-                phone: '',
-                username: '',
-                password: '',
-                channelId: []
+        if (this.form.phone === '') { this.$message.error('账号不为空') } else if (this.form.username === '') { this.$message.error('用户名不为空') } else if (this.form.password === '') { this.$message.error('密码不为空') } else {
+          if (!/^[1][0-9][0-9]{9}$/.test(this.form.phone)) {
+            this.$message.error('请输入正确的手机号')
+          } else {
+            this.$post('/admin/account/insertAdmin', {
+              phone: this.form.phone,
+              username: this.form.username,
+              password: this.form.password,
+              channelId: channel
+            }).then(res => {
+              // console.log(res)
+              if (res.code === 0) {
+                this.centerDialogVisible = false
+                this.$message(res.msg)
+                this.getDataList()
+                this.form = {
+                  phone: '',
+                  username: '',
+                  password: '',
+                  channelId: []
+                }
+              } else {
+                this.$message(res.msg)
               }
-            } else {
-              this.$message(res.msg)
-            }
-          })
+            })
+          }
         }
       } else {
         this.$post('/admin/account/updateAdminIndex', {
@@ -320,10 +324,11 @@ export default {
               message: '修改成功'
             })
             this.centerDialogVisible = false
+            this.getDataList()
           } else if (res.code === 1) {
             this.$message({
               type: 'info',
-              message: res.message
+              message: res.msg
             })
           }
         })
@@ -331,7 +336,13 @@ export default {
     },
     open (msg, id) {
       // console.log(id)
-      this.form = {}
+      this.form = {
+        phone: '',
+        username: '',
+        password: '',
+        newPass: '',
+        channelId: []
+      }
       this.id = id
       this.centerDialogVisible = true
       this.title = msg
@@ -368,7 +379,7 @@ export default {
       })
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      // console.log(`当前页: ${val}`)S
       this.currentPage4 = val
       this.getDataList()
     },

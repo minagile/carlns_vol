@@ -139,7 +139,7 @@ export default {
         channelName: this.search
       }).then(res => {
         if (res.code === 0) {
-          console.log(res)
+          // console.log(res)
           this.pagination.total = res.data.records
           this.tableData = res.data.rows
           // console.log(this.tableData)

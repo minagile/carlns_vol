@@ -168,7 +168,7 @@ export default {
         carId: this.id,
         remark: this.reason
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.innerVisible = false
           this.centerDialogVisible = false
@@ -184,7 +184,7 @@ export default {
         channelId: this.value,
         carId: this.value1
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.code === 0) {
           this.tableList = res.data
           // res.data.forEach(v => {
@@ -200,7 +200,7 @@ export default {
       if (val === true) {
         this.options = []
         this.$fetch('/admin/car/getAllCarByChannelId', {channelId: this.value}).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
               this.options.push({value: v.carId, label: v.carNumber})

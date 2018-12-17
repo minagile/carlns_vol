@@ -12,7 +12,7 @@ axios.defaults.baseURL = 'http://192.168.1.140:80'
 // axios.defaults.baseURL = 'http://192.168.1.145:8848'
 // axios.defaults.baseURL = 'http://192.168.1.117:80'
 // axios.defaults.baseURL = 'http://192.168.1.136:80'
-// axios.defaults.baseURL = 'https://www.easyfq.com'
+axios.defaults.baseURL = 'https://www.easyfq.com'
 
 // http request 拦截器
 axios.interceptors.request.use(

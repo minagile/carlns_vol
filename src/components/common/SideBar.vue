@@ -112,6 +112,13 @@ export default {
           label: '制作付款计划表',
           vhref: 'MakePayment',
           show: false
+        },
+        {
+          img: list.list5,
+          vaimg: list.llist5,
+          label: '手动添加保单号',
+          vhref: 'AddByPerson',
+          show: true
         }
       ],
       blackList: [

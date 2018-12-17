@@ -130,7 +130,7 @@ export default {
         if (this.vol) {
           url = '/admin/requisition/getBatchByChannelId'
         } else {
-          url = '/user/urequisition/getAll'
+          url = '/user/urequisition/getBatchByChannelId'
         }
         this.$fetch(url, {channelId: this.channelId}).then(res => {
           // console.log(res)
@@ -141,7 +141,7 @@ export default {
               })
             } else {
               this.options1 = [{
-                value: '',
+                value: null,
                 label: '暂无数据'
               }]
             }
@@ -228,8 +228,8 @@ export default {
         this.alltime = false
       } else {
         this.allchannel = false
-        this.channelId = ''
-        this.batch = ''
+        this.channelId = null
+        this.batch = null
         this.selectChannel = ''
       }
       this.giveParams()
@@ -398,6 +398,9 @@ export default {
     width: 88px;
     height: 36px;
     background-image: url(../../assets/img/refresh.png);
+    &:hover {
+      background-image: url(../../assets/img/fresh.png);
+    }
   }
 }
 </style>

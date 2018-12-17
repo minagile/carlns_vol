@@ -32,6 +32,7 @@
       <el-table
         :data="tableData"
         border
+        v-loading="loading"
         max-height="550"
         style="width: 95%; margin: 0 auto;">
         <el-table-column type="selection" width="55"></el-table-column>
@@ -98,6 +99,7 @@ export default {
   name: 'BlackList',
   data () {
     return {
+      loading: false,
       title: '新增',
       options: [
         {
@@ -189,6 +191,7 @@ export default {
       })
     },
     addBlackList () { // 新增黑名单
+      this.loading = true
       if (this.title === '新增') {
         this.$post('/admin/channel/addBlacklist', {
           'channelName': this.form.channelName,
@@ -198,6 +201,7 @@ export default {
           'reason': this.form.reason
         }).then(res => {
           if (res.code === 0) {
+            this.loading = false
             this.centerDialogVisible = false
             this.$message({
               message: res.msg,
@@ -222,6 +226,7 @@ export default {
           'channelId': this.form.channelId
         }).then(res => {
           if (res.code === 0) {
+            this.loading = false
             this.centerDialogVisible = false
             this.$message({
               message: res.msg,

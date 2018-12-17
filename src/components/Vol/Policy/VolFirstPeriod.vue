@@ -15,12 +15,14 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      v-loading="loading"
       max-height="450"
       style="width: 95%; margin: 0 auto;"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="sumMoney" label="金额"></el-table-column>
       <el-table-column label="车辆数" width="70">
         <template slot-scope="scope">
           <el-popover
@@ -67,6 +69,7 @@ export default {
   name: 'VolFirstPeriod',
   data () {
     return {
+      loading: false,
       gridData: [],
       currentPage4: 1,
       tableData3: [],
@@ -120,6 +123,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -134,6 +138,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/requisition/getFirstPaymentList', data).then(res => {
         if (res.code === 0) {
+          this.loading = false
           // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records

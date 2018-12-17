@@ -23,6 +23,7 @@
           </div>
             <el-table
               :data="tableData"
+              v-loading="loading1"
               style="width: 98%; margin: 0 auto"
               @row-click="jump('VolFirstPeriod')">
               <!-- <el-table-column
@@ -73,6 +74,7 @@
           </div>
             <el-table
               :data="tableData1"
+              v-loading="loading2"
               style="width: 98%; margin: 0 auto"
               @row-click="jump('VolReimbursementDetail')">
               <!-- <el-table-column
@@ -124,6 +126,7 @@
           </div>
             <el-table
               :data="tableData2"
+              v-loading="loading3"
               style="width: 98%; margin: 0 auto"
               @row-click="jump('VolReimbursementDetail')">
               <!-- <el-table-column
@@ -181,6 +184,9 @@
           <el-card class="box-card" :body-style="{ padding: '0px' }">
             <vue-event-calendar :events="demoEvents"  @day-changed="changedMonth($event)">
               <template slot-scope="props">
+                <div class="clock_img" v-show="!events">
+                  <img src="../../assets/vimg/eventsimg.png" alt="">
+                </div>
                 <div v-show="events" v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'VolReimbursementDetail'})">
                   <div class="calendar-events">
                     <div class="wrapper">
@@ -205,6 +211,9 @@ export default {
   name: 'VolHomePage',
   data () {
     return {
+      loading1: true,
+      loading2: true,
+      loading3: true,
       allchannel: true,
       selectAllChannel: [],
       value: '',
@@ -302,6 +311,7 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData = res.data
+          this.loading1 = false
         }
       })
       this.$fetch('/admin/homePage_a/overdue_a', {
@@ -309,6 +319,7 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData2 = res.data
+          this.loading2 = false
         }
       })
       this.$fetch('/admin/homePage_a/thisWeek_a', {
@@ -316,6 +327,7 @@ export default {
       }).then(res => {
         if (res.code === 0) {
           this.tableData1 = res.data
+          this.loading3 = false
         }
       })
       // GET /admin/homePage_a/calendar
@@ -336,6 +348,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.home_page .events-wrapper {
+  position: relative;
+}
+.clock_img {
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  img {
+    display: block;
+  }
+}
 .home-header {
   margin-bottom: 37px;
   &:last-child {

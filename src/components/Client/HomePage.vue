@@ -178,19 +178,22 @@
             </div>
             <el-card class="box-card" :body-style="{ padding: '0px' }">
               <vue-event-calendar :events="demoEvents"  @day-changed="changedMonth($event)">
-              <template slot-scope="props">
-                <div v-show="events" v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'ReimbursementDetail'})">
-                  <div class="calendar-events">
-                    <div class="wrapper">
-                      <h3 class="title">{{ event.title }}</h3>
-                      <p class="time">{{ event.period }}</p>
-                      <p class="desc">{{event.desc}}</p>
-                      <p class="desc">{{event.date}}</p>
+                <template slot-scope="props">
+                  <div class="clock_img" v-show="!events">
+                    <img src="../../assets/img/eventsimg.png" alt="">
+                  </div>
+                  <div v-show="events" v-for="(event, index) in props.showEvents" :key="index" class="event-item" @click="$router.push({name: 'ReimbursementDetail'})">
+                    <div class="calendar-events">
+                      <div class="wrapper">
+                        <h3 class="title">{{ event.title }}</h3>
+                        <p class="time">{{ event.period }}</p>
+                        <p class="desc">{{event.desc}}</p>
+                        <p class="desc">{{event.date}}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </template>
-            </vue-event-calendar>
+                </template>
+              </vue-event-calendar>
             </el-card>
           </el-col>
         </el-row>
@@ -220,6 +223,7 @@ export default {
   },
   mounted () {
     this.getHomePage()
+    // console.log(document.getElementsByClassName('.events-wrapper'))
     // console.log(sessionStorage.getItem('token'))
   },
   methods: {
@@ -272,6 +276,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.home_page .events-wrapper {
+  position: relative;
+}
+.clock_img {
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  img {
+    display: block;
+  }
+}
 .home-header {
   margin-bottom: 37px;
   overflow: auto;

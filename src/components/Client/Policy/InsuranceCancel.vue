@@ -30,12 +30,16 @@
             <el-table :data="gridData" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
-            <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carSum }}</el-button>
+            <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carSum }}</el-button>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column prop="coverageName" label="险种" width="70"></el-table-column>
-      <el-table-column prop="createTime" label="投保时间" width="120"></el-table-column>
+      <el-table-column label="投保时间" width="120">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeChange }}
+        </template>
+      </el-table-column>
       <el-table-column prop="remark" label="退保原因"></el-table-column>
     </el-table>
 
@@ -136,7 +140,17 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    timeChange (data) {
+      let date = new Date(data)
+      return date.getFullYear() + '-' + zero(date.getMonth() + 1) + '-' + zero(date.getDate())
+    }
   }
+}
+function zero (data) {
+  if (data < 10) return '0' + data
+  return data
 }
 </script>
 

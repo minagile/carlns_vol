@@ -282,6 +282,7 @@ export default {
     },
     upfile (e, i) {
       var file = e.target.files[0]
+      // console.log(file)
       if (i === 1) {
         this.file1 = file
         this.name = e.target.files[0].name
@@ -304,18 +305,18 @@ export default {
         this.$message('请先上传发票')
       } else {
         this.fullscreenLoading = true
-        var formData = new FormData()
-        formData.append('policyFile', this.file1)
-        formData.append('scheduleFile', this.file2)
-        formData.append('invoiceFile', this.file3)
-        formData.append('channelId', this.channelId)
-        formData.append('requisitionId', this.batch)
         let config = {
           headers: {
             'Content-Type': 'multipart/form-data',
             'token': sessionStorage.getItem('token')
           }
         }
+        var formData = new FormData()
+        formData.append('policyFile', this.file1)
+        formData.append('scheduleFile', this.file2)
+        formData.append('invoiceFile', this.file3)
+        formData.append('channelId', this.channelId)
+        formData.append('requisitionId', this.batch)
         this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
           // console.log(res)
           this.fullscreenLoading = false

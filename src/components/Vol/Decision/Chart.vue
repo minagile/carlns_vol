@@ -131,31 +131,33 @@ export default {
       this.table = table
       // let sum = 0
       this.$post(`/admin/report/${data}`, this.selectData).then(res => {
-        this.chartData = res
-        if (data === 'CoverageOf') {
-          this.getEchartDb()
-        } else if (data === 'ChannelRepaymentAmountTrend') {
-          this.getEchartZhe(res)
-        } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
-          this.getEchartPie()
+        if (res.code === 0) {
+          this.chartData = res.data
+          if (data === 'CoverageOf') {
+            this.getEchartDb()
+          } else if (data === 'ChannelRepaymentAmountTrend') {
+            this.getEchartZhe(res.data)
+          } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
+            this.getEchartPie()
+          } else {
+            this.getEchart()
+          }
         } else {
-          this.getEchart()
-        }
-        if (!res) {
           this.$message({
             type: 'error',
-            message: '没有数据'
+            message: res.msg
           })
         }
       })
       if (table) {
         this.$post(`/admin/report/${table}`, this.selectData).then(res => {
-          this.tablePie = res
-          this.getEchartPie()
           if (res.code === 0) {
+            this.tablePie = res.data
+            this.getEchartPie()
+          } else {
             this.$message({
               type: 'error',
-              message: '没有数据'
+              message: res.msg
             })
           }
         })

@@ -47,12 +47,10 @@ export default {
     getChartData (data) {
       this.url = data
       this.$post(`/user/report/${data}`, this.selectData).then(res => {
-        this.chartData = res
         if (res.code === 0) {
-          this.$message({
-            type: 'error',
-            message: '没有数据'
-          })
+          this.chartData = res.data
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },

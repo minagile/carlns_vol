@@ -143,13 +143,13 @@ export default {
         }
       } else if (data.startTime === '' && data.selectChannel !== '') {
         this.selectData = {
-          channelId: data.selectChannel
+          channelName: data.selectChannel
         }
       } else if (data.startTime && data.selectChannel !== '') {
         this.selectData = {
           startTime: data.startTime,
           endTime: data.endTime,
-          channelId: data.selectChannel
+          channelName: data.selectChannel
         }
       } else {
         this.selectData = {}

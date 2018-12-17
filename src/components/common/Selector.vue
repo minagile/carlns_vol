@@ -119,7 +119,6 @@ export default {
       // this.getData()
     },
     handleItemChange (val) {
-      console.log(val)
       setTimeout(_ => {
         var id = ''
         // POST /admin/channel/getNextChannel
@@ -183,7 +182,7 @@ export default {
       let selectData = {
         startTime: this.startTime,
         endTime: this.endTime,
-        selectChannel: this.channelId
+        selectChannel: this.selectChannel
       }
       this.$emit('giveParams', selectData)
     },

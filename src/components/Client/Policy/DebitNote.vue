@@ -128,12 +128,15 @@ export default {
     },
     getData () {
       var data = {
-        beginTime: this.serchDate.startTime,
+        // channelId: '',
+        startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
-        channelName: this.serchDate.selectChannel,
+        // corporateName: this.serchDate.selectChannel,
+        channelId: this.serchDate.selectChannel,
+        requisitionId: this.serchDate.requisitionId,
         order: this.SortValue,
-        page: this.pagination.currentPage,
-        pageSize: this.pagination.pageSize
+        page: this.currentPage4,
+        pageSize: this.NumValue
       }
       this.$fetch('/user/urequisition/getRequisitionList', data).then(res => {
         if (res.code === 0) {

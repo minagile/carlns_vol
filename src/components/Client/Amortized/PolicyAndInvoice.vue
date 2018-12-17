@@ -140,9 +140,12 @@ export default {
     },
     getData () {
       var data = {
+        // channelId: '',
         startTime: this.serchDate.startTime,
         endTime: this.serchDate.endTime,
-        corporateName: this.serchDate.selectChannel,
+        // corporateName: this.serchDate.selectChannel,
+        channelId: this.serchDate.selectChannel,
+        requisitionId: this.serchDate.requisitionId,
         order: this.SortValue,
         page: this.currentPage4,
         pageSize: this.NumValue

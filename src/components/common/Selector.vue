@@ -29,6 +29,7 @@
         </el-option>
       </el-select>
       <el-cascader @visible-change="select"
+        placeholder="请选择渠道"
         :options="options2"
         @change="changechan"
         :show-all-levels="false"
@@ -37,6 +38,19 @@
         :props="props"
         v-if="double"
       ></el-cascader>
+      <el-select v-model="batch"
+        clearable
+        filterable
+        remote
+        default-first-option
+        placeholder="请选择订单号" @visible-change="selectBatch">
+        <el-option
+          v-for="item in options1"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
       <button class="search" @click="giveParams" :class="{isVolS : vol == 1}">查询</button>
     </div>
 
@@ -71,6 +85,8 @@ export default {
   name: 'Selector',
   data () {
     return {
+      options1: '',
+      batch: '',
       allchannel: false,
       alltime: false,
       startTime: '',
@@ -96,9 +112,9 @@ export default {
       NumValue: 10,
       options2: [],
       props: {
-        value: 'label',
-        // label: 'label',
-        // value: 'value',
+        // value: 'label',
+        label: 'label',
+        value: 'value',
         children: 'cities'
       },
       channelId: ''
@@ -107,25 +123,60 @@ export default {
   mounted () {
   },
   methods: {
+    selectBatch (val) {
+      if (val === true) {
+        this.options1 = []
+        let url = ''
+        if (this.vol) {
+          url = '/admin/requisition/getBatchByChannelId'
+        } else {
+          url = '/user/urequisition/getAll'
+        }
+        this.$fetch(url, {channelId: this.channelId}).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            if (res.data.length > 0) {
+              res.data.forEach(v => {
+                this.options1.push({value: v.requisitionId, label: v.requisitionId})
+              })
+            } else {
+              this.options1 = [{
+                value: '',
+                label: '暂无数据'
+              }]
+            }
+          } else {
+            this.$message(res.msg)
+          }
+        })
+      }
+    },
     clickaaa () {
       // console.log(234)
       this.alltime = true
     },
     changechan (val) {
       // console.log(val)
-      // console.log(Array.reverse(val))
       this.channelId = val[val.length - 1]
+      // console.log(this.channelId)
       this.allchannel = true
       // this.getData()
     },
     handleItemChange (val) {
+      // console.log(val)
       setTimeout(_ => {
         var id = ''
         // POST /admin/channel/getNextChannel
         this.options2.forEach((v, k) => {
-          if (v.label === val[0]) {
+          if (v.value === val[0]) {
             id = v.value
-            this.$post('/admin/channel/getNextChannel', {
+            let url = ''
+            if (this.vol) {
+              url = '/admin/channel/getNextChannel'
+            } else {
+              url = '/user/uchannel/getNextChannel'
+            }
+            this.$post(url, {
               parentId: id
             }).then(res => {
               // console.log(res)
@@ -148,11 +199,21 @@ export default {
     // 查询所有渠道
     select (val) {
       if (val === true) {
+        // this.selectAllChannel = []
         this.options2 = []
-        this.$fetch('/admin/channel/getOneChannel').then(res => {
+        // GET /admin/channel/getOneChannel
+        let url = ''
+        if (this.vol) {
+          url = '/admin/channel/getOneChannel'
+        } else {
+          url = '/user/uchannel/getOneChannel'
+        }
+        this.$fetch(url).then(res => {
+          // console.log(res.data)
           if (res.code === 0) {
             res.data.forEach(v => {
               this.options2.push({value: v.channelId, label: v.channelName, cities: []})
+              // this.selectAllChannel.push({value: v.channelId, label: v.channelName})
             })
           } else {
             this.$message(res.msg)
@@ -168,6 +229,7 @@ export default {
       } else {
         this.allchannel = false
         this.channelId = ''
+        this.batch = ''
         this.selectChannel = null
       }
       this.giveParams()
@@ -182,8 +244,11 @@ export default {
       let selectData = {
         startTime: this.startTime,
         endTime: this.endTime,
-        selectChannel: this.selectChannel
+        selectChannel: this.channelId,
+        report: this.selectChannel,
+        requisitionId: this.batch
       }
+      // console.log(selectData)
       this.$emit('giveParams', selectData)
     },
     refurbish () {

@@ -363,11 +363,15 @@ export default {
         time: this.timeType,
         channelId: this.channelId
       }).then(res => {
-        this.show8 = false
-        this.tableList2 = res.data
-        console.log(this.tableList2.cProfit)
-        console.log(this.tableList2.ctrueProfit)
-        console.log(this.tableList2.cprincipal)
+        if (res.code === 0) {
+          this.show8 = false
+          this.tableList2 = res.data
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
+        }
       })
     }
   }

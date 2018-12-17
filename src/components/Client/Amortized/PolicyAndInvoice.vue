@@ -16,7 +16,8 @@
     tooltip-effect="light"
     border
     max-height="450"
-    style="width: 95%; margin: 0 auto;border: 1px solid #eee">
+    style="width: 95%; margin: 0 auto;border: 1px solid #eee"
+    v-loadinh="loading">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column label="车辆数" width="80">
@@ -79,7 +80,8 @@ export default {
       SortValue: '1',
       NumValue: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      loading: true
     }
   },
   mounted () {
@@ -157,6 +159,7 @@ export default {
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records
+          this.loading = false
         } else {
           this.$message.error(res.msg)
         }

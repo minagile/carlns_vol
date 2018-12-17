@@ -18,7 +18,7 @@
       </div>
       <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
       <div id="main1"  style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
@@ -34,7 +34,7 @@
         <el-table-column prop="HasBeenPayment" label="已还" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="price" label="逾期率" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="price" label="还款率" v-if="url === 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf' && url !=='SurrenderRate' && url !== 'OverdueRate' && url === 'RepaymentRate'"></el-table-column>
+        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf' && url !=='SurrenderRate' && url !== 'OverdueRate' && url !== 'RepaymentRate'"></el-table-column>
         <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf'"></el-table-column>
         <el-table-column prop="carCount" label="退保车辆个数" v-if="url === 'SurrenderRate'"></el-table-column>
         <el-table-column prop="surrender" label="总车辆数" v-if="url === 'SurrenderRate'"></el-table-column>
@@ -57,6 +57,7 @@ require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 require('echarts/lib/component/legend')
+require('echarts/lib/component/dataZoom')
 export default {
   name: 'Chart',
   data () {
@@ -102,14 +103,17 @@ export default {
       ],
       num: 0,
       num1: 0,
-      selectData: {}, // 参数
+      selectData: {
+        channelName: 0
+      }, // 参数
       chartData: [], // 图表数据
       channelList: [], // 渠道列表
       url: '',
       chartX: [],
       chartY: [],
       chartYY: [],
-      tablePie: []
+      tablePie: [],
+      table: ''
     }
   },
   mounted () {
@@ -123,7 +127,8 @@ export default {
     getData (data, index, table) { // 选择按钮，触发父组件改变图标数据
       this.url = data
       this.num = index
-      this.url = data
+      this.table = ''
+      this.table = table
       // let sum = 0
       this.$post(`/admin/report/${data}`, this.selectData).then(res => {
         this.chartData = res
@@ -132,7 +137,7 @@ export default {
         } else if (data === 'ChannelRepaymentAmountTrend') {
           this.getEchartZhe(res)
         } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
-          // this.getEchartPie()
+          this.getEchartPie()
         } else {
           this.getEchart()
         }
@@ -145,31 +150,29 @@ export default {
       }
     },
     allTime (data) { // 处理子组件数据
-      if (data.selectChannel === '' && data.startTime !== '') {
+      if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
           endTime: data.endTime
         }
-      } else if (data.startTime === '' && data.selectChannel !== '') {
+      } else if (data.startTime === '' && data.report !== '') {
         this.selectData = {
-          channelName: data.selectChannel
+          channelName: data.report
         }
-      } else if (data.startTime && data.selectChannel !== '') {
+      } else if (data.startTime && data.report !== '') {
         this.selectData = {
           startTime: data.startTime,
           endTime: data.endTime,
-          channelName: data.selectChannel
+          channelName: data.report
         }
       } else {
         this.selectData = {}
       }
-      this.getData(this.url, this.num)
+      this.getData(this.url, this.num, this.table)
     },
     getChannelList () { // 获取渠道列表
-      this.$fetch('/admin/report/getChannelName').then(res => {
-        if (res.code === 0) {
-          this.channelList = res
-        }
+      this.$fetch('/admin/report/getChilds').then(res => {
+        this.channelList = res
       })
     },
     objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
@@ -362,10 +365,11 @@ export default {
         seriesData.push({
           name: name,
           type: 'line',
-          stack: '总量',
+          stack: name,
           data: [],
           symbol: 'circle',
           symbolSize: '16',
+          smooth: true,
           itemStyle: {
             borderWidth: 2,
             borderColor: '#fff',
@@ -402,6 +406,13 @@ export default {
             saveAsImage: {}
           }
         },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 70,
+            bottom: 50
+          }
+        ],
         xAxis: {
           show: true,
           name: '时间',

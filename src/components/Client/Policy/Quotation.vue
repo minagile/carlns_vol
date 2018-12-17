@@ -149,7 +149,6 @@ export default {
   },
   mounted () {
     this.getData()
-    this.getList()
   },
   methods: {
     hide () {
@@ -201,8 +200,8 @@ export default {
         channelId: this.serchDate.selectChannel,
         requisitionId: this.serchDate.requisitionId,
         order: this.SortValue,
-        page: this.currentPage4,
-        pageSize: this.NumValue
+        page: this.pagination.currentPage,
+        pageSize: this.pagination.pageSize
       }
       this.$fetch('/user/urequisition/getquotationList', data).then(res => {
         if (res.code === 0) {

@@ -24,7 +24,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-        
       </div>
     </div>
     <div class="nextHeader" style="border: none">
@@ -81,7 +80,7 @@
         <tr v-for="(item, index) in middle" :key="index">
           <th>{{item.plateNumber}}</th>
           <th>{{item.vin}}</th>
-          <th>{{item.ICBC}}</th>
+          <th>{{item.iCBC}}</th>
           <th>{{item.policyNumber}}</th>
         </tr>
       </table>
@@ -324,7 +323,7 @@ export default {
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
         requisitionId: this.batch,
-        date: this.value1
+        date: this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate()
       }).then(res => {
         if (res.code === 0) {
           this.showList = true

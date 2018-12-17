@@ -150,7 +150,7 @@ export default {
         } else {
           var formData = new FormData()
           formData.append('file', file)
-          formData.append('beginTime', this.value1)
+          formData.append('beginTime', this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate())
           formData.append('ChannelId', this.channelId)
           let config = {
             headers: {

@@ -141,7 +141,7 @@ export default {
         } else {
           this.getEchart()
         }
-        if (res.code === 0) {
+        if (!res) {
           this.$message({
             type: 'error',
             message: '没有数据'

@@ -1,6 +1,6 @@
 <template>
   <!-- 帐号管理 -->
-  <div class="AccountManagement">
+  <div class="AccountManagement" v-loading="fullscreenLoading">
     <el-button class="add" @click="open('添加账号')">+ 添加账号</el-button>
 
     <!-- table -->
@@ -183,6 +183,7 @@ export default {
   name: 'AccountManagement',
   data () {
     return {
+      fullscreenLoading: true,
       rules: {
         phone: [
           { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -227,6 +228,7 @@ export default {
         channelId: channel
       }).then(res => {
         // console.log(res)
+        this.fullscreenLoading = false
         if (res.code === 0) {
           this.childDialogVisiblequdao = false
           this.getDataList()

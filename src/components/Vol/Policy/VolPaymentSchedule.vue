@@ -15,6 +15,7 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      v-loading="loading"
       max-height="450"
       style="width: 95%; margin: 0 auto;"
       @selection-change="handleSelectionChange">
@@ -143,6 +144,7 @@ export default {
   name: 'VolPaymentSchedule',
   data () {
     return {
+      loading: false,
       gridData: [],
       currentPage4: 1,
       tableData3: [],
@@ -211,6 +213,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -225,6 +228,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/requisition/getPaymentScheduleList', data).then(res => {
         if (res.code === 0) {
+          this.loading = false
           // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records

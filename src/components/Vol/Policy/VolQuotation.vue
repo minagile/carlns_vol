@@ -14,6 +14,7 @@
       ref="multipleTable"
       :data="tableData3"
       tooltip-effect="light"
+      v-loading="loading"
       border
       max-height="450"
       style="width: 95%; margin: 0 auto">
@@ -122,6 +123,7 @@ export default {
   name: 'VolQuotation',
   data () {
     return {
+      loading: false,
       gridData: [],
       currentPage4: 1,
       tableData3: [],
@@ -187,6 +189,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -201,6 +204,7 @@ export default {
       // console.log(data)
       this.$fetch('/admin/requisition/getquotationList', data).then(res => {
         if (res.code === 0) {
+          this.loading = false
           // console.log(res.data)
           this.tableData3 = res.data.rows
           this.total = res.data.records

@@ -148,6 +148,7 @@ export default {
   name: 'MakePayment',
   data () {
     return {
+      fullscreenLoading: false,
       addbaodanhao: '',
       showList: false,
       selectAllChannel: [],
@@ -302,6 +303,7 @@ export default {
       } else if (this.file3 === '') {
         this.$message('请先上传发票')
       } else {
+        this.fullscreenLoading = true
         var formData = new FormData()
         formData.append('policyFile', this.file1)
         formData.append('scheduleFile', this.file2)
@@ -317,6 +319,7 @@ export default {
         this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
           // console.log(res)
           if (res.code === 0) {
+            this.fullscreenLoading = false
             this.$message.success(res.data.msg)
           } else {
             this.$message(res.data.msg)
@@ -327,12 +330,14 @@ export default {
     createPlan () { // 生成付款计划表
       this.orderList = []
       this.orderList1 = []
+      this.fullscreenLoading = true
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
         requisitionId: this.batch,
         date: this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate()
       }).then(res => {
         if (res.code === 0) {
+          this.fullscreenLoading = false
           this.showList = true
           this.$message({
             type: 'success',

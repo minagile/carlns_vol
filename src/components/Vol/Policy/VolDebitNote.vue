@@ -14,6 +14,7 @@
       ref="multipleTable"
       :data="tableData3"
       tooltip-effect="light"
+      v-loading="loading"
       border
       max-height="450"
       style="width: 95%; margin: 0 auto;"
@@ -74,7 +75,8 @@ export default {
       SortValue: 1,
       NumValue: 10,
       value: '',
-      total: 0
+      total: 0,
+      loading: false
     }
   },
   mounted () {
@@ -130,6 +132,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -145,6 +148,7 @@ export default {
       this.$fetch('/admin/requisition/getRequisitionList', data).then(res => {
         if (res.code === 0) {
           // console.log(res.data)
+          this.loading = false
           this.tableData3 = res.data.rows
           this.total = res.data.records
         } else {

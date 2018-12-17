@@ -16,6 +16,7 @@
     :data="tableData"
     tooltip-effect="light"
     border
+    v-loading="loading"
     max-height="450"
     style="width: 95%; margin: 0 auto">
       <el-table-column prop="repaymentTime" label="还款时间"  width="120"></el-table-column>
@@ -79,7 +80,8 @@ export default {
       SortValue: '1',
       NumValue: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      loading: false
     }
   },
   mounted () {
@@ -193,6 +195,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -209,6 +212,7 @@ export default {
       this.$fetch('/admin/byStages_a/reimbursementDetail_a', data).then(res => {
         // console.log(res)
         if (res.code === 0) {
+          this.loading = false
           this.tableData = res.data.rows
           this.total = res.data.records
         } else {

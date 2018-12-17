@@ -72,6 +72,8 @@ export default {
     if (getCookie('phone')) {
       this.user = getCookie('phone')
       this.psd = getCookie('pwd')
+      // console.log(this.user)
+      // console.log(this.psd)
       // this.login()
       this.remember = true
     }
@@ -143,6 +145,8 @@ export default {
     // 登录
     login () {
       if (this.remember === true) {
+        delCookie('phone')
+        delCookie('pwd')
         setCookie('phone', this.user, 1000 * 60)
         setCookie('pwd', this.psd, 1000 * 60)
       } else {

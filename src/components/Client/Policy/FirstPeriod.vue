@@ -20,6 +20,7 @@
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="sumMoney" label="金额"></el-table-column>
       <el-table-column label="车辆数" width="70">
         <template slot-scope="scope">
           <el-popover

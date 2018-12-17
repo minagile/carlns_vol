@@ -30,8 +30,15 @@
         <el-table-column prop="channelName" label="渠道"></el-table-column>
         <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
         <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
-        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf'"></el-table-column>
+        <el-table-column prop="overdue" label="未还" v-if="url === 'OverdueRate'"></el-table-column>
+        <el-table-column prop="HasBeenPayment" label="已还" v-if="url === 'OverdueRate'"></el-table-column>
+        <el-table-column prop="price" label="逾期率" v-if="url === 'OverdueRate'"></el-table-column>
+        <el-table-column prop="price" label="还款率" v-if="url === 'RepaymentRate'"></el-table-column>
+        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf' && url !=='SurrenderRate' && url !== 'OverdueRate' && url === 'RepaymentRate'"></el-table-column>
         <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf'"></el-table-column>
+        <el-table-column prop="carCount" label="退保车辆个数" v-if="url === 'SurrenderRate'"></el-table-column>
+        <el-table-column prop="surrender" label="总车辆数" v-if="url === 'SurrenderRate'"></el-table-column>
+        <el-table-column prop="surrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
       </el-table>
 
       <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
@@ -160,7 +167,9 @@ export default {
     },
     getChannelList () { // 获取渠道列表
       this.$fetch('/admin/report/getChannelName').then(res => {
-        this.channelList = res
+        if (res.code === 0) {
+          this.channelList = res
+        }
       })
     },
     objectSpanMethod ({ row, column, rowIndex, columnIndex }) {

@@ -17,7 +17,8 @@
       tooltip-effect="light"
       border
       max-height="450"
-      style="width: 95%; margin: 0 auto;border: 1px solid #eee">
+      style="width: 95%; margin: 0 auto;border: 1px solid #eee"
+      v-loading="loading">
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column label="车辆数" width="70">
@@ -78,12 +79,13 @@ export default {
       SortValue: '1',
       NumValue: 10,
       tableData3: [],
+      loading: true,
       list: [] // 渠道列表
     }
   },
   mounted () {
     this.getData()
-    this.getList()
+    // this.getList()
   },
   methods: {
     hide () {
@@ -135,13 +137,14 @@ export default {
         channelId: this.serchDate.selectChannel,
         requisitionId: this.serchDate.requisitionId,
         order: this.SortValue,
-        page: this.currentPage4,
-        pageSize: this.NumValue
+        page: this.pagination.currentPage,
+        pageSize: this.pagination.pageSize
       }
       this.$fetch('/user/urequisition/getFirstPaymentList', data).then(res => {
         if (res.code === 0) {
           this.tableData3 = res.data.rows
           this.pagination.total = res.data.records
+          this.loading = false
         }
       })
     }

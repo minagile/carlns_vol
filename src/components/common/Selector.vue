@@ -43,7 +43,7 @@
         filterable
         remote
         default-first-option
-        placeholder="请选择订单号" @visible-change="selectBatch">
+        placeholder="请选择订单号" @visible-change="selectBatch" v-if="double">
         <el-option
           v-for="item in options1"
           :key="item.value"
@@ -230,7 +230,7 @@ export default {
         this.allchannel = false
         this.channelId = ''
         this.batch = ''
-        this.selectChannel = null
+        this.selectChannel = ''
       }
       this.giveParams()
     },

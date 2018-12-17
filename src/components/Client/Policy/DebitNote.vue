@@ -17,7 +17,8 @@
       tooltip-effect="light"
       border
       max-height="450"
-      style="width: 95%; margin: 0 auto;border: 1px solid #eee">
+      style="width: 95%; margin: 0 auto;border: 1px solid #eee"
+      v-loading="loading">
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
       <el-table-column label="车辆数" width="70">
@@ -78,12 +79,13 @@ export default {
         currentPage: 1,
         total: 0
       },
-      list: [] // 渠道列表
+      list: [], // 渠道列表
+      loading: true
     }
   },
   mounted () {
     this.getData()
-    this.getList()
+    // this.getList()
   },
   methods: {
     hide () {
@@ -142,6 +144,7 @@ export default {
         if (res.code === 0) {
           this.tableData3 = res.data.rows
           this.pagination.total = res.data.records
+          this.loading = false
         }
       })
     },

@@ -24,20 +24,20 @@ export default {
   },
   methods: {
     allTime (data) {
-      if (data.selectChannel === '' && data.startTime !== '') {
+      if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
           endTime: data.endTime
         }
-      } else if (data.startTime === '' && data.selectChannel !== '') {
+      } else if (data.startTime === '' && data.report !== '') {
         this.selectData = {
-          channelName: data.selectChannel
+          channelName: data.report
         }
-      } else if (data.startTime && data.selectChannel !== '') {
+      } else if (data.startTime && data.report !== '') {
         this.selectData = {
           startTime: data.startTime,
           endTime: data.endTime,
-          channelName: data.selectChannel
+          channelName: data.report
         }
       } else {
         this.selectData = {}
@@ -51,7 +51,7 @@ export default {
       })
     },
     getChannelList () {
-      this.$fetch('/user/report/getChannelName').then(res => {
+      this.$fetch('/user/report/getChilds').then(res => {
         this.channelList = res
       })
     }

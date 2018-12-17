@@ -21,7 +21,8 @@
             </div>
             <el-table
                 :data="tableData"
-                style="width: 98%; margin: 0 auto">
+                style="width: 98%; margin: 0 auto"
+                v-loading="loading">
                 <!-- <el-table-column
                   type="selection"
                   width="55">
@@ -70,7 +71,8 @@
             </div>
             <el-table
                 :data="tableData1"
-                style="width: 98%; margin: 0 auto">
+                style="width: 98%; margin: 0 auto"
+                v-loading="loading1">
                 <!-- <el-table-column
                   type="selection"
                   width="55">
@@ -120,7 +122,8 @@
             </div>
             <el-table
                 :data="tableData2"
-                style="width: 98%; margin: 0 auto">
+                style="width: 98%; margin: 0 auto"
+                v-loading="loading2">
                 <!-- <el-table-column
                   type="selection"
                   width="55">
@@ -209,7 +212,10 @@ export default {
       channel: '1',
       demoEvents: [],
       companyNum: 0,
-      events: false
+      events: false,
+      loading: true,
+      loading1: true,
+      loading2: true
     }
   },
   mounted () {
@@ -227,17 +233,26 @@ export default {
       this.$fetch('/user/homePage_c/accountPayable', {
         // 'channelId': this.channel
       }).then(res => {
-        this.tableData = res.data
+        if (res.code === 0) {
+          this.loading = false
+          this.tableData = res.data
+        }
       })
       this.$fetch('/user/homePage_c/thisWeek', {
         // 'channelId': this.channel
       }).then(res => {
-        this.tableData1 = res.data
+        if (res.code === 0) {
+          this.loading1 = false
+          this.tableData1 = res.data
+        }
       })
       this.$fetch('/user/homePage_c/overdue', {
         // 'channelId': this.channel
       }).then(res => {
-        this.tableData2 = res.data
+        if (res.code === 0) {
+          this.loading2 = false
+          this.tableData2 = res.data
+        }
       })
       this.$fetch('/user/homePage_c/vehicle', {
         // 'channelId': this.channel

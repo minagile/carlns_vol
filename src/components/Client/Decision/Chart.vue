@@ -270,7 +270,7 @@ export default {
         seriesData.push({
           name: name,
           type: 'line',
-          stack: '总量',
+          stack: name,
           data: [],
           symbol: 'circle',
           symbolSize: '16',

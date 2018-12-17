@@ -21,7 +21,7 @@
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="repaymentTime" label="还款时间" width="120"></el-table-column>
       <el-table-column prop="name" label="公司名称"></el-table-column>
-      <el-table-column label="车辆数" width="70">
+      <el-table-column label="车辆数" width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"

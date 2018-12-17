@@ -1,6 +1,6 @@
  <template>
   <!-- 制作付款计划表 -->
-  <div class="MakePayment">
+  <div class="MakePayment" v-loading="fullscreenLoading">
     <div class="header">
       <div class="select">
         <el-cascader @visible-change="select"
@@ -318,8 +318,8 @@ export default {
         }
         this.$http.post(Req + '/admin/requisition/uploadFiles', formData, config).then(res => {
           // console.log(res)
+          this.fullscreenLoading = false
           if (res.code === 0) {
-            this.fullscreenLoading = false
             this.$message.success(res.data.msg)
           } else {
             this.$message(res.data.msg)

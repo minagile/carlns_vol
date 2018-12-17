@@ -207,9 +207,16 @@ export default {
         this.$fetch('/admin/requisition/getBatchByChannelId', {channelId: this.channelId}).then(res => {
           // console.log(res)
           if (res.code === 0) {
-            res.data.forEach(v => {
-              this.options1.push({value: v.requisitionId, label: v.requisitionId})
-            })
+            if (res.data.length > 0) {
+              res.data.forEach(v => {
+                this.options1.push({value: v.requisitionId, label: v.requisitionId})
+              })
+            } else {
+              this.options1 = [{
+                value: '',
+                label: '暂无数据'
+              }]
+            }
           } else {
             this.$message(res.msg)
           }

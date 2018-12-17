@@ -19,7 +19,7 @@
     style="width: 95%; margin: 0 auto;border: 1px solid #eee">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
-      <el-table-column label="车辆数" width="70">
+      <el-table-column label="车辆数" width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"

@@ -172,7 +172,6 @@ export default {
             // console.log(response.data.data)
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('username', response.data.data.channelName)
-            // sessionStorage.setItem('type', response.data.type)
             // sessionStorage.setItem('pwd', this.psd)
             this.$router.push({name: 'HomePage'})
           } else {

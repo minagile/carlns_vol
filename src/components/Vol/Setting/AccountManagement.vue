@@ -390,6 +390,7 @@ export default {
         page: this.currentPage4,
         pageSize: this.NumValue
       }).then(res => {
+        this.fullscreenLoading = false
         if (res.code === 0) {
           this.list = res.data.rows
           this.total = res.data.records

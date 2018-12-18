@@ -4,11 +4,11 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
+// axios.defaults.baseURL = 'http://192.168.1.128:80' // 彭
 // axios.defaults.baseURL = 'http://192.168.1.145:80'
 // axios.defaults.baseURL = 'http://192.168.1.140:80'
 // axios.defaults.baseURL = 'http://192.168.1.102:8848'
-// axios.defaults.baseURL = 'http://192.168.1.136:8848'
+axios.defaults.baseURL = 'http://192.168.1.136:8848'
 // axios.defaults.baseURL = 'http://192.168.1.145:8848'
 // axios.defaults.baseURL = 'http://192.168.1.117:80'
 // axios.defaults.baseURL = 'http://192.168.1.136:80'
@@ -65,6 +65,30 @@ axios.interceptors.response.use(
       })
       router.push({
         path: '/MLogin',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
+    if (response.data.code === 1001) {
+      Message({
+        message: '请登录账号',
+        // message: response.data.msg,
+        type: 'error'
+      })
+      router.push({
+        path: '/MLogin',
+        querry: { redirect: router.currentRoute.fullPath }
+        // 从哪个页面跳转
+      })
+    }
+    if (response.data.code === 1002) {
+      Message({
+        message: '请登录账号',
+        // message: response.data.msg,
+        type: 'info'
+      })
+      router.push({
+        path: '/',
         querry: { redirect: router.currentRoute.fullPath }
         // 从哪个页面跳转
       })

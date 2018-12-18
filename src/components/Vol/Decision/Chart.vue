@@ -16,8 +16,8 @@
         <button :class="{active : num1 === 0}" @click="changeChart(0)"><span class="iconfont">&#xe698;</span></button>
         <button :class="{active : num1 === 1}" @click="changeChart(1)"><span class="iconfont">&#xe637;</span></button>
       </div>
-      <div id="main" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
-      <div id="main1"  style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
+      <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
+      <div id="main1"  style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
       <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
@@ -113,7 +113,8 @@ export default {
       chartY: [],
       chartYY: [],
       tablePie: [],
-      table: ''
+      table: '',
+      name: '分期总金额'
     }
   },
   mounted () {
@@ -129,6 +130,7 @@ export default {
       this.num = index
       this.table = ''
       this.table = table
+      this.name = this.btnList[index].name
       // let sum = 0
       this.$post(`/admin/report/${data}`, this.selectData).then(res => {
         if (res.code === 0) {
@@ -209,7 +211,8 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          formatter: '{a}<br/>{b}: {c}'
         },
         legend: {
           show: false
@@ -226,7 +229,12 @@ export default {
             type: 'category',
             data: chartX,
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
             }
           }
         ],
@@ -260,7 +268,7 @@ export default {
         ],
         series: [
           {
-            // name: chartX,
+            name: this.name,
             type: 'bar',
             barWidth: '30%',
             data: chartY,
@@ -310,7 +318,12 @@ export default {
             type: 'category',
             data: chartX,
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
             }
           }
         ],
@@ -489,7 +502,7 @@ export default {
         ],
         series: [
           {
-            name: '渠道占比',
+            name: this.name,
             type: 'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
@@ -553,13 +566,16 @@ export default {
   .btn {
     margin-bottom: 45px;
     button {
-      width:135px;
+      width:7.26%;
       height:44px;
       background:rgba(255,255,255,1);
       border:1px solid black;
       border-radius:4px;
       color: black;
       margin-right: 45px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       &:hover {
         background: #FFC107;
         color: black;

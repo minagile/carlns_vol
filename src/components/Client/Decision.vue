@@ -49,6 +49,7 @@ export default {
       this.$post(`/user/report/${data}`, this.selectData).then(res => {
         if (res.code === 0) {
           this.chartData = res.data
+          this.$message(res.msg)
         } else {
           this.$message.error(res.msg)
         }
@@ -56,9 +57,7 @@ export default {
     },
     getChannelList () {
       this.$fetch('/user/report/getChilds').then(res => {
-        if (res.code === 0) {
-          this.channelList = res.data
-        }
+        this.channelList = res
       })
     }
   },

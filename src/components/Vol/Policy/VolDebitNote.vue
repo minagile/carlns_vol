@@ -29,7 +29,7 @@
             @show="showCarList(scope.row.requisitionId)"
             @hide="hide"
             trigger="click">
-            <el-table :data="gridData" :show-header="false">
+            <el-table :data="gridData" max-height="300" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
             <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carSum }}</el-button>

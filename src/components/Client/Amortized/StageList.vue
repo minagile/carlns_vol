@@ -17,7 +17,7 @@
     border
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-    v-loadinh="loading">
+    v-loading="loading">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
       <el-table-column prop="name" label="公司名称" min-width="300"></el-table-column>
@@ -42,6 +42,7 @@
       <el-table-column width="220">
         <template slot-scope="scope">
           <el-button type="text" @click="look(scope.row.requisitionId)">查看付款计划表</el-button>
+          <el-button type="text" @click="download(scope.row.payments)" v-if="scope.row.payments">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -267,6 +268,9 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    download (address) {
+      window.open(address)
     }
   },
   components: {

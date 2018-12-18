@@ -332,10 +332,14 @@ export default {
       this.orderList = []
       this.orderList1 = []
       this.fullscreenLoading = true
+      var date = ''
+      if (this.value1 !== '') {
+        date = this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate()
+      }
       this.$fetch('/admin/stager/insertStager', {
         channelId: this.channelId,
         requisitionId: this.batch,
-        date: this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate()
+        date: date
       }).then(res => {
         this.fullscreenLoading = false
         if (res.code === 0) {

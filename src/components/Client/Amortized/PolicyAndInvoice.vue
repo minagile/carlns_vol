@@ -17,7 +17,7 @@
     border
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-    v-loadinh="loading">
+    v-loading="loading">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
       <el-table-column label="车辆数" width="80">
@@ -104,12 +104,12 @@ export default {
       this.getData()
     },
     lookDetail (id) {
-      if (id.invoice) {
-        window.open(id.invoice)
-      } else if (id.policy) {
-        window.open(id.policy)
+      if (!id.invoice && !id.policy) {
+        this.$message('没有文件')
       } else {
         this.$message('没有文件')
+        window.open(id.policy)
+        window.open(id.invoice)
       }
     },
     handleSelectionChange (val) {

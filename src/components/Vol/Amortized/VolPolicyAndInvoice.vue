@@ -102,12 +102,12 @@ export default {
       })
     },
     lookDetail (id) {
-      if (id.invoice) {
-        window.open(id.invoice)
-      } else if (id.policy) {
-        window.open(id.policy)
+      if (!id.invoice && !id.policy) {
+        this.$message('没有文件')
       } else {
         this.$message('没有文件')
+        window.open(id.policy)
+        window.open(id.invoice)
       }
     },
     // 查询按钮

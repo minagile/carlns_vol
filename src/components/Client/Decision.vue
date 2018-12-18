@@ -51,7 +51,7 @@ export default {
           this.chartData = res.data
           this.$message(res.msg)
         } else {
-          this.$message.error(res.msg)
+          this.$message(res.msg)
         }
       })
     },

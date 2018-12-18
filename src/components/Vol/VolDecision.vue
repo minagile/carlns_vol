@@ -2,7 +2,7 @@
   <!-- 决策支持 -->
   <div class="VolDecision">
     <chart v-if="calculater"></chart>
-    <div class="circle" @click="change" v-if="calculater">计算器</div>
+    <div class="circle" @click="change" v-if="calculater">数据统计</div>
     <div class="circle" @click="change" v-if="!calculater">返回</div>
     <router-view></router-view>
   </div>

@@ -337,8 +337,8 @@ export default {
         requisitionId: this.batch,
         date: this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate()
       }).then(res => {
+        this.fullscreenLoading = false
         if (res.code === 0) {
-          this.fullscreenLoading = false
           this.showList = true
           this.$message({
             type: 'success',

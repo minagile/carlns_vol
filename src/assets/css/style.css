@@ -319,3 +319,7 @@
   color: #4977FC;
   border-color: #fff;
 }
+
+.el-table .success-row {
+  background: #ffe4de;
+}

@@ -18,6 +18,20 @@ axios.defaults.baseURL = 'http://192.168.1.136:8848'
 axios.interceptors.request.use(
   config => {
     const token = sessionStorage.getItem('token')
+    // let path = window.location.href
+    // if (token === null) {
+    //   if (path.split('/').indexOf('vol') === -1) {
+    //     router.push({
+    //       path: '/',
+    //       querry: { redirect: router.currentRoute.fullPath }
+    //     })
+    //   } else {
+    //     router.push({
+    //       path: '/MLogin',
+    //       querry: { redirect: router.currentRoute.fullPath }
+    //     })
+    //   }
+    // }
     // config.data = JSON.stringify(config.data)
     config.headers = {
       'token': token,

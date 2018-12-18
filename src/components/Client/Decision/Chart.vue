@@ -13,7 +13,7 @@
     </div>
     <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
     <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
-    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 80%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -314,6 +314,13 @@ export default {
           type: 'plain',
           data: legend
         },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 70,
+            bottom: 50
+          }
+        ],
         grid: {
           top: '20%',
           left: '18%',

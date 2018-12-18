@@ -40,9 +40,10 @@
       <el-table-column prop="money" label="投保金额" min-width="100"></el-table-column>
       <el-table-column prop="coverage" label="险种" width="70"></el-table-column>
       <el-table-column prop="state" label="分期状态" width="80"></el-table-column>
-      <el-table-column>
+      <el-table-column width="200">
         <template slot-scope="scope">
           <el-button type="text" @click="look(scope.row.requisitionId)">查看付款计划表</el-button>
+          <el-button type="text" @click="download(scope.row.payments)" v-if="scope.row.payments">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -263,6 +264,9 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    download (address) {
+      window.open(address)
     }
   },
   components: {

@@ -1,7 +1,7 @@
 <template>
   <!-- 决策支持 -->
   <div class="calculater animated flipInY">
-    <p class="title">车险计算器</p>
+    <p class="title">数据统计</p>
       <div style="display: flex;justify-content: space-between;">
     <div class="content">
       <div>

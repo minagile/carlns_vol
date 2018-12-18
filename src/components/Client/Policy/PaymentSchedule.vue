@@ -18,7 +18,7 @@
       border
       max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-      v-loadinh="loading">
+      v-loading="loading">
       <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
       <el-table-column prop="channelName" label="公司名称" min-width="300"></el-table-column>
       <el-table-column label="车辆数" width="80">
@@ -175,7 +175,7 @@ export default {
       this.$fetch('/user/urequisition/getPaymentScheduleList', data).then(res => {
         this.loading = false
         if (res.code === 0) {
-          this.tableData3 = res.data.rows
+          this.tablgData3 = res.data.rows
           this.pagination.total = res.data.records
         }
       })

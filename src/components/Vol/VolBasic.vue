@@ -139,7 +139,7 @@ export default {
   header {
     height: 100px;
     position: relative;
-    z-index: 9999;
+    z-index: 10;
     // background: #FFC107;
     .tab {
       overflow: hidden;

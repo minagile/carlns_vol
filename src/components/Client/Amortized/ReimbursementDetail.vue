@@ -17,7 +17,7 @@
     border
     max-height="450"
     style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-    v-loadinh="loading">
+    v-loading="loading">
       <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
       <el-table-column prop="repaymentTime" label="还款时间" width="120"></el-table-column>
       <el-table-column prop="name" label="公司名称" min-width="300"></el-table-column>

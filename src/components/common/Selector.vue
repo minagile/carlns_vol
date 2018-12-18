@@ -91,7 +91,7 @@ export default {
       alltime: false,
       startTime: '',
       endTime: '',
-      selectChannel: '',
+      selectChannel: 0,
       SortOptions: [
         {
           value: 1,
@@ -230,7 +230,7 @@ export default {
         this.allchannel = false
         this.channelId = null
         this.batch = null
-        this.selectChannel = ''
+        this.selectChannel = 0
       }
       this.giveParams()
     },

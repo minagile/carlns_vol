@@ -13,7 +13,9 @@ export default {
   name: 'Decision',
   data () {
     return {
-      selectData: {},
+      selectData: {
+        channelName: 0
+      },
       chartData: [],
       channelList: []
     }
@@ -57,7 +59,11 @@ export default {
     },
     getChannelList () {
       this.$fetch('/user/report/getChilds').then(res => {
-        this.channelList = res
+        var aa = [{
+          channelId: 0,
+          channelName: '全部渠道'
+        }]
+        this.channelList = aa.concat(res)
       })
     }
   },

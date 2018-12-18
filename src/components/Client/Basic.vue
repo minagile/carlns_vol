@@ -14,6 +14,7 @@
             <el-dropdown>
               <p><span class="iconfont">&#xe626;</span>{{name}}</p>
               <el-dropdown-menu slot="dropdown">
+                <!-- <span @click="dialogVisible = true"><el-dropdown-item>修改密码</el-dropdown-item></span> -->
                 <span @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></span>
               </el-dropdown-menu>
             </el-dropdown>
@@ -21,6 +22,18 @@
       </div>
     </header>
     <router-view :key="$route.fullpath"></router-view>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="30%">
+      <div class="dialog-header1">
+        修改密码
+      </div>
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changePwd">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,7 +71,8 @@ export default {
         // }
       ],
       num: 0,
-      name: ''
+      name: '',
+      dialogVisible: false
     }
   },
   beforeRouteUpdate (to, from, next) {
@@ -91,6 +105,23 @@ export default {
       sessionStorage.clear()
       this.$router.push('/')
       this.$fetch('/login/logout')
+    },
+    changePwd () {
+      this.$post('', {
+
+      }).then(res => {
+        if (res.code === 0) {
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+        } else if (res.code === 1) {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
+        }
+      })
     }
   }
 }

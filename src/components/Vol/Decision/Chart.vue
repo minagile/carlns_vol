@@ -146,7 +146,7 @@ export default {
           }
         } else {
           this.$message({
-            type: 'error',
+            type: 'info',
             message: res.msg
           })
         }
@@ -158,7 +158,7 @@ export default {
             this.getEchartPie()
           } else {
             this.$message({
-              type: 'error',
+              type: 'info',
               message: res.msg
             })
           }

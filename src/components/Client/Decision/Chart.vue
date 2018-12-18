@@ -397,7 +397,7 @@ export default {
           {
             name: this.name,
             type: 'pie',
-            radius: ['50%', '70%'],
+            // radius: ['50%', '70%'],
             avoidLabelOverlap: false,
             color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {

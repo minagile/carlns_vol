@@ -19,9 +19,9 @@
       max-height="450"
       style="width: 95%; margin: 0 auto">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称"  min-width="180"></el-table-column>
-      <el-table-column label="车辆数" min-width="80">
+      <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"  min-width="300"></el-table-column>
+      <el-table-column label="车辆数" width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -35,8 +35,8 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="coverageName" label="险种"></el-table-column>
-      <el-table-column label="投保时间" min-width="120">
+      <el-table-column prop="coverageName" label="险种" width="100"></el-table-column>
+      <el-table-column label="投保时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>
@@ -47,7 +47,7 @@
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
-      <el-table-column min-width="70">
+      <el-table-column min-width="50">
         <template slot-scope="scope">
           <el-button type="text" @click="deleteD(scope.row.requisitionId)">删除</el-button>
         </template>

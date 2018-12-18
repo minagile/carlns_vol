@@ -17,13 +17,12 @@
       v-loading="loading"
       :row-class-name="tableRowClassName"
       max-height="450"
-      style="width: 95%; margin: 0 auto;"
-      @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称"  min-width="180"></el-table-column>
-      <el-table-column prop="sumMoney" label="金额"></el-table-column>
-      <el-table-column label="车辆数" min-width="80">
+      style="width: 95%; margin: 0 auto;">
+      <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+      <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"  min-width="300"></el-table-column>
+      <el-table-column prop="sumMoney" label="金额" min-width="100"></el-table-column>
+      <el-table-column label="车辆数" width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -37,8 +36,8 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="coverageName" label="险种" min-width="70"></el-table-column>
-      <el-table-column label="投保时间" min-width="120">
+      <el-table-column prop="coverageName" label="险种" width="100"></el-table-column>
+      <el-table-column label="投保时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>

@@ -26,6 +26,7 @@ require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 require('echarts/lib/component/legend')
+require('echarts/lib/component/dataZoom')
 export default {
   name: 'Chart',
   data () {
@@ -104,6 +105,7 @@ export default {
       this.$emit('getChartData', data)
     },
     getEchart (x, y) {
+      console.log(x)
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         tooltip: {

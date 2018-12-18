@@ -1,7 +1,7 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    <selector :all="true" @giveParams="allTime" :channelList="channelList" :sortTable="false"></selector>
+    <selector :all="true" @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector>
     <chart @getChartData="getChartData" :chartData="chartData"></chart>
   </div>
 </template>
@@ -47,7 +47,11 @@ export default {
     getChartData (data) {
       this.url = data
       this.$post(`/user/report/${data}`, this.selectData).then(res => {
-        this.chartData = res
+        if (res.code === 0) {
+          this.chartData = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
       })
     },
     getChannelList () {

@@ -138,6 +138,8 @@ export default {
   position: relative;
   header {
     height: 100px;
+    position: relative;
+    z-index: 9999;
     // background: #FFC107;
     .tab {
       overflow: hidden;
@@ -146,6 +148,7 @@ export default {
       ul {
         width: 880px;
         margin: 0 auto;
+        overflow: hidden;
       }
       li {
         float: left;
@@ -172,8 +175,11 @@ export default {
         }
       }
       .header-img {
-        float: right;
+        // float: right;
         padding-right: 38px;
+        position: absolute;
+        top: 20px;
+        right: 0;
         p {
           line-height: 52px;
           display: inline-block;

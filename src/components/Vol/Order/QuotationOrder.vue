@@ -137,7 +137,6 @@ export default {
   },
   methods: {
     uploadfile (e) {
-      this.loading = true
       if (this.channelId === '') {
         this.$message('请选择渠道')
       } else if (this.value1 === '') {
@@ -150,6 +149,7 @@ export default {
             message: '请上传.xls/.xlsx文件'
           })
         } else {
+          this.loading = true
           var formData = new FormData()
           formData.append('file', file)
           formData.append('beginTime', this.value1.getFullYear() + '-' + (this.value1.getMonth() + 1) + '-' + this.value1.getDate())

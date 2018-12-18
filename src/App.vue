@@ -24,6 +24,7 @@ html, body {
   height: 100%;
   font-family: MicrosoftYaHei;
   min-width: 1500px;
+  min-height: 900px;
 }
 a {
   cursor: pointer;

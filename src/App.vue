@@ -23,7 +23,8 @@ html, body {
 #app {
   height: 100%;
   font-family: MicrosoftYaHei;
-  min-width: 1000px;
+  min-width: 1500px;
+  min-height: 900px;
 }
 a {
   cursor: pointer;

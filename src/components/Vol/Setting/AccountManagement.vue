@@ -8,9 +8,9 @@
       <table>
         <tr v-for="(item, index) in list" :key="index">
           <td><div class="index">{{ index + 1 }}</div></td>
-          <td>用户名：{{ item.adminName }}</td>
+          <td><span>用户名：{{ item.adminName }}</span></td>
           <td>账号：{{ item.adminPhone }}</td>
-          <td>密码：{{ item.reversiblePassword }}</td>
+          <td><span>密码：{{ item.reversiblePassword }}</span></td>
           <td><el-button type="text" @click="qudao(item.adminId)">设置渠道</el-button></td>
           <td><el-button type="text" @click="set(item.adminId, item.adminName)">设置权限</el-button></td>
           <td><el-button type="text" @click="open('修改密码', item.adminId)">修改密码</el-button></td>
@@ -554,6 +554,13 @@ export default {
       // font-weight: bold;
       td:first-of-type {
         width: 84px;
+      }
+      td span {
+        display: block;
+        width: 250px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       td .index {
         width: 26px;

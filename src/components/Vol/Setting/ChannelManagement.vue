@@ -8,11 +8,11 @@
       <table>
         <tr v-for="(item, index) in list" :key="index" class="tabletr">
           <td><div class="index">{{ index + 1 }}</div></td>
-          <td>公司名称：{{ item.channelName }}</td>
-          <td>地址：{{ item.channelAddress }}</td>
+          <td><span>公司名称：{{ item.channelName }}</span></td>
+          <td><span>地址：{{ item.channelAddress }}</span></td>
           <td>负责人：{{ item.channelPrincipal }}</td>
           <td>联系方式：{{ item.channelPhone }}</td>
-          <td>密码：{{ item.plaintextPwd }}</td>
+          <td><span>密码：{{ item.plaintextPwd }}</span></td>
           <td><el-button type="text" @click="addchild(index, item.channelId, item)">添加子公司</el-button></td>
           <td><el-button type="text" @click="delchannel(item.channelId)">编辑</el-button></td>
           <td><el-button type="text" @click="remove(item.channelId)">删除</el-button></td>
@@ -447,6 +447,13 @@ export default {
       color: #000000;
       td:first-of-type {
         width: 84px;
+      }
+      td span {
+        display: block;
+        max-width: 250px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       .shouqi {
         cursor: pointer;

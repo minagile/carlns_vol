@@ -31,7 +31,7 @@
             <el-table :data="gridData" max-height="300" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
-            <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carNumber }}</el-button>
+            <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carNumber }}</el-button>
           </el-popover>
         </template>
       </el-table-column>

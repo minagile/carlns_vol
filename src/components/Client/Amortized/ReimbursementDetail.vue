@@ -31,7 +31,7 @@
             <el-table :data="gridData" max-height="300" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
-            <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carNumber }}</el-button>
+            <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carNumber }}</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -42,6 +42,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" v-if="scope.row.condition === 0" style="color: #4977FC">待还款</el-button>
+          <el-button type="text" v-if="scope.row.condition === 2" style="color: red">已逾期</el-button>
           <el-button type="text" v-if="scope.row.condition === 1" style="color: #333">已还款</el-button>
         </template>
       </el-table-column>

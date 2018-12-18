@@ -56,7 +56,9 @@ export default {
     },
     getChannelList () {
       this.$fetch('/user/report/getChilds').then(res => {
-        this.channelList = res
+        if (res.code === 0) {
+          this.channelList = res.data
+        }
       })
     }
   },

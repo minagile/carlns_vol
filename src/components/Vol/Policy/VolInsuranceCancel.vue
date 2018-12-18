@@ -19,20 +19,19 @@
       border
       v-loading="loading"
       max-height="450"
-      style="width: 95%; margin: 0 auto"
-      @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
-      <el-table-column prop="carNumber" label="车牌"></el-table-column>
-      <el-table-column prop="channelName" label="公司"  min-width="180"></el-table-column>
-      <el-table-column prop="coverageName" label="险种" min-width="70"></el-table-column>
-      <el-table-column label="投保时间" min-width="120">
+      style="width: 95%; margin: 0 auto">
+      <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+      <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
+      <el-table-column prop="carNumber" label="车牌" min-width="100"></el-table-column>
+      <el-table-column prop="channelName" label="公司"  min-width="300"></el-table-column>
+      <el-table-column prop="coverageName" label="险种" width="100"></el-table-column>
+      <el-table-column label="投保时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>
       </el-table-column>
       <el-table-column prop="remark" label="退保原因"></el-table-column>
-      <el-table-column>
+      <el-table-column width="80">
         <template slot-scope="scope">
           <el-button type="text" @click="cancel(scope.row.carId)">删除</el-button>
         </template>

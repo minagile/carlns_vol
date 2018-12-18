@@ -309,25 +309,25 @@ export default {
       this.$fetch('/admin/homePage_a/accountPayable_a', {
         channelId: this.channelId
       }).then(res => {
+        this.loading1 = false
         if (res.code === 0) {
           this.tableData = res.data
-          this.loading1 = false
         }
       })
       this.$fetch('/admin/homePage_a/overdue_a', {
         channelId: this.channelId
       }).then(res => {
+        this.loading2 = false
         if (res.code === 0) {
           this.tableData2 = res.data
-          this.loading2 = false
         }
       })
       this.$fetch('/admin/homePage_a/thisWeek_a', {
         channelId: this.channelId
       }).then(res => {
+        this.loading3 = false
         if (res.code === 0) {
           this.tableData1 = res.data
-          this.loading3 = false
         }
       })
       // GET /admin/homePage_a/calendar

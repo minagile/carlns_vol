@@ -41,7 +41,7 @@
         <el-table-column prop="channelAddress" label="联系地址"></el-table-column>
         <el-table-column prop="channelPhone" label="联系方式"></el-table-column>
         <el-table-column prop="channelEmail" label="邮箱"></el-table-column>
-        <el-table-column label="添加时间"  width="120">
+        <el-table-column label="添加时间"  min-width="120">
           <template slot-scope="scope">
             {{ scope.row.createTime | timeChange }}
           </template>
@@ -200,8 +200,8 @@ export default {
           'email': this.form.email,
           'reason': this.form.reason
         }).then(res => {
+          this.loading = false
           if (res.code === 0) {
-            this.loading = false
             this.centerDialogVisible = false
             this.$message({
               message: res.msg,
@@ -225,8 +225,8 @@ export default {
           'reason': this.form.reason,
           'channelId': this.form.channelId
         }).then(res => {
+          this.loading = false
           if (res.code === 0) {
-            this.loading = false
             this.centerDialogVisible = false
             this.$message({
               message: res.msg,

@@ -19,25 +19,25 @@
     style="width: 95%; margin: 0 auto;border: 1px solid #eee"
     v-loadinh="loading">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
       <el-table-column prop="name" label="公司名称"></el-table-column>
-      <el-table-column label="车辆数" width="80">
+      <el-table-column label="车辆数" min-width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"
             @show="showCarList(scope.row.requisitionId)"
             @hide="hide"
             trigger="click">
-            <el-table :data="gridData" :show-header="false">
+            <el-table :data="gridData" max-height="300" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
             <el-button slot="reference" type="text" style="color: #606266;width: 50px;">{{ scope.row.carNumber }}</el-button>
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="time" label="投保时间" width="120"></el-table-column>
+      <el-table-column prop="time" label="投保时间" min-width="120"></el-table-column>
       <el-table-column prop="money" label="投保金额"></el-table-column>
-      <el-table-column prop="coverage" label="险种" width="70"></el-table-column>
+      <el-table-column prop="coverage" label="险种" min-width="70"></el-table-column>
       <el-table-column prop="state" label="分期状态"></el-table-column>
       <el-table-column>
         <template slot-scope="scope">
@@ -243,6 +243,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -257,11 +258,11 @@ export default {
       // console.log(data)
       // GET /user/byStages/stagingList_query
       this.$fetch('/user/byStages/stagingList_query', data).then(res => {
-        console.log(res)
+        // console.log(res)
+        this.loading = false
         if (res.code === 0) {
           this.tableData = res.data.rows
           this.total = res.data.records
-          this.loading = false
         } else {
           this.$message.error(res.msg)
         }

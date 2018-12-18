@@ -16,26 +16,27 @@
       :data="tableData3"
       tooltip-effect="light"
       border
+      v-loading="loading"
       max-height="450"
       style="width: 95%; margin: 0 auto;border: 1px solid #eee">
-      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
       <el-table-column prop="channelName" label="公司名称"></el-table-column>
-      <el-table-column label="车辆数" width="80">
+      <el-table-column label="车辆数" min-width="80">
         <template slot-scope="scope">
           <el-popover
             placement="right"
             @show="showCarList(scope.row.requisitionId)"
             @hide="hide"
             trigger="click">
-            <el-table :data="gridData" :show-header="false">
+            <el-table :data="gridData" max-height="300" :show-header="false">
               <el-table-column property="carNumber"></el-table-column>
             </el-table>
             <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carSum }}</el-button>
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column prop="coverageName" label="险种" width="70"></el-table-column>
-      <el-table-column label="投保时间" width="120">
+      <el-table-column prop="coverageName" label="险种" min-width="70"></el-table-column>
+      <el-table-column label="投保时间" min-width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>
@@ -125,6 +126,7 @@ export default {
         currentPage: 1,
         total: 0
       },
+      loading: true,
       serchDate: [],
       SortValue: '1',
       // NumValue: 10,
@@ -192,6 +194,7 @@ export default {
       this.getData()
     },
     getData () {
+      this.loading = true
       var data = {
         // channelId: '',
         startTime: this.serchDate.startTime,
@@ -204,6 +207,7 @@ export default {
         pageSize: this.pagination.pageSize
       }
       this.$fetch('/user/urequisition/getquotationList', data).then(res => {
+        this.loading = false
         if (res.code === 0) {
           this.tableData3 = res.data.rows
           this.pagination.total = res.data.records

@@ -1,6 +1,6 @@
 <template>
   <!-- 生成报价单 -->
-  <div class="QuotationOrder">
+  <div class="QuotationOrder" v-loading="loading">
     <div class="header">
       <!-- <el-select v-model="value4" clearable placeholder="请选择渠道"  @visible-change="select">
         <el-option
@@ -129,13 +129,15 @@ export default {
         label: 'label',
         value: 'value',
         children: 'cities'
-      }
+      },
+      loading: false
     }
   },
   mounted () {
   },
   methods: {
     uploadfile (e) {
+      this.loading = true
       if (this.channelId === '') {
         this.$message('请选择渠道')
       } else if (this.value1 === '') {
@@ -160,6 +162,7 @@ export default {
           }
           this.$http.post(Req + '/admin/requisition/excelImport', formData, config).then(res => {
             // console.log(res.data)
+            this.loading = false
             if (res.data.code === 0) {
               // this.$message(res.data.msg)
               this.$fetch('/admin/requisition/showQuotationList', {channelId: this.channelId}).then(res => {

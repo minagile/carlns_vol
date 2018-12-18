@@ -22,9 +22,9 @@
       style="width: 95%; margin: 0 auto"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
       <el-table-column prop="carNumber" label="车牌"></el-table-column>
-      <el-table-column prop="channelName" label="公司"></el-table-column>
+      <el-table-column prop="channelName" label="公司"  min-width="180"></el-table-column>
       <el-table-column prop="coverageName" label="险种" min-width="70"></el-table-column>
       <el-table-column label="投保时间" min-width="120">
         <template slot-scope="scope">

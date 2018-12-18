@@ -20,8 +20,8 @@
       style="width: 95%; margin: 0 auto;"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"  min-width="180"></el-table-column>
       <el-table-column prop="sumMoney" label="金额"></el-table-column>
       <el-table-column label="车辆数" min-width="80">
         <template slot-scope="scope">
@@ -43,7 +43,7 @@
           {{ scope.row.createTime | timeChange }}
         </template>
       </el-table-column>
-      <el-table-column label="支付操作">
+      <el-table-column label="支付操作" width="180">
         <template slot-scope="scope">
           <el-button :class="{yellow: scope.row.stagesType === '未支付'}" size="mini" @click="changeType(scope.row, '未支付')">未支付</el-button>
           <el-button :class="{yellow: scope.row.stagesType === '已支付'}" size="mini" @click="changeType(scope.row, '已支付')">已支付</el-button>

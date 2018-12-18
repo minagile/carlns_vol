@@ -20,8 +20,8 @@
       style="width: 95%; margin: 0 auto;"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称"  min-width="180"></el-table-column>
       <el-table-column label="车辆数" min-width="80">
         <template slot-scope="scope">
           <el-popover
@@ -42,9 +42,9 @@
           {{ scope.row.createTime | timeChange }}
         </template>
       </el-table-column>
-      <el-table-column label="付款计划表">
+      <el-table-column label="付款计划表" width="220">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" alt="">
+          <img src="../../../assets/img/img.png" width="50" alt="">
           <el-button type="text"  @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
         </template>
       </el-table-column>

@@ -17,11 +17,11 @@
       v-loading="loading"
       border
       max-height="450"
-      style="width: 95%; margin: 0 auto;"
+      style="width: 95%;min-width:700px;margin: 0 auto;"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="requisitionId" label="订单号" min-width="180"></el-table-column>
-      <el-table-column prop="channelName" label="公司名称"></el-table-column>
+      <el-table-column prop="requisitionId" label="订单号" width="180"></el-table-column>
+      <el-table-column prop="channelName" label="公司名称" min-width="180"></el-table-column>
       <el-table-column label="车辆数" min-width="80">
         <template slot-scope="scope">
           <el-popover

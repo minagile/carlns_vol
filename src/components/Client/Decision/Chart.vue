@@ -5,14 +5,15 @@
         v-for="(btn, index) in btnList"
         :key="index"
         :class="{active : num == index}"
-        @click="tab(index, btn.url)"
+        @click="tab(index, btn.url, btn.name)"
+        :alt="btn.name"
       >
         {{btn.name}}
       </button>
     </div>
-    <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
-    <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 59.55%;height:432px;background: #fff;margin: 0 auto;"></div>
-    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 80%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main" v-show="this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main1" v-show="this.url === 'CoverageOf'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
+    <div id="main2" v-show="this.url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
   </div>
 </template>
 
@@ -66,7 +67,8 @@ export default {
         }
       ],
       num: 0,
-      url: ''
+      url: '',
+      name: '分期总金额'
     }
   },
   props: ['chartData'],
@@ -96,23 +98,24 @@ export default {
     }
   },
   methods: {
-    tab (index, url) {
+    tab (index, url, name) {
       this.num = index
       this.getData(url)
+      this.name = name
     },
     getData (data) {
       this.url = data
       this.$emit('getChartData', data)
     },
     getEchart (x, y) {
-      console.log(x)
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         tooltip: {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          formatter: '{a}<br/>{b}: {c}'
         },
         grid: {
           left: '3%',
@@ -126,7 +129,12 @@ export default {
             type: 'category',
             data: x,
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
             }
           }
         ],
@@ -160,6 +168,7 @@ export default {
         ],
         series: [
           {
+            name: this.name,
             type: 'bar',
             barWidth: '30%',
             data: y,
@@ -202,7 +211,12 @@ export default {
             type: 'category',
             data: x,
             axisTick: {
-              alignWithLabel: true
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
             }
           }
         ],
@@ -300,6 +314,13 @@ export default {
           type: 'plain',
           data: legend
         },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 70,
+            bottom: 50
+          }
+        ],
         grid: {
           top: '20%',
           left: '18%',
@@ -374,7 +395,7 @@ export default {
         ],
         series: [
           {
-            name: '渠道占比',
+            name: this.name,
             type: 'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
@@ -412,13 +433,16 @@ export default {
   .btn {
     margin-bottom: 45px;
     button {
-      width:135px;
+      width:7.26%;
       height:44px;
       background:rgba(255,255,255,1);
       border:1px solid rgba(73,119,252,1);
       border-radius:4px;
       color: #4977FC;
       margin-right: 45px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       &:hover {
         background: #4977FC;
         color: white;

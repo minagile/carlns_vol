@@ -98,60 +98,60 @@
           <table v-if="show8" class="table1">
             <tr>
               <th></th>
-              <th>总收入</th>
+              <th>总垫付</th>
+              <th>实际收入</th>
               <th>盈利</th>
               <th>本金</th>
-              <th>我方垫付</th>
             </tr>
             <tr>
               <th>统计商业险</th>
+              <td>{{resSoure.commercials.jfs}}</td>
               <td>{{resSoure.commercials.sfs}}</td>
               <td>{{resSoure.commercials.yls}}</td>
               <td>{{resSoure.commercials.bjs}}</td>
-              <td>{{resSoure.commercials.jfs}}</td>
             </tr>
             <tr>
               <th>统计交强险</th>
+              <td>{{resSoure.sali.jfc}}</td>
               <td>{{resSoure.sali.sfc}}</td>
               <td>{{resSoure.sali.ylc}}</td>
               <td>{{resSoure.sali.bjc}}</td>
-              <td>{{resSoure.sali.jfc}}</td>
             </tr>
             <tr>
               <th>合计</th>
+              <td>{{resSoure.total.d}}</td>
               <td>{{resSoure.total.a}}</td>
               <td>{{resSoure.total.b}}</td>
               <td>{{resSoure.total.c}}</td>
-              <td>{{resSoure.total.d}}</td>
             </tr>
           </table>
           <table v-if="!show8" class="table2">
             <tr>
               <th></th>
-              <th>应盈利</th>
-              <th>真实盈利</th>
+              <th>总垫付</th>
+              <th>应收入</th>
+              <th>实际收入</th>
               <th>本金</th>
-              <th>我方垫付</th>
-              <th>收入</th>
-              <th>真实收入</th>
+              <th>应盈利</th>
+              <th>实际盈利</th>
             </tr>
             <tr>
               <th>统计商业险</th>
-              <td>{{this.tableList2.profit}}</td>
-              <td>{{this.tableList2.trueProfit}}</td>
-              <td>{{this.tableList2.principal}}</td>
               <td>{{this.tableList2.advances}}</td>
               <td>{{this.tableList2.income}}</td>
               <td>{{this.tableList2.trueIncome}}</td>
+              <td>{{this.tableList2.principal}}</td>
+              <td>{{this.tableList2.profit}}</td>
+              <td>{{this.tableList2.trueProfit}}</td>
             </tr>
             <tr>
               <th>统计交强险</th>
-              <td>{{this.tableList2.cProfit}}</td>
-              <td>{{this.tableList2.cTrueProfit}}</td>
-              <td>{{this.tableList2.cPrincipal}}</td>
               <td>{{this.tableList2.cAdvances}}</td>
               <td>{{this.tableList2.cIncome}}</td>
               <td>{{this.tableList2.cTrueIncome}}</td>
+              <td>{{this.tableList2.cPrincipal}}</td>
+              <td>{{this.tableList2.cProfit}}</td>
+              <td>{{this.tableList2.cTrueProfit}}</td>
             </tr>
             <!-- <tr>
               <th>合计</th>

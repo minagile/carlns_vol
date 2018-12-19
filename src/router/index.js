@@ -142,7 +142,7 @@ export default new Router({
       name: 'MLogin',
       component: MLogin,
       meta: {
-        title: '登录'
+        title: '车险服务管理后台'
       }
     },
     {
@@ -150,7 +150,7 @@ export default new Router({
       name: 'VolBasic',
       component: VolBasic,
       meta: {
-        title: '车险后台管理'
+        title: '车险服务管理后台'
       },
       children: [
         {
@@ -287,7 +287,7 @@ export default new Router({
       name: 'Login',
       component: Login,
       meta: {
-        title: '登录'
+        title: '车险服务平台客户端'
       }
     },
     {

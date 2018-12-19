@@ -15,6 +15,9 @@ import vueEventCalendar from 'vue-event-calendar'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import animate from 'animate.css'
+import VueWechatTitle from 'vue-wechat-title'
+
+Vue.use(VueWechatTitle)
 
 Vue.use(animate)
 

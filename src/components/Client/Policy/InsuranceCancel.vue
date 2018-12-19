@@ -41,6 +41,11 @@
           {{ scope.row.createTime | timeChange }}
         </template>
       </el-table-column>
+      <el-table-column label="退保时间" width="120">
+        <template slot-scope="scope">
+          {{ scope.row.updateTime | timeChange }}
+        </template>
+      </el-table-column>
       <el-table-column prop="remark" label="退保原因" width="220"></el-table-column>
     </el-table>
 

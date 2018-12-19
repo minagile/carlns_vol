@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="sumMoney" label="金额" min-width="100"></el-table-column>
-      <el-table-column label="投保时间" width="120">
+      <el-table-column label="订单生成时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>

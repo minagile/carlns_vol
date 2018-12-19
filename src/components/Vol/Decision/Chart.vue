@@ -402,7 +402,7 @@ export default {
           stack: name,
           data: [],
           symbol: 'circle',
-          symbolSize: '16',
+          symbolSize: '6',
           smooth: true,
           itemStyle: {
             borderWidth: 2,

@@ -42,7 +42,8 @@
       <el-table-column width="220">
         <template slot-scope="scope">
           <el-button type="text" @click="look(scope.row.requisitionId)">查看付款计划表</el-button>
-          <el-button type="text" @click="download(scope.row.payments)" v-if="scope.row.payments">下载</el-button>
+          <!-- <el-button type="text" @click="download(scope.row.payments)" v-if="scope.row.payments">下载</el-button> -->
+          <el-button type="text" @click="lookxx(scope.row.requisitionId)">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -172,6 +173,13 @@ export default {
     this.getData()
   },
   methods: {
+    lookxx (id) {
+      let routeData = this.$router.resolve({
+        name: 'AlertSchedule',
+        query: { id: id, enter: 'font' }
+      })
+      window.open(routeData.href, '_blank')
+    },
     hide () {
       this.gridData = []
     },

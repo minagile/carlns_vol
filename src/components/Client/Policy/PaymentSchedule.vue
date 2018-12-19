@@ -43,8 +43,9 @@
       </el-table-column>
       <el-table-column label="付款计划表" width="220">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" width="50" alt="">
-          <el-button type="text" @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
+          <!-- <img src="../../../assets/img/img.png" width="50" alt=""> -->
+          <el-button type="text"  @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
+          <el-button type="text"  @click="watchPriceopen(scope.row.requisitionId)">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -119,6 +120,13 @@ export default {
     this.getData()
   },
   methods: {
+    watchPriceopen (id) {
+      let routeData = this.$router.resolve({
+        name: 'AlertSchedule',
+        query: { id: id, enter: 'font' }
+      })
+      window.open(routeData.href, '_blank')
+    },
     hide () {
       this.gridData = []
     },
@@ -174,8 +182,9 @@ export default {
       }
       this.$fetch('/user/urequisition/getPaymentScheduleList', data).then(res => {
         this.loading = false
+        // console.log(this.tableData3)
         if (res.code === 0) {
-          this.tablgData3 = res.data.rows
+          this.tableData3 = res.data.rows
           this.pagination.total = res.data.records
         }
       })

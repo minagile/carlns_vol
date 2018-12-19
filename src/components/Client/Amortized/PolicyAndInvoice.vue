@@ -37,21 +37,23 @@
       <!-- <el-table-column prop="batch" label="批次"></el-table-column> -->
       <el-table-column prop="name" label="公司名称" min-width="300"></el-table-column>
       <el-table-column prop="time" label="投保时间" width="120"></el-table-column>
-      <el-table-column prop="policy" label="保单">
+      <el-table-column prop="policy" label="保单" width="120">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" alt="">
+          <!-- <img src="../../../assets/img/img.png" alt=""> -->
+          <el-button type="text" @click="lookDetail(scope.row, 1)" :style="{color: scope.row.policy ? '#409EFF' : '#ccc'}">下载</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="invoice" label="发票">
+      <el-table-column prop="invoice" label="发票" width="120">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" alt="">
+          <!-- <img src="../../../assets/img/img.png" alt=""> -->
+          <el-button type="text" @click="lookDetail(scope.row, 2)" :style="{color: scope.row.invoice ? '#409EFF' : '#ccc'}">下载</el-button>
         </template>
       </el-table-column>
-      <el-table-column width="220">
+      <!-- <el-table-column width="220">
         <template slot-scope="scope">
           <el-button type="text" @click="lookDetail(scope.row)">下载保单及发票</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <el-pagination v-if="total > NumValue"
@@ -103,13 +105,20 @@ export default {
     reload () {
       this.getData()
     },
-    lookDetail (id) {
-      if (!id.invoice && !id.policy) {
-        this.$message('没有文件')
-      } else {
-        this.$message('没有文件')
-        window.open(id.policy)
-        window.open(id.invoice)
+    lookDetail (id, i) {
+      if (i === 1) {
+        if (!id.policy) {
+          this.$message('没有文件')
+        } else {
+          window.open(id.policy)
+        }
+      }
+      if (i === 2) {
+        if (!id.invoice) {
+          this.$message('没有文件')
+        } else {
+          window.open(id.invoice)
+        }
       }
     },
     handleSelectionChange (val) {

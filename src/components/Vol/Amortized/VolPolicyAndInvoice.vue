@@ -39,13 +39,13 @@
         <el-table-column prop="policy" label="保单" width="120">
           <template slot-scope="scope">
             <!-- <img src="../../../assets/img/img.png" alt=""> -->
-            <el-button type="text" v-if="scope.row.policy !== ''" @click="lookDetail(scope.row, 1)">下载</el-button>
+            <el-button type="text" @click="lookDetail(scope.row, 1)" :style="{color: scope.row.policy ? '#409EFF' : '#ccc'}">下载</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="invoice" label="发票" width="120">
           <template slot-scope="scope">
             <!-- <img src="../../../assets/img/img.png" alt=""> -->
-            <el-button type="text" v-if="scope.row.policy !== ''" @click="lookDetail(scope.row, 2)">下载</el-button>
+            <el-button type="text" @click="lookDetail(scope.row, 2)" :style="{color: scope.row.invoice ? '#409EFF' : '#ccc'}">下载</el-button>
           </template>
         </el-table-column>
         <!-- <el-table-column>
@@ -112,7 +112,7 @@ export default {
         }
       }
       if (i === 2) {
-        if (!id.invoicey) {
+        if (!id.invoice) {
           this.$message('没有文件')
         } else {
           window.open(id.invoice)

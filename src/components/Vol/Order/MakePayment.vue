@@ -27,23 +27,40 @@
       </div>
     </div>
     <div class="nextHeader" style="border: none">
+      <!-- <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-change="handleChange"
+        :multiple="false"
+        limit="1"
+        :file-list="fileList3">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload> -->
       <div class="upfilekuang">
-        <div class="upfile">
-          <img src="../../../assets/vimg/upload.png" alt="">
+        <div class="upfile" v-loading="loading1">
+          <img v-if="name === '上传保单'" src="../../../assets/vimg/upload.png" alt="">
+          <img v-if="name !== '上传保单'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name}}</p>
+          <!-- <a @click="delFlod(1)">删除</a> -->
           <input type="file" @change="upfile($event, 1)">
         </div>
-        <div class="upfile">
-          <img src="../../../assets/vimg/upload.png" alt="">
+        <div class="upfile" v-loading="loading2">
+          <img v-if="name1 === '上传付款计划表'" src="../../../assets/vimg/upload.png" alt="">
+          <img v-if="name1 !== '上传付款计划表'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name1}}</p>
+          <!-- <a @click="delFlod(2)">删除</a> -->
           <input type="file"  @change="upfile($event, 2)">
         </div>
-        <div class="upfile">
-          <img src="../../../assets/vimg/upload.png" alt="">
+        <div class="upfile" v-loading="loading3">
+          <img v-if="name2 === '上传发票扫描件'" src="../../../assets/vimg/upload.png" alt="">
+          <img v-if="name2 !== '上传发票扫描件'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name2}}</p>
+          <!-- <a @click="delFlod(3)">删除</a> -->
           <input type="file"  @change="upfile($event, 3)">
         </div>
-        <el-button class="up" @click="uploadfile">上传</el-button>
+        <!-- <el-button class="up" @click="uploadfile">上传</el-button> -->
+        <el-progress v-if="per != 0" :percentage="per" status="success"></el-progress>
       </div>
 
       <!-- <div class="addNumber">
@@ -182,7 +199,11 @@ export default {
       name: '上传保单',
       name1: '上传付款计划表',
       name2: '上传发票扫描件',
-      value1: ''
+      value1: '',
+      per: 0,
+      loading1: false,
+      loading2: false,
+      loading3: false
     }
   },
   mounted () {
@@ -282,19 +303,54 @@ export default {
     },
     upfile (e, i) {
       var file = e.target.files[0]
+      var formData = new FormData()
+      // console.log(file.progress)
       // console.log(file)
+      var config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'token': sessionStorage.getItem('token')
+        }
+      }
+      let url = ''
       if (i === 1) {
+        url = '/admin/requisition/uploadPolicyFile'
         this.file1 = file
+        this.loading1 = true
+        formData.append('policyFile', this.file1)
         this.name = e.target.files[0].name
       }
+      // /admin/requisition/uploadScheduleFile
       if (i === 2) {
+        url = '/admin/requisition/uploadScheduleFile'
         this.file2 = file
+        this.loading2 = true
+        formData.append('scheduleFile', this.file2)
         this.name1 = e.target.files[0].name
       }
+      // /admin/requisition/uploadinvoiceFiles
       if (i === 3) {
+        url = '/admin/requisition/uploadinvoiceFiles'
         this.file3 = file
+        this.loading3 = true
+        formData.append('invoiceFile', this.file3)
         this.name2 = e.target.files[0].name
       }
+      formData.append('channelId', this.channelId)
+      formData.append('requisitionId', this.batch)
+      this.$http.post(Req + url, formData, config).then(res => {
+        // console.log(res)
+        // this.fullscreenLoading = false
+        // this.per = 100
+        this.loading1 = false
+        this.loading2 = false
+        this.loading3 = false
+        if (res.code === 0) {
+          this.$message.success(res.data.msg)
+        } else {
+          this.$message(res.data.msg)
+        }
+      })
     },
     uploadfile () {
       if (this.file1 === '') {
@@ -482,7 +538,8 @@ export default {
   padding-top: 12px;
   padding-bottom: 80px;
   .upfilekuang{
-    width:609px;
+    // width:609px;
+    padding: 0 43px 0 33px;
     height:106px;
     background:rgba(255,255,255,1);
     box-shadow:0px 1px 5px 0px rgba(181,181,181,0.3);

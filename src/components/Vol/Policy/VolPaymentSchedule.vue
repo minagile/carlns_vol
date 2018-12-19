@@ -43,8 +43,9 @@
       </el-table-column>
       <el-table-column label="付款计划表" width="220">
         <template slot-scope="scope">
-          <img src="../../../assets/img/img.png" width="50" alt="">
+          <!-- <img src="../../../assets/img/img.png" width="50" alt=""> -->
           <el-button type="text"  @click="watchPrice(scope.row.requisitionId)">点击查看付款计划表</el-button>
+          <el-button type="text"  @click="watchPriceopen(scope.row.requisitionId)">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -173,6 +174,13 @@ export default {
     this.getData()
   },
   methods: {
+    watchPriceopen (id) {
+      let routeData = this.$router.resolve({
+        name: 'AlertSchedule',
+        query: { id: id }
+      })
+      window.open(routeData.href, '_blank')
+    },
     hide () {
       this.gridData = []
     },
@@ -300,76 +308,76 @@ function zero (data) {
     padding-bottom: 20px;
   }
   .el-dialog {
-  // .dialog-header {
-  //   background: #4977FC;
-  //   color: #fff;
-  // }
-  .dia {
-    padding: 0 15px;
-    height: 600px;
-    overflow: scroll;
-  }
-  padding: 15px 191px 32px;
-  p {
-    font-size: 15px;
-    line-height: 30px;
-  }
-  .order-table-header {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    padding: 21px 26px;
-    font-size: 16px;
-    font-weight:bold;
-    background:rgba(248,248,248,1);
-    height:58px;
-    box-sizing: border-box;
-    border: 1px solid #E5E5E5;
-    border-bottom: 0;
-  }
-  table {
-    border-collapse: collapse;
-    // display: block;
-    width: 100%;
-    input {
-      border: none;
-      padding: 0 10px;
-      width: 11.5%;
+    // .dialog-header {
+    //   background: #4977FC;
+    //   color: #fff;
+    // }
+    .dia {
+      padding: 0 15px;
+      height: 600px;
+      overflow: scroll;
     }
-    td, th{
+    padding: 15px 191px 32px;
+    p {
+      font-size: 15px;
+      line-height: 30px;
+    }
+    .order-table-header {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding: 21px 26px;
+      font-size: 16px;
+      font-weight:bold;
+      background:rgba(248,248,248,1);
+      height:58px;
+      box-sizing: border-box;
       border: 1px solid #E5E5E5;
-      text-align: left;
-      height: 50px;
-      color: #262626;
-      font-weight: normal;
-      text-indent: 13px;
-      input {
-        width: 100%;
-        display: block;
-        padding: 0;
-        text-indent: 13px;
-        height: 50px;
-        line-height: 50px;
-      }
+      border-bottom: 0;
     }
-  }
-  border: 0;
-  table {
-    // margin-top: 20px;
-    margin-bottom: 35px;
-    td {
-      p {
-        float: left;
-        &:last-child {
-          float: right;
+    table {
+      border-collapse: collapse;
+      // display: block;
+      width: 100%;
+      input {
+        border: none;
+        padding: 0 10px;
+        width: 11.5%;
+      }
+      td, th{
+        border: 1px solid #E5E5E5;
+        text-align: left;
+        height: 50px;
+        color: #262626;
+        font-weight: normal;
+        text-indent: 13px;
+        input {
+          width: 100%;
+          display: block;
+          padding: 0;
+          text-indent: 13px;
+          height: 50px;
+          line-height: 50px;
         }
       }
     }
+    border: 0;
+    table {
+      // margin-top: 20px;
+      margin-bottom: 35px;
+      td {
+        p {
+          float: left;
+          &:last-child {
+            float: right;
+          }
+        }
+      }
+    }
+    .t {
+      text-align: right;
+      line-height: 50px;
+    }
   }
-  .t {
-    text-align: right;
-    line-height: 50px;
-  }
-}
 }
 </style>

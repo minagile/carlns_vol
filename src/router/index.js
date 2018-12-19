@@ -51,6 +51,8 @@ import BlackList from '@/components/Vol/Black/BlackList'
 import ChannelManagement from '@/components/Vol/Setting/ChannelManagement'
 import AccountManagement from '@/components/Vol/Setting/AccountManagement'
 
+import AlertSchedule from '@/components/common/AlertSchedule'
+
 Vue.use(Router)
 
 export default new Router({
@@ -389,6 +391,11 @@ export default new Router({
       meta: {
         title: '车险服务平台客户端'
       }
+    },
+    {
+      path: '/AlertSchedule',
+      name: 'AlertSchedule',
+      component: AlertSchedule
     }
   ]
 })

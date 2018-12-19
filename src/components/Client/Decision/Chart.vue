@@ -110,6 +110,7 @@ export default {
     getEchart (x, y) {
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
+        color: ['#3398DB', '#D53A35'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -171,15 +172,15 @@ export default {
             name: this.name,
             type: 'bar',
             barWidth: '30%',
-            data: y,
-            itemStyle: {
-              normal: {
-                color: function (params) {
-                  var colorList = ['#F0788F', '#DE76CA', '#9972E7', '#6E72EA']
-                  return colorList[params.dataIndex]
-                }
-              }
-            }
+            data: y
+            // itemStyle: {
+            //   normal: {
+            //     color: function (params) {
+            //       var colorList = ['#F0788F', '#DE76CA', '#9972E7', '#6E72EA']
+            //       return colorList[params.dataIndex]
+            //     }
+            //   }
+            // }
           }
         ]
       })
@@ -193,6 +194,7 @@ export default {
       }
       let myChart1 = echarts.init(document.getElementById('main1'))
       myChart1.setOption({
+        color: ['#3398DB', '#D53A35'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -254,22 +256,22 @@ export default {
             type: 'bar',
             barWidth: '30%',
             data: y,
-            label: label,
+            label: label
             // barWidth: 30,
-            itemStyle: {
-              color: '#5F72B4'
-            }
+            // itemStyle: {
+            //   color: '#5F72B4'
+            // }
           },
           {
             name: '商业险占比',
             type: 'bar',
             barWidth: '30%',
             data: yy,
-            label: label,
+            label: label
             // barWidth: 30,
-            itemStyle: {
-              color: '#FE6F5F'
-            }
+            // itemStyle: {
+            //   color: '#FE6F5F'
+            // }
           }
         ]
       })
@@ -289,7 +291,7 @@ export default {
           stack: name,
           data: [],
           symbol: 'circle',
-          symbolSize: '16',
+          symbolSize: '6',
           itemStyle: {
             borderWidth: 2,
             borderColor: '#fff',
@@ -373,6 +375,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
+        color: ['#b34020', '#d95132', '#ff6347', '#ff8170', '#ffa199', '#DD6C62', '#B7463C', '#93190E', '#740F05'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -399,7 +402,7 @@ export default {
             type: 'pie',
             // radius: ['50%', '70%'],
             avoidLabelOverlap: false,
-            color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
+            // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
                 show: false,

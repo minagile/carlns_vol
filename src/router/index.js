@@ -63,43 +63,64 @@ export default new Router({
       name: 'Basic',
       component: Basic,
       meta: {
-        title: '车险客户端'
+        title: '车险服务平台客户端'
       },
       children: [
         {
           path: '/HomePage',
           name: 'HomePage',
-          component: HomePage
+          component: HomePage,
+          meta: {
+            title: '车险服务平台客户端'
+          }
         },
         {
           path: '/PolicyAd',
           name: 'PolicyAd',
           component: PolicyAd,
+          meta: {
+            title: '车险服务平台客户端'
+          },
           children: [
             {
               path: '/PolicyAd/DebitNote',
               name: 'DebitNote',
-              component: DebitNote
+              component: DebitNote,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/PolicyAd/Quotation',
               name: 'Quotation',
-              component: Quotation
+              component: Quotation,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/PolicyAd/FirstPeriod',
               name: 'FirstPeriod',
-              component: FirstPeriod
+              component: FirstPeriod,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/PolicyAd/PaymentSchedule',
               name: 'PaymentSchedule',
-              component: PaymentSchedule
+              component: PaymentSchedule,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/PolicyAd/InsuranceCancel',
               name: 'InsuranceCancel',
-              component: InsuranceCancel
+              component: InsuranceCancel,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             }
           ]
         },
@@ -107,33 +128,51 @@ export default new Router({
           path: '/Amortized',
           name: 'Amortized',
           component: Amortized,
+          meta: {
+            title: '车险服务平台客户端'
+          },
           children: [
             {
               path: '/Amortized/StageList',
               name: 'StageList',
-              component: StageList
+              component: StageList,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/Amortized/ReimbursementDetail',
               name: 'ReimbursementDetail',
-              component: ReimbursementDetail
+              component: ReimbursementDetail,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             },
             {
               path: '/Amortized/PolicyAndInvoice',
               name: 'PolicyAndInvoice',
-              component: PolicyAndInvoice
+              component: PolicyAndInvoice,
+              meta: {
+                title: '车险服务平台客户端'
+              }
             }
           ]
         },
         {
           path: '/Decision',
           name: 'Decision',
-          component: Decision
+          component: Decision,
+          meta: {
+            title: '车险服务平台客户端'
+          }
         },
         {
           path: '/Setting',
           name: 'Setting',
-          component: Setting
+          component: Setting,
+          meta: {
+            title: '车险服务平台客户端'
+          }
         }
       ]
     },
@@ -156,27 +195,42 @@ export default new Router({
         {
           path: '/vol/VolHomePage',
           name: 'VolHomePage',
-          component: VolHomePage
+          component: VolHomePage,
+          meta: {
+            title: '车险服务管理后台'
+          }
         },
         {
           path: '/vol/VolOrderApply',
           name: 'VolOrderApply',
           component: VolOrderApply,
+          meta: {
+            title: '车险服务管理后台'
+          },
           children: [
             {
               path: '/vol/VolOrderApply/QuotationOrder',
               name: 'QuotationOrder',
-              component: QuotationOrder
+              component: QuotationOrder,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolOrderApply/MakePayment',
               name: 'MakePayment',
-              component: MakePayment
+              component: MakePayment,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolOrderApply/AddByPerson',
               name: 'AddByPerson',
-              component: AddByPerson
+              component: AddByPerson,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         },
@@ -184,31 +238,49 @@ export default new Router({
           path: '/vol/VolPolicyAd',
           name: 'VolPolicyAd',
           component: VolPolicyAd,
+          meta: {
+            title: '车险服务管理后台'
+          },
           children: [
             {
               path: '/vol/VolPolicyAd/VolDebitNote',
               name: 'VolDebitNote',
-              component: VolDebitNote
+              component: VolDebitNote,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolPolicyAd/VolQuotation',
               name: 'VolQuotation',
-              component: VolQuotation
+              component: VolQuotation,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolPolicyAd/VolFirstPeriod',
               name: 'VolFirstPeriod',
-              component: VolFirstPeriod
+              component: VolFirstPeriod,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolPolicyAd/VolPaymentSchedule',
               name: 'VolPaymentSchedule',
-              component: VolPaymentSchedule
+              component: VolPaymentSchedule,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolPolicyAd/VolInsuranceCancel',
               name: 'VolInsuranceCancel',
-              component: VolInsuranceCancel
+              component: VolInsuranceCancel,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         },
@@ -216,21 +288,33 @@ export default new Router({
           path: '/vol/VolAmortized',
           name: 'VolAmortized',
           component: VolAmortized,
+          meta: {
+            title: '车险服务管理后台'
+          },
           children: [
             {
               path: '/vol/VolAmortized/VolStageList',
               name: 'VolStageList',
-              component: VolStageList
+              component: VolStageList,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolAmortized/VolReimbursementDetail',
               name: 'VolReimbursementDetail',
-              component: VolReimbursementDetail
+              component: VolReimbursementDetail,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolAmortized/VolPolicyAndInvoice',
               name: 'VolPolicyAndInvoice',
-              component: VolPolicyAndInvoice
+              component: VolPolicyAndInvoice,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         },
@@ -238,16 +322,25 @@ export default new Router({
           path: '/vol/VolDecision',
           name: 'VolDecision',
           component: VolDecision,
+          meta: {
+            title: '车险服务管理后台'
+          },
           children: [
             {
               path: '/vol/VolDecision/Calculater',
               name: 'Calculater',
-              component: Calculater
+              component: Calculater,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolDecision/Chart',
               name: 'Chart',
-              component: Chart
+              component: Chart,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         },
@@ -259,7 +352,10 @@ export default new Router({
             {
               path: '/vol/VolBlackList/BlackList',
               name: 'BlackList',
-              component: BlackList
+              component: BlackList,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         },
@@ -271,12 +367,18 @@ export default new Router({
             {
               path: '/vol/VolSetting/ChannelManagement',
               name: 'ChannelManagement',
-              component: ChannelManagement
+              component: ChannelManagement,
+              meta: {
+                title: '车险服务管理后台'
+              }
             },
             {
               path: '/vol/VolSetting/AccountManagement',
               name: 'AccountManagement',
-              component: AccountManagement
+              component: AccountManagement,
+              meta: {
+                title: '车险服务管理后台'
+              }
             }
           ]
         }

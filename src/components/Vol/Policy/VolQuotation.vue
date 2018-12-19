@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="coverageName" label="险种" width="100"></el-table-column>
-      <el-table-column label="投保时间" width="120">
+      <el-table-column label="订单生成时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
         </template>

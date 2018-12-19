@@ -595,7 +595,7 @@ export default {
     }
   }
   .change {
-    float: right;
+    text-align: right;
     font-size: 0;
     button {
       width: 60px;

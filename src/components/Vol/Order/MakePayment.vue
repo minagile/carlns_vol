@@ -16,6 +16,7 @@
           filterable
           remote
           default-first-option
+          @change="changeOrder"
           placeholder="请选择订单号" @visible-change="selectBatch">
           <el-option
             v-for="item in options1"
@@ -27,37 +28,27 @@
       </div>
     </div>
     <div class="nextHeader" style="border: none">
-      <!-- <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-change="handleChange"
-        :multiple="false"
-        limit="1"
-        :file-list="fileList3">
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload> -->
       <div class="upfilekuang">
         <div class="upfile" v-loading="loading1">
           <img v-if="name === '上传保单'" src="../../../assets/vimg/upload.png" alt="">
           <img v-if="name !== '上传保单'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name}}</p>
-          <!-- <a @click="delFlod(1)">删除</a> -->
-          <input type="file" @change="upfile($event, 1)">
+          <input type="file" title="" @change="upfile($event, 1)">
+          <a @click="delFlod(1)" class="delFlod" v-show="del1">删除</a>
         </div>
         <div class="upfile" v-loading="loading2">
           <img v-if="name1 === '上传付款计划表'" src="../../../assets/vimg/upload.png" alt="">
           <img v-if="name1 !== '上传付款计划表'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name1}}</p>
-          <!-- <a @click="delFlod(2)">删除</a> -->
-          <input type="file"  @change="upfile($event, 2)">
+          <input type="file" title="" @change="upfile($event, 2)">
+          <a @click="delFlod(2)" class="delFlod" v-show="del2">删除</a>
         </div>
         <div class="upfile" v-loading="loading3">
           <img v-if="name2 === '上传发票扫描件'" src="../../../assets/vimg/upload.png" alt="">
           <img v-if="name2 !== '上传发票扫描件'" src="../../../assets/vimg/fle.png" alt="">
           <p>{{name2}}</p>
-          <!-- <a @click="delFlod(3)">删除</a> -->
-          <input type="file"  @change="upfile($event, 3)">
+          <input type="file" title="" @change="upfile($event, 3)">
+          <a @click="delFlod(3)" class="delFlod" v-show="del3">删除</a>
         </div>
         <!-- <el-button class="up" @click="uploadfile">上传</el-button> -->
         <el-progress v-if="per != 0" :percentage="per" status="success"></el-progress>
@@ -151,11 +142,6 @@
       <p class="t">{{head.name}}</p>
       <p class="t">{{head.qdate}}</p>
     </div>
-
-    <!-- <div class="btn">
-      <el-button class="cancel">取消</el-button>
-      <el-button class="submit">确定</el-button>
-    </div> -->
   </div>
 </template>
 
@@ -203,12 +189,58 @@ export default {
       per: 0,
       loading1: false,
       loading2: false,
-      loading3: false
+      loading3: false,
+      del1: false,
+      del2: false,
+      del3: false
     }
   },
   mounted () {
   },
   methods: {
+    delFlod (i) {
+      if (i === 1) {
+        this.loading1 = true
+      }
+      if (i === 2) {
+        this.loading2 = true
+      }
+      if (i === 3) {
+        this.loading3 = true
+      }
+      this.$post('/admin/requisition/deleteFile', {
+        type: i,
+        channelId: this.channelId,
+        requisitionId: this.batch
+      }).then(res => {
+        this.loading1 = false
+        this.loading2 = false
+        this.loading3 = false
+        if (i === 1) {
+          this.del1 = false
+          this.name = '上传保单'
+        }
+        if (i === 2) {
+          this.del2 = false
+          this.name1 = '上传付款计划表'
+        }
+        if (i === 3) {
+          this.del3 = false
+          this.name2 = '上传发票扫描件'
+        }
+        // console.log(res)
+        if (res.code === 0) {
+          this.$message.success(res.msg)
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
+    changeOrder () {
+      this.name = '上传保单'
+      this.name1 = '上传付款计划表'
+      this.name2 = '上传发票扫描件'
+    },
     addbaodan () {
       // GET /admin/stager/addPolicyNumber
       // this.$fetch('/admin/stager/addPolicyNumber', {
@@ -317,7 +349,9 @@ export default {
         url = '/admin/requisition/uploadPolicyFile'
         this.file1 = file
         this.loading1 = true
-        formData.append('policyFile', this.file1)
+        this.del1 = true
+        // formData.append('policyFile', this.file1)
+        formData.append('policyFile', file)
         this.name = e.target.files[0].name
       }
       // /admin/requisition/uploadScheduleFile
@@ -325,7 +359,9 @@ export default {
         url = '/admin/requisition/uploadScheduleFile'
         this.file2 = file
         this.loading2 = true
-        formData.append('scheduleFile', this.file2)
+        this.del2 = true
+        // formData.append('scheduleFile', this.file2)
+        formData.append('scheduleFile', file)
         this.name1 = e.target.files[0].name
       }
       // /admin/requisition/uploadinvoiceFiles
@@ -333,15 +369,15 @@ export default {
         url = '/admin/requisition/uploadinvoiceFiles'
         this.file3 = file
         this.loading3 = true
-        formData.append('invoiceFile', this.file3)
+        this.del3 = true
+        // formData.append('invoiceFile', this.file3)
+        formData.append('invoiceFile', file)
         this.name2 = e.target.files[0].name
       }
       formData.append('channelId', this.channelId)
       formData.append('requisitionId', this.batch)
+      e.target.value = null
       this.$http.post(Req + url, formData, config).then(res => {
-        // console.log(res)
-        // this.fullscreenLoading = false
-        // this.per = 100
         this.loading1 = false
         this.loading2 = false
         this.loading3 = false
@@ -564,6 +600,16 @@ export default {
       margin-left: 15px;
       cursor: pointer;
       position: relative;
+      .delFlod {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 12px;
+        color: #0770FF;
+        &:hover {
+          color: red;
+        }
+      }
       img {
         margin-top: 8px;
       }

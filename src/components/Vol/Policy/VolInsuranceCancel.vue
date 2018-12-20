@@ -25,6 +25,12 @@
       <el-table-column prop="carNumber" label="车牌" min-width="100"></el-table-column>
       <el-table-column prop="channelName" label="公司"  min-width="300"></el-table-column>
       <el-table-column prop="coverageName" label="险种" width="100"></el-table-column>
+      <el-table-column label="退保金额" min-width="200">
+        <template slot-scope="scope">
+          <input type="text" placeholder="请输入退保金额" v-model="scope.row.carEndMoney">
+          <el-button type="text" @click="addCarMoney(scope.row.carId, scope.row.carEndMoney)">修改</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="投保时间" width="120">
         <template slot-scope="scope">
           {{ scope.row.createTime | timeChange }}
@@ -165,6 +171,21 @@ export default {
     this.getData()
   },
   methods: {
+    // 添加修改退保金额
+    addCarMoney (id, data) {
+      // console.log(id, data)
+      this.$post('/admin/car/dropCarMoney', {
+        carId: id,
+        carEndMoney: data
+      }).then(res => {
+        if (res.code === 0) {
+          this.$message.success(res.msg)
+          this.getData()
+        } else {
+          this.$message(res.msg)
+        }
+      })
+    },
     tuibaobtn (id) {
       this.innerVisible = true
       this.id = id
@@ -368,8 +389,17 @@ function zero (data) {
 </script>
 
 <style lang="less" scoped>
-.el-pagination  {
+.el-table  {
   // margin-top: 50px;
+  input {
+    width: 100px;
+    height: 30px;
+    border: 0;
+    color: #606266;
+  }
+  input::-webkit-input-placeholder {
+    color: #999;
+  }
 }
 .VolInsuranceCancel {
   .tuibao {

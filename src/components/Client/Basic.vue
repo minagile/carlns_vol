@@ -14,7 +14,7 @@
             <el-dropdown>
               <p><span class="iconfont">&#xe626;</span>{{name}}</p>
               <el-dropdown-menu slot="dropdown">
-                <!-- <span @click="dialogVisible = true"><el-dropdown-item>修改密码</el-dropdown-item></span> -->
+                <span @click="dialogVisible = true"><el-dropdown-item>修改密码</el-dropdown-item></span>
                 <span @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></span>
               </el-dropdown-menu>
             </el-dropdown>
@@ -24,11 +24,23 @@
     <router-view :key="$route.fullpath"></router-view>
     <el-dialog
       :visible.sync="dialogVisible"
-      width="30%">
+      width="550px">
       <div class="dialog-header1">
         修改密码
       </div>
-      <span>这是一段信息</span>
+      <div class="form">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <!-- <el-form-item label="密码">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item> -->
+          <el-form-item label="新密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.pass"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="changePwd">确 定</el-button>
@@ -42,6 +54,25 @@ import { Topbar } from '../../assets/js/img.js'
 export default {
   name: 'Basic',
   data () {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleForm.checkPass !== '') {
+          this.$refs.ruleForm.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       tabList: [
         {
@@ -72,7 +103,19 @@ export default {
       ],
       num: 0,
       name: '',
-      dialogVisible: false
+      dialogVisible: false,
+      ruleForm: {
+        pass: '',
+        checkPass: ''
+      },
+      rules: {
+        pass: [
+          { validator: validatePass, trigger: 'blur', required: true }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur', required: true }
+        ]
+      }
     }
   },
   beforeRouteUpdate (to, from, next) {
@@ -107,21 +150,26 @@ export default {
       this.$fetch('/login/logout')
     },
     changePwd () {
-      this.$post('', {
-
-      }).then(res => {
-        if (res.code === 0) {
-          this.$message({
-            type: 'success',
-            message: '修改成功'
-          })
-        } else if (res.code === 1) {
-          this.$message({
-            type: 'error',
-            message: res.msg
-          })
-        }
-      })
+      if (this.ruleForm.pass === this.ruleForm.checkPass && this.ruleForm.pass !== '') {
+        this.$post('/user/uchannel/updatePwd', {
+          pwd: this.ruleForm.pass
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '修改成功'
+            })
+            this.dialogVisible = false
+            this.ruleForm.pass = ''
+            this.ruleForm.checkPass = ''
+          } else if (res.code === 1) {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
+        })
+      }
     }
   }
 }

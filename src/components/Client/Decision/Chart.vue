@@ -80,8 +80,8 @@ export default {
       if (this.url === 'CoverageOf') {
         this.chartData.forEach(v => {
           chartX.push(v.channelName)
-          chartY.push(v.carrtafficRate)
-          chartYY.push(v.commercialRate)
+          chartY.push(v.carrtafficRate.toFixed(2))
+          chartYY.push(v.commercialRate.toFixed(2))
         })
         this.getEchartDb(chartX, chartY, chartYY)
       } else if (this.url === 'ChannelRepaymentAmountTrend') {
@@ -188,9 +188,8 @@ export default {
     getEchartDb (x, y, yy) {
       const label = {
         show: true,
-        rotate: 90,
-        position: 'insideBottom',
-        offset: [5, -50]
+        position: 'insideTop',
+        offset: [0, -20]
       }
       let myChart1 = echarts.init(document.getElementById('main1'))
       myChart1.setOption({
@@ -199,7 +198,8 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          formatter: '{a0}: {c0}%<br/>{a1}: {c1}%'
         },
         grid: {
           left: '3%',
@@ -291,16 +291,16 @@ export default {
           stack: name,
           data: [],
           symbol: 'circle',
-          symbolSize: '6',
-          itemStyle: {
-            borderWidth: 2,
-            borderColor: '#fff',
-            shadowColor: 'rgba(0, 0, 0, 0.3)',
-            shadowBlur: 4
-          },
-          lineStyle: {
-            width: 4
-          }
+          symbolSize: '4'
+          // itemStyle: {
+          //   borderWidth: 2,
+          //   borderColor: '#fff',
+          //   shadowColor: 'rgba(0, 0, 0, 0.3)',
+          //   shadowBlur: 4
+          // }
+          // lineStyle: {
+          //   width: 4
+          // }
         })
         data[1].forEach((v, k) => {
           seriesData[n].data.push(v.value[name])
@@ -308,9 +308,12 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#87e5da', '#92a4c0', '#f4adad', '#e58cdb', '#d0efb5', '#eb7878', '#2f3e75', '#f3e595', '#eda1c1', '#fab2ac', '#bee4d2', '#d7f8f7'],
+        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
         tooltip: {
-          trigger: 'item'
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          }
         },
         legend: {
           type: 'plain',
@@ -319,8 +322,8 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            start: 70,
-            bottom: 50
+            start: 10
+            // bottom: 50
           }
         ],
         grid: {
@@ -375,7 +378,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#b34020', '#d95132', '#ff6347', '#ff8170', '#ffa199', '#DD6C62', '#B7463C', '#93190E', '#740F05'],
+        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

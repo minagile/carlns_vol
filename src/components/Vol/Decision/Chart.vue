@@ -403,17 +403,17 @@ export default {
           stack: name,
           data: [],
           symbol: 'circle',
-          symbolSize: '6',
-          smooth: true,
-          itemStyle: {
-            borderWidth: 2,
-            borderColor: '#fff',
-            shadowColor: 'rgba(0, 0, 0, 0.3)',
-            shadowBlur: 4
-          },
-          lineStyle: {
-            width: 4
-          }
+          symbolSize: '4'
+          // smooth: true,
+          // itemStyle: {
+          //   borderWidth: 2,
+          //   borderColor: '#fff',
+          //   shadowColor: 'rgba(0, 0, 0, 0.3)',
+          //   shadowBlur: 4
+          // }
+          // lineStyle: {
+          //   width: 4
+          // }
         })
         data[1].forEach((v, k) => {
           seriesData[n].data.push(v.value[name])
@@ -421,9 +421,12 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#87e5da', '#92a4c0', '#f4adad', '#e58cdb', '#d0efb5', '#eb7878', '#2f3e75', '#f3e595', '#eda1c1', '#fab2ac', '#bee4d2', '#d7f8f7'],
+        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
         tooltip: {
-          trigger: 'item'
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          }
         },
         legend: {
           type: 'plain',
@@ -444,8 +447,8 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            start: 70,
-            bottom: 50
+            start: 10
+            // bottom: 50
           }
         ],
         xAxis: {
@@ -488,7 +491,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#b34020', '#d95132', '#ff6347', '#ff8170', '#ffa199', '#DD6C62', '#B7463C', '#93190E', '#740F05'],
+        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

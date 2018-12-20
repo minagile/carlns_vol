@@ -302,14 +302,14 @@ export default {
       let chartYY = []
       this.chartData.forEach(v => {
         chartX.push(v.channelName)
-        chartY.push(v.carrtafficRate)
-        chartYY.push(v.commercialRate)
+        chartY.push(v.carrtafficRate.toFixed(2))
+        chartYY.push(v.commercialRate.toFixed(2))
       })
       const label = {
         show: true,
-        rotate: 90,
-        position: 'insideBottom',
-        offset: [5, -50]
+        // rotate: 90,
+        position: 'insideTop',
+        offset: [0, -20]
       }
       let myChart1 = echarts.init(document.getElementById('main1'))
       myChart1.setOption({
@@ -318,7 +318,8 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          formatter: '{a0}: {c0}%<br/>{a1}: {c1}%'
         },
         grid: {
           left: '3%',

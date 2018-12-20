@@ -128,6 +128,7 @@
           <table v-if="!show8" class="table2">
             <tr>
               <th></th>
+              <th>总分期金额</th>
               <th>总垫付</th>
               <th>应收入</th>
               <th>实际收入</th>
@@ -137,29 +138,34 @@
             </tr>
             <tr>
               <th>统计商业险</th>
-              <td>{{this.tableList2.advances}}</td>
-              <td>{{this.tableList2.income}}</td>
-              <td>{{this.tableList2.trueIncome}}</td>
-              <td>{{this.tableList2.principal}}</td>
-              <td>{{this.tableList2.profit}}</td>
-              <td>{{this.tableList2.trueProfit}}</td>
+              <td>{{tableList2.allMoney}}</td>
+              <td>{{tableList2.advances}}</td>
+              <td>{{tableList2.income}}</td>
+              <td>{{tableList2.trueIncome}}</td>
+              <td>{{tableList2.principal}}</td>
+              <td>{{tableList2.profit}}</td>
+              <td>{{tableList2.trueProfit}}</td>
             </tr>
             <tr>
               <th>统计交强险</th>
-              <td>{{this.tableList2.cAdvances}}</td>
-              <td>{{this.tableList2.cIncome}}</td>
-              <td>{{this.tableList2.cTrueIncome}}</td>
-              <td>{{this.tableList2.cPrincipal}}</td>
-              <td>{{this.tableList2.cProfit}}</td>
-              <td>{{this.tableList2.cTrueProfit}}</td>
+              <td>{{tableList2.cAllMoney}}</td>
+              <td>{{tableList2.cAdvances}}</td>
+              <td>{{tableList2.cIncome}}</td>
+              <td>{{tableList2.cTrueIncome}}</td>
+              <td>{{tableList2.cPrincipal}}</td>
+              <td>{{tableList2.cProfit}}</td>
+              <td>{{tableList2.cTrueProfit}}</td>
             </tr>
-            <!-- <tr>
+            <tr>
               <th>合计</th>
-              <td>{{resSoure.total.a}}</td>
-              <td>{{resSoure.total.b}}</td>
-              <td>{{resSoure.total.c}}</td>
-              <td>{{resSoure.total.d}}</td>
-            </tr> -->
+              <td>{{tableList2.countAllMoney}}</td>
+              <td>{{tableList2.countAdvances}}</td>
+              <td>{{tableList2.countIncome}}</td>
+              <td>{{tableList2.countTrueIncome}}</td>
+              <td>{{tableList2.countPrincipal}}</td>
+              <td>{{tableList2.countProfit}}</td>
+              <td>{{tableList2.countTrueProfit}}</td>
+            </tr>
           </table>
       </div>
       </div>
@@ -249,7 +255,9 @@ export default {
       timeType: '',
       show8: true,
       tableList2: {
+        allMoney: 0,
         advances: 0,
+        cAllMoney: 0,
         cAdvances: 0,
         cIncome: 0,
         cPrincipal: 0,
@@ -261,7 +269,14 @@ export default {
         profit: 0,
         trueIncome: 0,
         trueProfit: 0,
-        type: 0
+        type: 0,
+        countAllMoney: 0,
+        countAdvances: 0,
+        countIncome: 0,
+        countTrueIncome: 0,
+        countPrincipal: 0,
+        countProfit: 0,
+        countTrueProfit: 0
       }
     }
   },
@@ -515,7 +530,7 @@ export default {
       // background: white;
       width: 100%;
       td, th {
-        width: 100% / 7;
+        width: 100% / 8;
         text-align: center;
         height: 20px;
       }

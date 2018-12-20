@@ -18,7 +18,7 @@
       </div>
       <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
       <div id="main1"  style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
@@ -114,7 +114,9 @@ export default {
       chartYY: [],
       tablePie: [],
       table: '',
-      name: '分期总金额'
+      name: '分期总金额',
+      yName: '金额',
+      ziqudao: 0
     }
   },
   mounted () {
@@ -140,8 +142,8 @@ export default {
           } else if (data === 'ChannelRepaymentAmountTrend') {
             this.getEchartZhe(res.data)
           } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
-            this.getEchartPie()
-          } else {
+            // this.getEchartPie()
+          } else if (data === 'TotalAmountInStages' || data === 'TotalAmountOfRepayment') {
             this.getEchart()
           }
         } else {
@@ -155,7 +157,11 @@ export default {
         this.$post(`/admin/report/${table}`, this.selectData).then(res => {
           if (res.code === 0) {
             this.tablePie = res.data
-            this.getEchartPie()
+            if (this.ziqudao !== 0 || data === 'ChannelsOf') {
+              this.getEchartPie()
+            } else {
+              this.getEchart()
+            }
           } else {
             this.$message({
               type: 'info',
@@ -166,6 +172,7 @@ export default {
       }
     },
     allTime (data) { // 处理子组件数据
+      this.ziqudao = data.report
       if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
@@ -249,7 +256,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -344,7 +351,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -545,6 +552,15 @@ export default {
   },
   components: {
     Selector
+  },
+  watch: {
+    name (val) {
+      if (this.name === '分期总金额' || this.name === '还款总金额') {
+        this.yName = '金额'
+      } else {
+        this.yName = '%'
+      }
+    }
   }
 }
 </script>

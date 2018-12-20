@@ -528,8 +528,8 @@ export default {
             // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
-                show: false,
-                position: 'center'
+                show: true
+                // position: 'inner'
               },
               emphasis: {
                 show: true,
@@ -539,11 +539,11 @@ export default {
                 }
               }
             },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
+            // labelLine: {
+            //   normal: {
+            //     show: false
+            //   }
+            // },
             data: this.tablePie
           }
         ]

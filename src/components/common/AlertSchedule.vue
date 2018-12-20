@@ -4,7 +4,7 @@
     <div class="dialog-header">业务清单及付款计划表</div>
     <div class="dia">
       <p style="margin-bottom: 65px;">致：上海锦锭科技有限公司</p>
-      <p style="text-indent:50px;line-height: 60px;">根据我司<i> {{head.name}} </i>与贵司于 {{head.date | time}} 签订的《商户合作协议书》，我司 <i>{{head.qdate | time}}</i> 投保 <i> {{head.coverage}} </i> 的车辆业务清单如下：</p>
+      <p style="text-indent:50px;line-height: 60px;">根据我司<i> {{head.name}} </i>与贵司签订的《商户合作协议书》，我司 <i>{{head.qdate | time}}</i> 投保 <i> {{head.coverage}} </i> 的车辆业务清单如下：</p>
       <!-- <div class="order-table-header">
         <span>订单号：{{head.batch}}</span>
         <span>险种：{{head.coverage}}</span>

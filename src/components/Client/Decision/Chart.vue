@@ -47,15 +47,15 @@ export default {
         },
         {
           name: '还款率',
-          url: 'RepaymentRate'
+          url: 'RepaymentRatePie'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate'
+          url: 'OverdueRatePie'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate'
+          url: 'SurrenderRatePie'
         },
         {
           name: '险种占比',
@@ -68,8 +68,7 @@ export default {
       ],
       num: 0,
       url: '',
-      name: '分期总金额',
-      yName: '金额'
+      name: '分期总金额'
     }
   },
   props: ['chartData'],
@@ -87,7 +86,7 @@ export default {
         this.getEchartDb(chartX, chartY, chartYY)
       } else if (this.url === 'ChannelRepaymentAmountTrend') {
         this.getEchartZhe(this.chartData)
-      } else if (this.url === 'ChannelsOfPie') {
+      } else if (this.url === 'ChannelsOfPie' || this.url === 'RepaymentRatePie' || this.url === 'OverdueRatePie' || this.url === 'SurrenderRatePie') {
         this.getEchartPie()
       } else {
         this.chartData.forEach(v => {
@@ -95,13 +94,6 @@ export default {
           chartY.push(v.price)
         })
         this.getEchart(chartX, chartY)
-      }
-    },
-    name (val) {
-      if (val === '分期总金额' || val === '还款总金额') {
-        this.yName = '金额'
-      } else {
-        this.yName = '%'
       }
     }
   },
@@ -151,7 +143,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: this.yName,
+            name: '销售额',
             nameTextStyle: {
               color: '#666666'
             },
@@ -234,7 +226,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '%',
+            name: '销售额',
             nameTextStyle: {
               color: '#666666'
             },
@@ -416,8 +408,8 @@ export default {
             // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
-                show: false,
-                position: 'center'
+                show: false
+                // position: 'center'
               },
               emphasis: {
                 show: true,
@@ -427,11 +419,11 @@ export default {
                 }
               }
             },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
+            // labelLine: {
+            //   normal: {
+            //     show: false
+            //   }
+            // },
             data: this.chartData
           }
         ]

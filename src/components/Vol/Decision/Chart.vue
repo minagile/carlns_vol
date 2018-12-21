@@ -17,8 +17,8 @@
         <button :class="{active : num1 === 1}" @click="changeChart(1)"><span class="iconfont">&#xe637;</span></button>
       </div>
       <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
-      <div id="main1"  style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto"></div>
+      <div id="main1"  style="width: 1500px;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
@@ -26,22 +26,24 @@
         border
         style="width: 60.38%;margin: 100px auto 0 auto;"
         v-show="num1 === 1 && this.url !== 'ChannelRepaymentAmountTrend'"
-        :span-method="objectSpanMethod">
+        :span-method="objectSpanMethod"
+        show-summary>
         <el-table-column prop="channelName" label="渠道"></el-table-column>
-        <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
-        <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
+        <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
+        <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
         <el-table-column prop="overdue" label="未还" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="HasBeenPayment" label="已还" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="price" label="逾期率" v-if="url === 'OverdueRate'"></el-table-column>
+        <el-table-column prop="price" label="金额" v-if="url === 'ChannelsOf'"></el-table-column>
         <el-table-column prop="price" label="还款率" v-if="url === 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf' && url !=='SurrenderRate' && url !== 'OverdueRate' && url !== 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf'"></el-table-column>
+        <el-table-column prop="price" label="总计" v-if="url === 'TotalAmountInStages' || url ==='TotalAmountOfRepayment'"></el-table-column>
+        <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf' || url === 'ChannelsOf'"></el-table-column>
         <el-table-column prop="carCount" label="退保车辆个数" v-if="url === 'SurrenderRate'"></el-table-column>
         <el-table-column prop="surrender" label="总车辆数" v-if="url === 'SurrenderRate'"></el-table-column>
-        <el-table-column prop="surrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
+        <el-table-column prop="SurrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
       </el-table>
 
-      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1" style="width:100%;">暂无数据</p>
+      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
     </div>
   </div>
 </template>
@@ -78,20 +80,23 @@ export default {
         },
         {
           name: '还款率',
-          url: 'RepaymentRate'
+          url: 'RepaymentRate',
+          table: 'RepaymentRatePie'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate'
+          url: 'OverdueRate',
+          table: 'OverdueRatePie'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate'
+          url: 'SurrenderRate',
+          table: 'SurrenderRatePie'
         },
         {
           name: '险种占比',
-          url: 'CoverageOf'
-          // table: 'CoverageOfPie'
+          url: 'CoverageOf',
+          table: 'CoverageOfPie'
         },
         {
           name: '还款总金额趋势图',
@@ -138,12 +143,10 @@ export default {
             this.getEchartDb()
           } else if (data === 'ChannelRepaymentAmountTrend') {
             this.getEchartZhe(res.data)
-          } else if (data === 'ChannelsOf') {
-            this.getEchartPie()
-          } else {
-            if (this.ziqudao === 0 || this.url === 'TotalAmountInStages' || this.url === 'TotalAmountOfRepayment') {
-              this.getEchart()
-            }
+          } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
+            // this.getEchartPie()
+          } else if (data === 'TotalAmountInStages' || data === 'TotalAmountOfRepayment') {
+            this.getEchart()
           }
         } else {
           this.$message({
@@ -156,7 +159,11 @@ export default {
         this.$post(`/admin/report/${table}`, this.selectData).then(res => {
           if (res.code === 0) {
             this.tablePie = res.data
-            this.getEchartPie()
+            if (this.ziqudao !== 0 || data === 'ChannelsOf') {
+              this.getEchartPie()
+            } else {
+              this.getEchart()
+            }
           } else {
             this.$message({
               type: 'info',
@@ -523,8 +530,8 @@ export default {
             // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
-                show: false,
-                position: 'center'
+                show: true
+                // position: 'inner'
               },
               emphasis: {
                 show: true,
@@ -534,11 +541,11 @@ export default {
                 }
               }
             },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
+            // labelLine: {
+            //   normal: {
+            //     show: false
+            //   }
+            // },
             data: this.tablePie
           }
         ]
@@ -550,51 +557,10 @@ export default {
   },
   watch: {
     name (val) {
-      if (val === '分期总金额' || val === '还款总金额') {
+      if (this.name === '分期总金额' || this.name === '还款总金额') {
         this.yName = '金额'
       } else {
         this.yName = '%'
-      }
-    },
-    ziqudao (val) {
-      if (val !== 0) {
-        if (this.url === 'RepaymentRate') {
-          this.$post(`/admin/report/RepaymentRate`, this.selectData).then(res => {
-            if (res.code === 0) {
-              this.tablePie = res.data
-              this.getEchartPie()
-            } else {
-              this.$message({
-                type: 'info',
-                message: res.msg
-              })
-            }
-          })
-        } else if (this.url === 'OverdueRatePie') {
-          this.$post(`/admin/report/OverdueRatePie`, this.selectData).then(res => {
-            if (res.code === 0) {
-              this.tablePie = res.data
-              this.getEchartPie()
-            } else {
-              this.$message({
-                type: 'info',
-                message: res.msg
-              })
-            }
-          })
-        } else if (this.url === 'SurrenderRatePie') {
-          this.$post(`/admin/report/SurrenderRatePie`, this.selectData).then(res => {
-            if (res.code === 0) {
-              this.tablePie = res.data
-              this.getEchartPie()
-            } else {
-              this.$message({
-                type: 'info',
-                message: res.msg
-              })
-            }
-          })
-        }
       }
     }
   }

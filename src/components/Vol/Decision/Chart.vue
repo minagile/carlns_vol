@@ -17,8 +17,8 @@
         <button :class="{active : num1 === 1}" @click="changeChart(1)"><span class="iconfont">&#xe637;</span></button>
       </div>
       <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
-      <div id="main1"  style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <div id="main1"  style="width: 1500px;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto;"></div>
 
       <el-table
         :data="chartData"
@@ -26,19 +26,21 @@
         border
         style="width: 60.38%;margin: 100px auto 0 auto;"
         v-show="num1 === 1 && this.url !== 'ChannelRepaymentAmountTrend'"
-        :span-method="objectSpanMethod">
+        :span-method="objectSpanMethod"
+        show-summary>
         <el-table-column prop="channelName" label="渠道"></el-table-column>
-        <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
-        <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages' || url === 'ChannelsOf'"></el-table-column>
+        <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
+        <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
         <el-table-column prop="overdue" label="未还" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="HasBeenPayment" label="已还" v-if="url === 'OverdueRate'"></el-table-column>
         <el-table-column prop="price" label="逾期率" v-if="url === 'OverdueRate'"></el-table-column>
+        <el-table-column prop="price" label="金额" v-if="url === 'ChannelsOf'"></el-table-column>
         <el-table-column prop="price" label="还款率" v-if="url === 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="price" label="总计" v-if="url !== 'CoverageOf' && url !=='SurrenderRate' && url !== 'OverdueRate' && url !== 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf'"></el-table-column>
+        <el-table-column prop="price" label="总计" v-if="url === 'TotalAmountInStages' || url ==='TotalAmountOfRepayment'"></el-table-column>
+        <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf' || url === 'ChannelsOf'"></el-table-column>
         <el-table-column prop="carCount" label="退保车辆个数" v-if="url === 'SurrenderRate'"></el-table-column>
         <el-table-column prop="surrender" label="总车辆数" v-if="url === 'SurrenderRate'"></el-table-column>
-        <el-table-column prop="surrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
+        <el-table-column prop="SurrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
       </el-table>
 
       <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
@@ -114,7 +116,9 @@ export default {
       chartYY: [],
       tablePie: [],
       table: '',
-      name: '分期总金额'
+      name: '分期总金额',
+      yName: '金额',
+      ziqudao: 0
     }
   },
   mounted () {
@@ -140,8 +144,8 @@ export default {
           } else if (data === 'ChannelRepaymentAmountTrend') {
             this.getEchartZhe(res.data)
           } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
-            this.getEchartPie()
-          } else {
+            // this.getEchartPie()
+          } else if (data === 'TotalAmountInStages' || data === 'TotalAmountOfRepayment') {
             this.getEchart()
           }
         } else {
@@ -155,7 +159,11 @@ export default {
         this.$post(`/admin/report/${table}`, this.selectData).then(res => {
           if (res.code === 0) {
             this.tablePie = res.data
-            this.getEchartPie()
+            if (this.ziqudao !== 0 || data === 'ChannelsOf') {
+              this.getEchartPie()
+            } else {
+              this.getEchart()
+            }
           } else {
             this.$message({
               type: 'info',
@@ -166,6 +174,7 @@ export default {
       }
     },
     allTime (data) { // 处理子组件数据
+      this.ziqudao = data.report
       if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
@@ -249,7 +258,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -344,7 +353,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -421,7 +430,7 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -491,7 +500,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -521,8 +530,8 @@ export default {
             // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
-                show: false,
-                position: 'center'
+                show: true
+                // position: 'inner'
               },
               emphasis: {
                 show: true,
@@ -532,11 +541,11 @@ export default {
                 }
               }
             },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
+            // labelLine: {
+            //   normal: {
+            //     show: false
+            //   }
+            // },
             data: this.tablePie
           }
         ]
@@ -545,6 +554,15 @@ export default {
   },
   components: {
     Selector
+  },
+  watch: {
+    name (val) {
+      if (this.name === '分期总金额' || this.name === '还款总金额') {
+        this.yName = '金额'
+      } else {
+        this.yName = '%'
+      }
+    }
   }
 }
 </script>

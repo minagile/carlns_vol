@@ -308,7 +308,7 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -378,7 +378,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -408,8 +408,8 @@ export default {
             // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
             label: {
               normal: {
-                show: false,
-                position: 'center'
+                show: false
+                // position: 'center'
               },
               emphasis: {
                 show: true,
@@ -419,11 +419,11 @@ export default {
                 }
               }
             },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
+            // labelLine: {
+            //   normal: {
+            //     show: false
+            //   }
+            // },
             data: this.chartData
           }
         ]

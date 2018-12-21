@@ -147,7 +147,7 @@ export default {
           // console.log(this.middle.length)
           var yu = 0
           if (res.data.middle.length > 11) {
-            if (res.data.middle.length < 15) {
+            if (res.data.middle.length <= 16) {
               this.middle = res.data.middle
               this.style = { 'page-break-before': 'left' }
               if (res.data.trailVo1) {
@@ -160,6 +160,7 @@ export default {
                 const length1 = this.orderList1.length - 1
                 this.sum1 = this.orderList1[length1].sum
               }
+              // console.log(this.orderList1)
             } else {
               this.tableShow = true
               this.middle = res.data.middle.slice(0, 15)
@@ -170,39 +171,61 @@ export default {
               }
               if (res.data.middle.length <= 30) {
                 yu = res.data.middle.length - 15
-                this.nextTableShow = true
-                if (res.data.trailVo1) {
-                  this.orderList = res.data.trailVo1.slice(0, 21 - yu)
-                  const length = res.data.trailVo1.length - 1
-                  this.orderLista = res.data.trailVo1.slice(21 - yu, length)
-                  // console.log(this.orderList)
-                  this.sum = res.data.trailVo1[length].sum
-                }
-                if (res.data.trailVo2) {
-                  this.orderList1 = res.data.trailVo2.slice(0, 21 - yu)
-                  const length = res.data.trailVo2.length - 1
-                  this.orderLista = res.data.trailVo2.slice(21 - yu, length)
-                  this.sum = res.data.trailVo2[length].sum
+                if (yu <= 9) {
+                  if (res.data.trailVo1) {
+                    this.orderList = res.data.trailVo1
+                    const length = this.orderList.length - 1
+                    this.sum = this.orderList[length].sum
+                  }
+                  if (res.data.trailVo2) {
+                    this.orderList1 = res.data.trailVo2
+                    const length1 = this.orderList1.length - 1
+                    this.sum1 = this.orderList1[length1].sum
+                  }
+                } else {
+                  this.nextTableShow = true
+                  if (res.data.trailVo1) {
+                    this.orderList = res.data.trailVo1.slice(0, 21 - yu)
+                    const length = res.data.trailVo1.length - 1
+                    this.orderLista = res.data.trailVo1.slice(21 - yu, length + 1)
+                    // console.log(this.orderList)
+                    this.sum = res.data.trailVo1[length].sum
+                  }
+                  if (res.data.trailVo2) {
+                    this.orderList1 = res.data.trailVo2.slice(0, 21 - yu)
+                    const length = res.data.trailVo2.length - 1
+                    this.orderLista = res.data.trailVo2.slice(21 - yu, length + 1)
+                    this.sum = res.data.trailVo2[length].sum
+                  }
                 }
               } else {
                 // this.style = { 'page-break-before': 'left' }
                 if (res.data.middle.length > 30) {
                   yu = (res.data.middle.length - 15) % 25
-                  if (yu > 25) {
+                  if (yu >= 22) {
                     this.style = { 'page-break-before': 'left' }
+                    if (res.data.trailVo1) {
+                      this.orderList = res.data.trailVo1
+                      const length = this.orderList.length - 1
+                      this.sum = this.orderList[length].sum
+                    }
+                    if (res.data.trailVo2) {
+                      this.orderList1 = res.data.trailVo2
+                      const length1 = this.orderList1.length - 1
+                      this.sum1 = this.orderList1[length1].sum
+                    }
                   } else {
                     this.nextTableShow = true
                     if (res.data.trailVo1) {
                       this.orderList = res.data.trailVo1.slice(0, 21 - yu)
                       const length = res.data.trailVo1.length - 1
-                      this.orderLista = res.data.trailVo1.slice(21 - yu, length)
-                      // console.log(this.orderList)
+                      this.orderLista = res.data.trailVo1.slice(21 - yu, length + 1)
                       this.sum = res.data.trailVo1[length].sum
                     }
                     if (res.data.trailVo2) {
                       this.orderList1 = res.data.trailVo2.slice(0, 21 - yu)
                       const length = res.data.trailVo2.length - 1
-                      this.orderLista = res.data.trailVo2.slice(21 - yu, length)
+                      this.orderLista = res.data.trailVo2.slice(21 - yu, length + 1)
                       this.sum = res.data.trailVo2[length].sum
                     }
                   }
@@ -212,22 +235,22 @@ export default {
           } else {
             this.middle = res.data.middle
             yu = res.data.middle.length
-            console.log(yu)
+            // console.log(yu)
             this.nextTableShow = true
             // this.style = { 'page-break-before': 'left' }
             if (res.data.trailVo1) {
               this.orderList = res.data.trailVo1.slice(0, 11 - yu)
               const length = res.data.trailVo1.length - 1
-              this.orderLista = res.data.trailVo1.slice(11 - yu, length)
-              // console.log(this.orderList)
+              this.orderLista = res.data.trailVo1.slice(11 - yu, length + 1)
               this.sum = res.data.trailVo1[length].sum
             }
             if (res.data.trailVo2) {
               this.orderList1 = res.data.trailVo2.slice(0, 11 - yu)
               const length = res.data.trailVo2.length - 1
-              this.orderLista = res.data.trailVo2.slice(11 - yu, length)
+              this.orderLista = res.data.trailVo2.slice(11 - yu, length + 1)
               this.sum = res.data.trailVo2[length].sum
             }
+            // console.log(this.orderLista)
             // if (res.data.trailVo1) {
             //   this.orderList = res.data.trailVo1
             //   const length = this.orderList.length - 1

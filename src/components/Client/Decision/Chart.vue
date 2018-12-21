@@ -47,15 +47,15 @@ export default {
         },
         {
           name: '还款率',
-          url: 'RepaymentRatePie'
+          url: 'RepaymentRate'
         },
         {
           name: '逾期率',
-          url: 'OverdueRatePie'
+          url: 'OverdueRate'
         },
         {
           name: '退保率',
-          url: 'SurrenderRatePie'
+          url: 'SurrenderRate'
         },
         {
           name: '险种占比',
@@ -68,7 +68,8 @@ export default {
       ],
       num: 0,
       url: '',
-      name: '分期总金额'
+      name: '分期总金额',
+      yName: '金额'
     }
   },
   props: ['chartData'],
@@ -86,7 +87,7 @@ export default {
         this.getEchartDb(chartX, chartY, chartYY)
       } else if (this.url === 'ChannelRepaymentAmountTrend') {
         this.getEchartZhe(this.chartData)
-      } else if (this.url === 'ChannelsOfPie' || this.url === 'RepaymentRatePie' || this.url === 'OverdueRatePie' || this.url === 'SurrenderRatePie') {
+      } else if (this.url === 'ChannelsOfPie') {
         this.getEchartPie()
       } else {
         this.chartData.forEach(v => {
@@ -94,6 +95,13 @@ export default {
           chartY.push(v.price)
         })
         this.getEchart(chartX, chartY)
+      }
+    },
+    name (val) {
+      if (val === '分期总金额' || val === '还款总金额') {
+        this.yName = '金额'
+      } else {
+        this.yName = '%'
       }
     }
   },
@@ -143,7 +151,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -226,7 +234,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '销售额',
+            name: '%',
             nameTextStyle: {
               color: '#666666'
             },
@@ -308,7 +316,7 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -378,7 +386,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

@@ -18,7 +18,7 @@
       </div>
       <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
       <div id="main1"  style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 100%;height:432px;background: #fff;margin: 0 auto;"></div>
+      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto"></div>
 
       <el-table
         :data="chartData"
@@ -41,7 +41,7 @@
         <el-table-column prop="surrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
       </el-table>
 
-      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
+      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1" style="width:100%;">暂无数据</p>
     </div>
   </div>
 </template>
@@ -78,23 +78,20 @@ export default {
         },
         {
           name: '还款率',
-          url: 'RepaymentRate',
-          table: 'RepaymentRatePie'
+          url: 'RepaymentRate'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate',
-          table: 'OverdueRatePie'
+          url: 'OverdueRate'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate',
-          table: 'SurrenderRatePie'
+          url: 'SurrenderRate'
         },
         {
           name: '险种占比',
-          url: 'CoverageOf',
-          table: 'CoverageOfPie'
+          url: 'CoverageOf'
+          // table: 'CoverageOfPie'
         },
         {
           name: '还款总金额趋势图',
@@ -114,7 +111,9 @@ export default {
       chartYY: [],
       tablePie: [],
       table: '',
-      name: '分期总金额'
+      name: '分期总金额',
+      yName: '金额',
+      ziqudao: 0
     }
   },
   mounted () {
@@ -139,10 +138,12 @@ export default {
             this.getEchartDb()
           } else if (data === 'ChannelRepaymentAmountTrend') {
             this.getEchartZhe(res.data)
-          } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
+          } else if (data === 'ChannelsOf') {
             this.getEchartPie()
           } else {
-            this.getEchart()
+            if (this.ziqudao === 0 || this.url === 'TotalAmountInStages' || this.url === 'TotalAmountOfRepayment') {
+              this.getEchart()
+            }
           }
         } else {
           this.$message({
@@ -166,6 +167,7 @@ export default {
       }
     },
     allTime (data) { // 处理子组件数据
+      this.ziqudao = data.report
       if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
@@ -249,7 +251,7 @@ export default {
           {
             show: true,
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -344,7 +346,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '销售额',
+            name: this.yName,
             nameTextStyle: {
               color: '#666666'
             },
@@ -421,7 +423,7 @@ export default {
       })
       var myChart6 = echarts.init(document.getElementById('main2'))
       myChart6.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -491,7 +493,7 @@ export default {
       })
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#FF7CBD', '#87CEFA', '#D970D5', '#32CD32', '#6394EB', '#FE69B3'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -545,6 +547,56 @@ export default {
   },
   components: {
     Selector
+  },
+  watch: {
+    name (val) {
+      if (val === '分期总金额' || val === '还款总金额') {
+        this.yName = '金额'
+      } else {
+        this.yName = '%'
+      }
+    },
+    ziqudao (val) {
+      if (val !== 0) {
+        if (this.url === 'RepaymentRate') {
+          this.$post(`/admin/report/RepaymentRate`, this.selectData).then(res => {
+            if (res.code === 0) {
+              this.tablePie = res.data
+              this.getEchartPie()
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.msg
+              })
+            }
+          })
+        } else if (this.url === 'OverdueRatePie') {
+          this.$post(`/admin/report/OverdueRatePie`, this.selectData).then(res => {
+            if (res.code === 0) {
+              this.tablePie = res.data
+              this.getEchartPie()
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.msg
+              })
+            }
+          })
+        } else if (this.url === 'SurrenderRatePie') {
+          this.$post(`/admin/report/SurrenderRatePie`, this.selectData).then(res => {
+            if (res.code === 0) {
+              this.tablePie = res.data
+              this.getEchartPie()
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.msg
+              })
+            }
+          })
+        }
+      }
+    }
   }
 }
 </script>

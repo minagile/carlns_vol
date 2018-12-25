@@ -47,9 +47,10 @@
           <el-button type="text" @click="watchPrice(scope.row.requisitionId, scope.row.coverageName)">点击查看报价单</el-button>
         </template>
       </el-table-column>
-      <el-table-column min-width="50">
+      <el-table-column width="130">
         <template slot-scope="scope">
           <el-button type="text" @click="deleteD(scope.row.requisitionId)">删除</el-button>
+          <el-button type="text" @click="tableprint(scope.row.requisitionId, scope.row.coverageName)">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -153,6 +154,13 @@ export default {
     this.getData()
   },
   methods: {
+    tableprint (id, convarge) {
+      let routeData = this.$router.resolve({
+        name: 'TablePrint',
+        query: { id: id, convarge: convarge }
+      })
+      window.open(routeData.href, '_blank')
+    },
     hide () {
       this.gridData = []
     },

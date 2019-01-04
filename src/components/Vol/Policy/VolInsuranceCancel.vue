@@ -207,7 +207,7 @@ export default {
     },
     // 查询保单信息
     checkAllData () {
-      this.$fetch('/admin/car/getCarByChannelIdOrCarId', {
+      this.$fetch('/admin/car/getCarByCarNumber', {
         channelId: this.value,
         carId: this.value1
       }).then(res => {
@@ -226,11 +226,11 @@ export default {
     getAllCar (val) {
       if (val === true) {
         this.options = []
-        this.$fetch('/admin/car/getAllCarByChannelId', {channelId: this.value}).then(res => {
+        this.$fetch('/admin/car/getCarByChannelId', {channelId: this.value}).then(res => {
           // console.log(res)
           if (res.code === 0) {
             res.data.forEach(v => {
-              this.options.push({value: v.carId, label: v.carNumber})
+              this.options.push({value: v.carNumber, label: v.carNumber})
             })
           } else {
             this.$message(res.msg)

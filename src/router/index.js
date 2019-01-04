@@ -52,6 +52,7 @@ import ChannelManagement from '@/components/Vol/Setting/ChannelManagement'
 import AccountManagement from '@/components/Vol/Setting/AccountManagement'
 
 import AlertSchedule from '@/components/common/AlertSchedule'
+import TablePrint from '@/components/common/TablePrint'
 
 Vue.use(Router)
 
@@ -396,6 +397,11 @@ export default new Router({
       path: '/AlertSchedule',
       name: 'AlertSchedule',
       component: AlertSchedule
+    },
+    {
+      path: '/TablePrint',
+      name: 'TablePrint',
+      component: TablePrint
     }
   ]
 })

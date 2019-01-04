@@ -4,9 +4,9 @@ import qs from 'qs'
 import { Message } from 'element-ui'
 
 axios.defaults.timeout = 10000
-axios.defaults.baseURL = 'http://192.168.1.128:8848' // 彭
+// axios.defaults.baseURL = 'http://192.168.1.128:8848' // 彭
 // axios.defaults.baseURL = 'http://192.168.1.145:80'
-// axios.defaults.baseURL = 'http://192.168.1.140:8848'
+axios.defaults.baseURL = 'http://192.168.1.140:8848'
 // axios.defaults.baseURL = 'http://192.168.1.102:8848'
 // axios.defaults.baseURL = 'http://192.168.1.136:8848'
 // axios.defaults.baseURL = 'http://192.168.1.145:8848'

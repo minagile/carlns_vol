@@ -282,10 +282,12 @@ function zero (data) {
   }
   .order-table {
     margin: 20px 23px 0;
+    height: 600px;
+    overflow: auto;
     .order-table-header {
       display: flex;
       justify-content: space-between;
-      padding: 21px 26px;
+      // padding: 21px 26px;
       font-size: 16px;
       font-weight:bold;
       background:rgba(248,248,248,1);
@@ -295,6 +297,7 @@ function zero (data) {
       border-bottom: 0;
     }
     table {
+      margin: 21px 26px;
       border-collapse: collapse;
       // height: calc(100% - 58px);
       // display: block;

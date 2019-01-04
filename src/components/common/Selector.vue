@@ -121,6 +121,7 @@ export default {
     }
   },
   mounted () {
+    this.handleItemChange()
   },
   methods: {
     selectBatch (val) {
@@ -163,7 +164,7 @@ export default {
       // this.getData()
     },
     handleItemChange (val) {
-      // console.log(val)
+      this.batch = ''
       setTimeout(_ => {
         var id = ''
         // POST /admin/channel/getNextChannel

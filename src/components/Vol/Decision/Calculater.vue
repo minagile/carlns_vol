@@ -1,6 +1,6 @@
 <template>
   <!-- 决策支持 -->
-  <div class="calculater animated flipInY">
+  <div class="calculater">
     <p class="title">数据统计</p>
       <div style="display: flex;justify-content: space-between;">
     <div class="content">
@@ -12,7 +12,7 @@
       </div>
       <div style="height:99%;overflow: auto;">
         <div class="table" v-for="(item, index) in list" :key="index">
-          <div class="lei">类型</div>
+          <!-- <div class="lei">类型</div> -->
           <div class="radio">
             <p>
               <input type="radio" :name="index" value="1" checked @change="choose('1', item)">交强险
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div style="width:50%;margin-left:20px;">
+    <div style="width:53%;margin-left:20px;">
       <div class="content ss">
         <div class="select">
           <span>自动选择</span>
@@ -130,6 +130,7 @@
               <th></th>
               <th>总分期金额</th>
               <th>总垫付</th>
+              <th>退保金额</th>
               <th>应收入</th>
               <th>实际收入</th>
               <th>本金</th>
@@ -140,6 +141,7 @@
               <th>统计商业险</th>
               <td>{{tableList2.allMoney}}</td>
               <td>{{tableList2.advances}}</td>
+              <td>{{tableList2.endMoney}}</td>
               <td>{{tableList2.income}}</td>
               <td>{{tableList2.trueIncome}}</td>
               <td>{{tableList2.principal}}</td>
@@ -150,6 +152,7 @@
               <th>统计交强险</th>
               <td>{{tableList2.cAllMoney}}</td>
               <td>{{tableList2.cAdvances}}</td>
+              <td>{{tableList2.cEndMoney}}</td>
               <td>{{tableList2.cIncome}}</td>
               <td>{{tableList2.cTrueIncome}}</td>
               <td>{{tableList2.cPrincipal}}</td>
@@ -160,6 +163,7 @@
               <th>合计</th>
               <td>{{tableList2.countAllMoney}}</td>
               <td>{{tableList2.countAdvances}}</td>
+              <td>{{tableList2.countEndMoney}}</td>
               <td>{{tableList2.countIncome}}</td>
               <td>{{tableList2.countTrueIncome}}</td>
               <td>{{tableList2.countPrincipal}}</td>
@@ -276,7 +280,10 @@ export default {
         countTrueIncome: 0,
         countPrincipal: 0,
         countProfit: 0,
-        countTrueProfit: 0
+        countTrueProfit: 0,
+        endMoney: 0,
+        cEndMoney: 0,
+        countEndMoney: 0
       }
     }
   },
@@ -424,10 +431,10 @@ export default {
     font-weight: bold;
     button {
       width: 49px;
-      height: 20px;
+      height: 30px;
       border: none;
       background-color: white;
-      border-radius: 7px;
+      border-radius: 5px;
       font-size: 10px;
     }
   }
@@ -435,10 +442,11 @@ export default {
     height: 50px;
     overflow: hidden;
     box-shadow:0px 8px 12px 0px rgba(23,3,79,0.1);
-    border-radius:10px;
+    border-radius:5px;
     background-color: white;
     margin-bottom: 10px;
     padding: 0 10px 0 0;
+    white-space:nowrap;
     div {
       display: inline-block;
       height: 100%;
@@ -471,13 +479,13 @@ export default {
   }
   .find {
     float: right;
-    width: 113px;
+    width: 80px;
     height: 39px;
-    font-size:17px;
+    font-size:14px;
     font-family:Adobe Heiti Std R;
     font-weight:normal;
     background: white;
-    border-radius:11px;
+    border-radius:5px;
     margin-top: 10px;
   }
 }
@@ -505,7 +513,7 @@ export default {
   .xianshi {
     width: 100%;
     border:1px solid rgba(255,255,255,1);
-    border-radius:14px;
+    border-radius:5px;
     height: 109px;
   }
   .content .table .el-date-editor.el-input[data-v-76d92dd6] {
@@ -514,7 +522,7 @@ export default {
   .xianshi {
     background: white;
     box-shadow:0px 15px 20px 0px rgba(23,3,79,0.1);
-    border-radius:20px;
+    border-radius:5px;
     margin-top: 20px;
     border: 1px solid black;
     .table1 {
@@ -544,13 +552,13 @@ export default {
     width: 100%;
     text-align: right;
     .find1 {
-      width: 113px;
+      width: 80px;
       height: 39px;
-      font-size:17px;
+      font-size:14px;
       font-family:Adobe Heiti Std R;
       font-weight:normal;
       background: #FFC107;
-      border-radius:11px;
+      border-radius:5px;
       margin-top: 10px;
     }
   }

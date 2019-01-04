@@ -80,7 +80,9 @@
             <th>车险保单号</th>
           </tr>
           <tr v-for="(item, index) in middle" :key="index">
-            <th>{{item.plateNumber}}</th>
+            <th>{{item.plateNumber}}<br/>
+            {{item.tui}}
+            </th>
             <th>{{item.vin}}</th>
             <th>{{item.iCBC}}</th>
             <th>{{item.policyNumber}}</th>

@@ -29,7 +29,14 @@
             @hide="hide"
             trigger="click">
             <el-table :data="gridData" max-height="300" :show-header="false">
-              <el-table-column property="carNumber"></el-table-column>
+              <el-table-column>
+                <template slot-scope="scope">
+                  {{ scope.row.carNumber }}
+                  <span v-if="scope.row.delFlag === -1" style="color: red">
+                    {{ scope.row.delFlag | carType }}
+                  </span>
+                </template>
+              </el-table-column>
             </el-table>
             <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carSum }}</el-button>
           </el-popover>
@@ -67,7 +74,7 @@
 
     <el-dialog
       :visible.sync="dialogVisible"
-      width="1000px"
+      width="1200px"
       custom-class="dialog">
       <div class="dialog-header">报价单</div>
       <div class="order-table">
@@ -271,6 +278,9 @@ export default {
     },
     time (data) {
       return data.split(' ')[0].replace('-', '.').replace('-', '.')
+    },
+    carType (val) {
+      if (val === -1) return '已退保'
     }
   }
 }
@@ -290,7 +300,7 @@ function zero (data) {
   }
   .order-table {
     margin: 20px 23px 0;
-    height: 600px;
+    // height: 600px;
     overflow: auto;
     .order-table-header {
       display: flex;
@@ -305,7 +315,7 @@ function zero (data) {
       border-bottom: 0;
     }
     table {
-      margin: 21px 26px;
+      // margin: 21px 26px;
       border-collapse: collapse;
       // height: calc(100% - 58px);
       // display: block;

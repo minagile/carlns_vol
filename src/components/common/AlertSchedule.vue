@@ -20,7 +20,9 @@
         </tr>
         <tr v-for="(item, index) in middle" :key="index">
           <th width="60">{{ index + 1 }}</th>
-          <th>{{item.plateNumber}}</th>
+          <th>{{item.plateNumber}}<br/>
+            <span style="font-size:12px">{{item.tui}}</span>
+          </th>
           <th>{{item.vin}}</th>
           <th>{{item.iCBC}}</th>
           <th>{{item.policyNumber}}</th>

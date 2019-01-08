@@ -11,13 +11,13 @@
     </selector>
 
     <el-table
-    ref="multipleTable"
-    :data="tableData"
-    tooltip-effect="light"
-    border
-    max-height="450"
-    style="width: 95%; margin: 0 auto;border: 1px solid #eee"
-    v-loading="loading">
+      ref="multipleTable"
+      :data="tableData"
+      tooltip-effect="light"
+      border
+      max-height="450"
+      style="width: 95%; margin: 0 auto;border: 1px solid #eee"
+      v-loading="loading">
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="requisitionId" label="订单号" min-width="150"></el-table-column>
       <el-table-column prop="name" label="公司名称" min-width="300"></el-table-column>
@@ -29,7 +29,14 @@
             @hide="hide"
             trigger="click">
             <el-table :data="gridData" max-height="300" :show-header="false">
-              <el-table-column property="carNumber"></el-table-column>
+              <el-table-column>
+                <template slot-scope="scope">
+                  {{ scope.row.carNumber }}
+                  <span v-if="scope.row.delFlag === -1" style="color: red">
+                    {{ scope.row.delFlag | carType }}
+                  </span>
+                </template>
+              </el-table-column>
             </el-table>
             <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carNumber }}</el-button>
           </el-popover>
@@ -58,7 +65,7 @@
       :total="total">
     </el-pagination>
 
-    <el-dialog :visible.sync="centerDialogVisible" width="1200px">
+    <el-dialog :visible.sync="centerDialogVisible" width="770px">
       <div class="dialog-header">付款计划表</div>
       <div class="dia">
         <p>致：上海锦锭科技有限公司</p>
@@ -78,7 +85,9 @@
             <th>车险保单号</th>
           </tr>
           <tr v-for="(item, index) in middle" :key="index">
-            <th>{{item.plateNumber}}</th>
+            <th>{{item.plateNumber}}<br/>
+            {{item.tui}}
+            </th>
             <th>{{item.vin}}</th>
             <th>{{item.iCBC}}</th>
             <th>{{item.policyNumber}}</th>
@@ -283,6 +292,11 @@ export default {
   },
   components: {
     Selector
+  },
+  filters: {
+    carType (val) {
+      if (val === -1) return '已退保'
+    }
   }
 }
 </script>

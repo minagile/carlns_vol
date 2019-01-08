@@ -29,7 +29,17 @@
             @hide="hide"
             trigger="click">
             <el-table :data="gridData" max-height="300" :show-header="false">
-              <el-table-column property="carNumber"></el-table-column>
+              <el-table-column>
+                <template slot-scope="scope">
+                  {{ scope.row.carNumber }}
+                  <span v-if="scope.row.delFlag === -1" style="color: red">
+                    {{ scope.row.delFlag | carType }}
+                  </span>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column property="delFlag">
+
+              </el-table-column> -->
             </el-table>
             <el-button slot="reference" type="text" style="width: 50px;">{{ scope.row.carSum }}</el-button>
           </el-popover>
@@ -292,6 +302,9 @@ export default {
       if (val === 2) return '已逾期'
       if (val === 1) return '已付款'
       if (val === 0) return '未付款'
+    },
+    carType (val) {
+      if (val === -1) return '已退保'
     }
   }
 }

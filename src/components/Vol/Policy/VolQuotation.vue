@@ -313,6 +313,7 @@ function zero (data) {
       box-sizing: border-box;
       border: 1px solid #E5E5E5;
       border-bottom: 0;
+      line-height: 58px;
     }
     table {
       // margin: 21px 26px;

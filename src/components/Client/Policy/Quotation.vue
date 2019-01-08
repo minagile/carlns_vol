@@ -273,7 +273,8 @@ function zero (data) {
     .order-table-header {
       display: flex;
       justify-content: space-between;
-      padding: 21px 26px;
+      // padding: 21px 26px;
+      line-height: 58px;
       font-size: 16px;
       font-weight:bold;
       background:rgba(248,248,248,1);

@@ -50,6 +50,7 @@ import BlackList from '@/components/Vol/Black/BlackList'
 
 import ChannelManagement from '@/components/Vol/Setting/ChannelManagement'
 import AccountManagement from '@/components/Vol/Setting/AccountManagement'
+import Log from '@/components/Vol/Setting/log'
 
 import AlertSchedule from '@/components/common/AlertSchedule'
 import TablePrint from '@/components/common/TablePrint'
@@ -377,6 +378,14 @@ export default new Router({
               path: '/vol/VolSetting/AccountManagement',
               name: 'AccountManagement',
               component: AccountManagement,
+              meta: {
+                title: '车险服务管理后台'
+              }
+            },
+            {
+              path: '/vol/VolSetting/log',
+              name: 'Log',
+              component: Log,
               meta: {
                 title: '车险服务管理后台'
               }

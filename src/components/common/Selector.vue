@@ -20,7 +20,7 @@
     <div class="Selector-main">
       <button @click="clearTime(1)" class="all" v-if="all" :class="{isVol : vol == 1, chooseall: allchannel === true}">全部渠道</button>
 
-      <el-select v-model="selectChannel" placeholder="选择渠道" v-if="!double">
+      <el-select v-model="selectChannel" placeholder="选择渠道" v-if="!double && isUser">
         <el-option
           v-for="item in channelList"
           :key="item.channelId"
@@ -279,6 +279,19 @@ export default {
     double: {
       type: Boolean,
       default: true
+    },
+    ziqudao: {
+      type: Number,
+      default: 0
+    },
+    isUser: {
+      type: Boolean,
+      default: true
+    }
+  },
+  watch: {
+    ziqudao (val) {
+      this.selectChannel = val
     }
   }
 }
@@ -371,6 +384,7 @@ export default {
     .chooseall {
       background: #fff;
       border: 1px solid #282828;
+      color: black
     }
   }
 }

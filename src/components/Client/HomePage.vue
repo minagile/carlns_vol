@@ -343,7 +343,10 @@ export default {
   p:nth-of-type(1) {
     padding-top: 20px;
     font-size: 16px;
-    text-indent: 30px;
+    text-indent: 5%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   p:nth-of-type(2) {
     font-size: 16px;

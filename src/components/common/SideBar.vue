@@ -144,6 +144,13 @@ export default {
           label: '账号管理',
           vhref: 'AccountManagement',
           show: false
+        },
+        {
+          img: list.list5,
+          vaimg: list.llist5,
+          label: '操作日志',
+          vhref: 'Log',
+          show: true
         }
       ],
       num: 0

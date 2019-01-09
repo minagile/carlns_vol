@@ -1,7 +1,7 @@
 <template>
   <!-- 决策支持 -->
   <div class="Decision">
-    <selector :all="true" @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector>
+    <!-- <selector :all="true" @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector> -->
     <chart @getChartData="getChartData" :chartData="chartData"></chart>
   </div>
 </template>
@@ -21,8 +21,8 @@ export default {
     }
   },
   created () {
-    this.getChartData('TotalAmountInStages', this.selectData)
-    this.getChannelList()
+    // this.getChartData('TotalAmountInStages', this.selectData)
+    // this.getChannelList()
   },
   methods: {
     allTime (data) {
@@ -76,13 +76,14 @@ export default {
 
 <style lang="less" scoped>
 .Decision {
-  background: #fff;
+  // background: #fff;
   min-height: calc(100% - 100px);
   border-radius: 16px;
   margin: 0 34px;
   box-sizing: border-box;
-  .Selector {
-    border-bottom: 20px solid #F2F2F2;
-  }
+  overflow: hidden;
+  // .Selector {
+  //   border-bottom: 20px solid #F2F2F2;
+  // }
 }
 </style>

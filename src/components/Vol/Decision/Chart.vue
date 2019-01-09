@@ -1,6 +1,7 @@
 <template>
   <div class="chart">
-    <selector :all="true" :vol="true"  @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector>
+    <selector :all="true" :vol="true" :ziqudao="ziqudao"  @giveParams="allTime" :channelList="channelList" :sortTable="false" :double="false"></selector>
+
     <div class="con">
       <div class="btn">
         <button
@@ -12,38 +13,150 @@
           {{btn.name}}
         </button>
       </div>
+
       <div class="change">
         <button :class="{active : num1 === 0}" @click="changeChart(0)"><span class="iconfont">&#xe698;</span></button>
         <button :class="{active : num1 === 1}" @click="changeChart(1)"><span class="iconfont">&#xe637;</span></button>
+        <button :class="{active : num1 === 2}" @click="changeChart(2)"><span class="iconfont">&#xe79a;</span></button>
       </div>
-      <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url !== 'CoverageOf' && this.url !== 'ChannelRepaymentAmountTrend'"></div>
-      <div id="main1"  style="width: 1500px;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0 && this.url === 'CoverageOf'"></div>
-      <div id="main2" v-show="num1 === 0 && url === 'ChannelRepaymentAmountTrend'" style="width: 1500px;height:432px;background: #fff;margin: 0 auto;"></div>
 
-      <el-table
-        :data="chartData"
-        height="250"
-        border
-        style="width: 60.38%;margin: 100px auto 0 auto;"
-        v-show="num1 === 1 && this.url !== 'ChannelRepaymentAmountTrend'"
-        :span-method="objectSpanMethod"
-        show-summary>
-        <el-table-column prop="channelName" label="渠道"></el-table-column>
-        <el-table-column prop="commercial" label="商业险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
-        <el-table-column prop="carrtaffic" label="交强险" v-if="url === 'CoverageOf' || url === 'TotalAmountInStages'"></el-table-column>
-        <el-table-column prop="overdue" label="未还" v-if="url === 'OverdueRate'"></el-table-column>
-        <el-table-column prop="HasBeenPayment" label="已还" v-if="url === 'OverdueRate'"></el-table-column>
-        <el-table-column prop="price" label="逾期率" v-if="url === 'OverdueRate'"></el-table-column>
-        <el-table-column prop="price" label="金额" v-if="url === 'ChannelsOf'"></el-table-column>
-        <el-table-column prop="price" label="还款率" v-if="url === 'RepaymentRate'"></el-table-column>
-        <el-table-column prop="price" label="总计" v-if="url === 'TotalAmountInStages' || url ==='TotalAmountOfRepayment'"></el-table-column>
-        <el-table-column prop="total" label="合计" v-if="url === 'CoverageOf' || url === 'ChannelsOf'"></el-table-column>
-        <el-table-column prop="carCount" label="退保车辆个数" v-if="url === 'SurrenderRate'"></el-table-column>
-        <el-table-column prop="surrender" label="总车辆数" v-if="url === 'SurrenderRate'"></el-table-column>
-        <el-table-column prop="SurrenderRate" label="比率" v-if="url === 'SurrenderRate'"></el-table-column>
-      </el-table>
+      <div id="main" style="width: 100%;height:432px;background: #fff;margin: 0 auto;" v-show="num1 === 0"></div>
 
-      <p v-show="url === 'ChannelRepaymentAmountTrend' && num1 === 1">暂无数据</p>
+      <div v-show="num1 === 1" class="table">
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-show="url === 'getAllPrice'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channelName"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="repaymentAmount"
+            label="商业险">
+          </el-table-column>
+          <el-table-column
+            prop="stagePrice"
+            label="交强险">
+          </el-table-column>
+        </el-table>
+
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-if="url === 'getChannelProportion'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channelName"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="stagePrice"
+            label="交强险">
+          </el-table-column>
+        </el-table>
+
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-show="url === 'getRepaymentRate'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channelName"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="HasBeenPayment"
+            label="还款金额">
+          </el-table-column>
+          <el-table-column
+            label="还款率(%)">
+            <template slot-scope="scope">
+              {{scope.row.price}}%
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-show="url === 'getOverdueRate'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channel_name"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="overdueNum"
+            label="待还款">
+          </el-table-column>
+          <el-table-column
+            label="逾期率(%)">
+            <template slot-scope="scope">
+              {{scope.row.rate}}%
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-if="url === 'getSurrenderRate'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channel_name"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="surrenderNum"
+            label="退保车辆">
+          </el-table-column>
+          <el-table-column
+            prop="normalNum"
+            label="所有车辆">
+          </el-table-column>
+          <el-table-column
+            label="退保率(%)">
+            <template slot-scope="scope">
+              {{scope.row.rate}}%
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-table
+          :data="chartAndTable.table"
+          height="250"
+          border
+          show-summary
+          v-if="url === 'getInsuranceRate'"
+          style="width: 80%;margin: 80px auto;">
+          <el-table-column
+            prop="channel_name"
+            label="渠道">
+          </el-table-column>
+          <el-table-column
+            prop="to_pay_high"
+            label="交强险">
+          </el-table-column>
+          <el-table-column
+            prop="commercial"
+            label="商业险">
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <div v-show="num1 === 2" style="width: 1500px;height:432px;background: #fff;margin: 0 auto;" id="main1">
+        请选择时间
+      </div>
     </div>
   </div>
 </template>
@@ -67,118 +180,74 @@ export default {
       btnList: [
         {
           name: '分期总金额',
-          url: 'TotalAmountInStages'
-        },
-        {
-          name: '还款总金额',
-          url: 'TotalAmountOfRepayment'
+          url: 'getAllPrice'
         },
         {
           name: '渠道占比',
-          url: 'ChannelsOf',
-          table: 'ChannelsOfPie'
+          url: 'getChannelProportion'
         },
         {
           name: '还款率',
-          url: 'RepaymentRate',
-          table: 'RepaymentRatePie'
+          url: 'getRepaymentRate'
         },
         {
           name: '逾期率',
-          url: 'OverdueRate',
-          table: 'OverdueRatePie'
+          url: 'getOverdueRate'
         },
         {
           name: '退保率',
-          url: 'SurrenderRate',
-          table: 'SurrenderRatePie'
+          url: 'getSurrenderRate'
         },
         {
           name: '险种占比',
-          url: 'CoverageOf',
-          table: 'CoverageOfPie'
-        },
-        {
-          name: '还款总金额趋势图',
-          url: 'ChannelRepaymentAmountTrend'
+          url: 'getInsuranceRate'
+          // url: 'CoverageOf'
         }
       ],
       num: 0,
       num1: 0,
       selectData: {
         channelName: 0
-      }, // 参数
-      chartData: [], // 图表数据
+      },
       channelList: [], // 渠道列表
       url: '',
       chartX: [],
       chartY: [],
       chartYY: [],
-      tablePie: [],
       table: '',
       name: '分期总金额',
       yName: '金额',
-      ziqudao: 0
+      ziqudao: 0,
+      chartAndTable: []
     }
   },
   mounted () {
-    this.getData('TotalAmountInStages', 0)
+    this.getData('getAllPrice', 0)
     this.getChannelList()
   },
   methods: {
     changeChart (e) { // 切换图标和表格
       this.num1 = e
     },
-    getData (data, index, table) { // 选择按钮，触发父组件改变图标数据
-      this.url = data
-      this.num = index
-      this.table = ''
-      this.table = table
-      this.name = this.btnList[index].name
-      // let sum = 0
-      this.$post(`/admin/report/${data}`, this.selectData).then(res => {
-        if (res.code === 0) {
-          this.chartData = res.data
-          if (data === 'CoverageOf') {
-            this.getEchartDb()
-          } else if (data === 'ChannelRepaymentAmountTrend') {
-            this.getEchartZhe(res.data)
-          } else if (data === 'ChannelsOf' || data === 'RepaymentRate' || data === 'OverdueRate' || data === 'SurrenderRate') {
-            // this.getEchartPie()
-          } else if (data === 'TotalAmountInStages' || data === 'TotalAmountOfRepayment') {
-            this.getEchart()
-          }
-        } else {
-          this.$message({
-            type: 'info',
-            message: res.msg
-          })
-        }
+    getChannelList () { // 获取渠道列表
+      this.$fetch('/admin/report/getChilds', {
+        channelId: 0
+      }).then(res => {
+        const aa = [{
+          channelId: 0,
+          channelName: '全部渠道'
+        }]
+        this.channelList = aa.concat(res)
       })
-      if (table) {
-        this.$post(`/admin/report/${table}`, this.selectData).then(res => {
-          if (res.code === 0) {
-            this.tablePie = res.data
-            if (this.ziqudao !== 0 || data === 'ChannelsOf') {
-              this.getEchartPie()
-            } else {
-              this.getEchart()
-            }
-          } else {
-            this.$message({
-              type: 'info',
-              message: res.msg
-            })
-          }
-        })
-      }
     },
     allTime (data) { // 处理子组件数据
       this.ziqudao = data.report
+      console.log(data.report)
       if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
-          endTime: data.endTime
+          endTime: data.endTime,
+          channelName: data.report
         }
       } else if (data.startTime === '' && data.report !== '') {
         this.selectData = {
@@ -195,31 +264,293 @@ export default {
       }
       this.getData(this.url, this.num, this.table)
     },
-    getChannelList () { // 获取渠道列表
-      this.$fetch('/admin/report/getChilds', {
-        channelId: 0
-      }).then(res => {
-        const aa = [{
-          channelId: 0,
-          channelName: '全部渠道'
-        }]
-        this.channelList = aa.concat(res)
+    getData (data, index, table) { // 选择按钮，触发父组件改变图标数据
+      this.url = data
+      this.num = index
+      this.table = ''
+      this.table = table
+      this.name = this.btnList[index].name
+      this.chartAndTable = []
+      this.$post(`/admin/report/${data}`, this.selectData).then(res => {
+        if (res.code === 0) {
+          console.log(res)
+          this.chartAndTable = res.data
+          // this.chartData = res.data
+          if (res.data.line.value) {
+            this.getEchartZhe()
+          }
+          if (data === 'getAllPrice') {
+            this.totalEchartDb() // 分期+渠道， 双柱状图
+          }
+          if (data === 'getChannelProportion') {
+            this.ChannelsEchartPie() // 渠道占比，饼图
+          }
+          if (data === 'getRepaymentRate') {
+            if (this.ziqudao === 0) {
+              this.RepaymentEchart() // 主渠道，还款率，柱状图
+            } else {
+              this.RepaymentEchartPie() // 子渠道，还款率，饼图
+            }
+          }
+          if (data === 'getOverdueRate') {
+            if (this.ziqudao === 0) {
+              this.OverdueEchart() // 主渠道，逾期率，柱状图
+            } else {
+              this.OverduetEchartPie() // 子渠道，逾期率，饼图
+            }
+          }
+          if (data === 'getSurrenderRate') {
+            if (this.ziqudao === 0) {
+              this.SurrenderEchart() // 主渠道，退保率，柱状图
+            } else {
+              this.SurrenderEchartPie() // 子渠道，退保率，饼图
+            }
+          }
+          if (data === 'getInsuranceRate') {
+            this.CoverageEchartDb() // 险种占比，双柱状图
+          }
+        }
       })
     },
-    objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
-      // if (columnIndex === 2) {
-      //   return {
-      //     rowIndex: 2,
-      //   }
-      // }
-    },
-    getEchart () {
-      let chartX = []
-      let chartY = []
-      this.chartData.forEach(v => {
-        chartX.push(v.channelName)
-        chartY.push(v.price)
+    getEchartZhe () { // 折线图
+      var seriesData = []
+      this.chartAndTable.line.value.forEach((m, n) => {
+        seriesData.push({
+          name: m.name,
+          type: 'line',
+          stack: m.name,
+          data: m.price || m.value,
+          symbol: 'circle',
+          symbolSize: '4'
+        })
       })
+      let name = this.chartAndTable.line.name || this.chartAndTable.line.time
+      var myChart6 = echarts.init(document.getElementById('main1'))
+      myChart6.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          }
+        },
+        legend: {
+          type: 'plain',
+          // data: name,
+          show: true
+          // orient: 'vertical'
+        },
+        grid: {
+          top: '20%',
+          left: '18%',
+          height: '60%',
+          width: '64%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 10
+          }
+        ],
+        xAxis: {
+          show: true,
+          name: '时间',
+          type: 'category',
+          boundaryGap: false,
+          splitLine: {
+            show: true
+          },
+          data: name,
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          show: true,
+          name: '金额(￥)',
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        series: seriesData
+      }, true)
+    },
+    totalEchartDb () { // 分期+渠道， 双柱状图
+      const label = {
+        show: true,
+        position: 'insideTop',
+        offset: [0, -20]
+      }
+      let myChart1 = echarts.init(document.getElementById('main'))
+      myChart1.setOption({
+        color: ['#3398DB', '#D53A35'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: '{a0}: {c0}%<br/>{a1}: {c1}'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          // x: 'right',
+          data: name
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: this.chartAndTable.doubleColumn.channelName,
+            axisTick: {
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: this.yName,
+            nameTextStyle: {
+              color: '#666666'
+            },
+            nameGap: 24,
+            axisLine: {
+              lineStyle: {
+                color: '#C6C8C9'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#666666'
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: '交强险',
+            type: 'bar',
+            barWidth: '30%',
+            data: this.chartAndTable.doubleColumn.value.stagePrice,
+            label: label
+          },
+          {
+            name: '商业险',
+            type: 'bar',
+            barWidth: '30%',
+            data: this.chartAndTable.doubleColumn.value.repaymentAmount,
+            label: label
+          }
+        ]
+      })
+      // 点击事件
+      myChart1.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
+          }
+        })
+      })
+    },
+    ChannelsEchartPie () { // 渠道占比，饼图
+      // let name = []
+      let tablePie = []
+      tablePie = this.chartAndTable.pie.map(item => {
+        return {name: item.channelName, value: item.stagePrice}
+      })
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left'
+          // data: name
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            data: tablePie
+          }
+        ]
+      }, true)
+      // 点击事件
+      myChart.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
+          }
+        })
+      })
+    },
+    RepaymentEchart () { // 主渠道，还款率，柱状图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         color: ['#3398DB', '#D53A35'],
@@ -243,7 +574,136 @@ export default {
           {
             show: true,
             type: 'category',
-            data: chartX,
+            data: this.chartAndTable.column.name,
+            axisTick: {
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
+            }
+          }
+        ],
+        yAxis: [
+          {
+            show: true,
+            type: 'value',
+            name: this.yName,
+            nameTextStyle: {
+              color: '#666666'
+            },
+            nameGap: 24,
+            axisLine: {
+              lineStyle: {
+                color: '#C6C8C9'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#666666'
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: this.chartAndTable.column.name,
+            type: 'bar',
+            barWidth: '30%',
+            data: this.chartAndTable.column.value
+          }
+        ]
+      }, true)
+      // 点击事件
+      myChart.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
+          }
+        })
+      })
+    },
+    RepaymentEchartPie () { // 子渠道，还款率，饼图
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left'
+          // data: this.tablePie.name
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            data: this.chartAndTable.pie
+          }
+        ]
+      }, true)
+    },
+    OverdueEchart () { // 主渠道，逾期率，柱状图
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#3398DB', '#D53A35'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: '{a}<br/>{b}: {c}'
+        },
+        legend: {
+          show: false
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            show: true,
+            type: 'category',
+            data: this.chartAndTable.column.name,
             axisTick: {
               alignWithLabel: true,
               interval: 0
@@ -287,40 +747,201 @@ export default {
             name: this.name,
             type: 'bar',
             barWidth: '30%',
-            data: chartY
-            // itemStyle: {
-            //   normal: {
-            //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            //       offset: 0,
-            //       color: 'rgba(17, 168,171, 1)'
-            //     }, {
-            //       offset: 1,
-            //       color: 'rgba(17, 168,171, 0.1)'
-            //     }]),
-            //     shadowColor: 'rgba(0, 0, 0, 0.1)',
-            //     shadowBlur: 10
-            //   }
-            // }
+            data: this.chartAndTable.column.value
           }
         ]
+      }, true)
+      // 点击事件
+      myChart.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
+          }
+        })
       })
     },
-    getEchartDb () {
-      let chartX = []
-      let chartY = []
-      let chartYY = []
-      this.chartData.forEach(v => {
-        chartX.push(v.channelName)
-        chartY.push(v.carrtafficRate.toFixed(2))
-        chartYY.push(v.commercialRate.toFixed(2))
+    OverduetEchartPie () { // 子渠道，逾期率，饼图
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left'
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            data: this.chartAndTable.pie
+          }
+        ]
+      }, true)
+    },
+    SurrenderEchart () { // 主渠道，逾期率，柱状图
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#3398DB', '#D53A35'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: '{a}<br/>{b}: {c}'
+        },
+        legend: {
+          show: false
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            show: true,
+            type: 'category',
+            data: this.chartAndTable.column.name,
+            axisTick: {
+              alignWithLabel: true,
+              interval: 0
+            },
+            axisLabel: {
+              show: true,
+              interval: 0
+            }
+          }
+        ],
+        yAxis: [
+          {
+            show: true,
+            type: 'value',
+            name: this.yName,
+            nameTextStyle: {
+              color: '#666666'
+            },
+            nameGap: 24,
+            axisLine: {
+              lineStyle: {
+                color: '#C6C8C9'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#666666'
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dotted'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: this.name,
+            type: 'bar',
+            barWidth: '30%',
+            data: this.chartAndTable.column.value
+          }
+        ]
+      }, true)
+      // 点击事件
+      myChart.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
+          }
+        })
       })
+    },
+    SurrenderEchartPie () { // 子渠道，逾期率，饼图
+      let myChart = echarts.init(document.getElementById('main'))
+      myChart.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          x: 'left'
+        },
+        xAxis: [
+          {
+            show: false
+          }
+        ],
+        yAxis: [
+          {
+            show: false
+          }
+        ],
+        series: [
+          {
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: true
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            data: this.chartAndTable.pie
+          }
+        ]
+      }, true)
+    },
+    CoverageEchartDb () { // 险种占比， 双柱状图
       const label = {
         show: true,
-        // rotate: 90,
         position: 'insideTop',
         offset: [0, -20]
       }
-      let myChart1 = echarts.init(document.getElementById('main1'))
+      let myChart1 = echarts.init(document.getElementById('main'))
       myChart1.setOption({
         color: ['#3398DB', '#D53A35'],
         tooltip: {
@@ -336,10 +957,16 @@ export default {
           bottom: '3%',
           containLabel: true
         },
+        legend: {
+          show: true,
+          orient: 'vertical',
+          // x: 'right',
+          data: name
+        },
         xAxis: [
           {
             type: 'category',
-            data: chartX,
+            data: this.chartAndTable.doubleColumn.name,
             axisTick: {
               alignWithLabel: true,
               interval: 0
@@ -382,173 +1009,28 @@ export default {
             name: '交强险占比',
             type: 'bar',
             barWidth: '30%',
-            data: chartY,
+            data: this.chartAndTable.doubleColumn.value.commercial,
             label: label
-            // barWidth: 30,
           },
           {
             name: '商业险占比',
             type: 'bar',
             barWidth: '30%',
-            data: chartYY,
+            data: this.chartAndTable.doubleColumn.value.to_pay_high,
             label: label
-            // barWidth: 30,
           }
         ]
-      })
-    },
-    getEchartZhe (data) {
-      // console.log(data)
-      var dateArr = data[0]
-      var seriesData = []
-      var name = ''
-      let legend = []
-      data[2].forEach((m, n) => {
-        name = m.channelName
-        legend.push(name)
-        seriesData.push({
-          name: name,
-          type: 'line',
-          stack: name,
-          data: [],
-          symbol: 'circle',
-          symbolSize: '4'
-          // smooth: true,
-          // itemStyle: {
-          //   borderWidth: 2,
-          //   borderColor: '#fff',
-          //   shadowColor: 'rgba(0, 0, 0, 0.3)',
-          //   shadowBlur: 4
-          // }
-          // lineStyle: {
-          //   width: 4
-          // }
-        })
-        data[1].forEach((v, k) => {
-          seriesData[n].data.push(v.value[name])
-        })
-      })
-      var myChart6 = echarts.init(document.getElementById('main2'))
-      myChart6.setOption({
-        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            animation: false
-          }
-        },
-        legend: {
-          type: 'plain',
-          data: legend
-        },
-        grid: {
-          top: '20%',
-          left: '18%',
-          height: '60%',
-          width: '64%',
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        dataZoom: [
-          {
-            type: 'slider',
-            start: 10
-            // bottom: 50
-          }
-        ],
-        xAxis: {
-          show: true,
-          name: '时间',
-          type: 'category',
-          boundaryGap: false,
-          splitLine: {
-            show: true
-          },
-          data: dateArr,
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        yAxis: {
-          show: true,
-          name: '金额(￥)',
-          type: 'value',
-          splitLine: {
-            show: true
-          },
-          axisLine: {
-            show: false
-          },
-          axisTick: {
-            show: false
-          }
-        },
-        series: seriesData
       }, true)
-    },
-    getEchartPie () {
-      let name = []
-      this.tablePie.forEach(v => {
-        name.push(v.name)
-      })
-      let myChart = echarts.init(document.getElementById('main'))
-      myChart.setOption({
-        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-          show: true,
-          orient: 'vertical',
-          x: 'left',
-          data: name
-        },
-        xAxis: [
-          {
-            show: false
+      // 点击事件
+      myChart1.on('click', (params) => {
+        const name = params.name
+        this.channelList.forEach(v => {
+          if (v.channelName.indexOf(name) > -1) {
+            this.ziqudao = v.channelId
+            this.selectData.channelName = v.channelId
+            this.getData(this.url, this.num)
           }
-        ],
-        yAxis: [
-          {
-            show: false
-          }
-        ],
-        series: [
-          {
-            name: this.name,
-            type: 'pie',
-            // radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            // color: ['#b6a2de', '#5ab1ef', '#ffb980', '#d87a80', '#2ec7c9', '#7092be'],
-            label: {
-              normal: {
-                show: true
-                // position: 'inner'
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              }
-            },
-            // labelLine: {
-            //   normal: {
-            //     show: false
-            //   }
-            // },
-            data: this.tablePie
-          }
-        ]
+        })
       })
     }
   },
@@ -634,14 +1116,15 @@ export default {
     button:nth-of-type(1){
       border-right: none;
       border-radius: 5px 0 0 5px;
+      vertical-align: bottom;
       span {
         font-size: 26px;
       }
     }
-    button:nth-of-type(2){
+    button:nth-of-type(3){
       border-left: none;
       border-radius: 0px 5px 5px 0px;
-      vertical-align: bottom;
+      // vertical-align: bottom;
     }
     .active {
       background: #FF9494;

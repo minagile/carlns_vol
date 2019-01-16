@@ -12,6 +12,14 @@
         >
           {{btn.name}}
         </button>
+        <el-select v-model="channel" placeholder="请选择" v-if="url === 'getInsuranceRate' && ziqudao && num1 === 2" @change="changeChannel">
+          <el-option
+            v-for="item in channelList1"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
       </div>
 
       <div class="change">
@@ -57,7 +65,11 @@
           </el-table-column>
           <el-table-column
             prop="stagePrice"
-            label="交强险">
+            label="金额">
+          </el-table-column>
+          <el-table-column
+            prop="percent"
+            label="占比">
           </el-table-column>
         </el-table>
 
@@ -218,7 +230,9 @@ export default {
       name: '分期总金额',
       yName: '金额',
       ziqudao: 0,
-      chartAndTable: []
+      chartAndTable: [],
+      channelList1: [],
+      channel: ''
     }
   },
   mounted () {
@@ -242,7 +256,7 @@ export default {
     },
     allTime (data) { // 处理子组件数据
       this.ziqudao = data.report
-      console.log(data.report)
+      // console.log(data.report)
       if (data.report === '' && data.startTime !== '') {
         this.selectData = {
           startTime: data.startTime,
@@ -273,17 +287,32 @@ export default {
       this.chartAndTable = []
       this.$post(`/admin/report/${data}`, this.selectData).then(res => {
         if (res.code === 0) {
-          console.log(res)
           this.chartAndTable = res.data
+          if (this.chartAndTable.table.length < 1) {
+            this.$message.info('暂无数据')
+          }
           // this.chartData = res.data
           if (res.data.line.value) {
-            this.getEchartZhe()
+            if (data === 'getInsuranceRate' && this.ziqudao) {
+              this.getEchartZhe1(res.data.line, res.data.line.name[0])
+              this.channelList1 = res.data.line.name // 险种占比，双柱状图
+              this.channel = res.data.line.name[0]
+            } else {
+              this.getEchartZhe(res.data.line)
+            }
           }
           if (data === 'getAllPrice') {
             this.totalEchartDb() // 分期+渠道， 双柱状图
           }
           if (data === 'getChannelProportion') {
             this.ChannelsEchartPie() // 渠道占比，饼图
+            let sum = 0
+            this.chartAndTable.table.forEach(v => {
+              sum += Number(v.stagePrice)
+            })
+            this.chartAndTable.table.forEach(v => {
+              v.percent = (v.stagePrice / sum * 100).toFixed(2) + '%'
+            })
           }
           if (data === 'getRepaymentRate') {
             if (this.ziqudao === 0) {
@@ -309,12 +338,15 @@ export default {
           if (data === 'getInsuranceRate') {
             this.CoverageEchartDb() // 险种占比，双柱状图
           }
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },
-    getEchartZhe () { // 折线图
+    getEchartZhe (data) { // 折线图
       var seriesData = []
-      this.chartAndTable.line.value.forEach((m, n) => {
+      // console.log('444')
+      data.value.forEach((m, n) => {
         seriesData.push({
           name: m.name,
           type: 'line',
@@ -324,8 +356,12 @@ export default {
           symbolSize: '4'
         })
       })
-      let name = this.chartAndTable.line.name || this.chartAndTable.line.time
+      let name = data.name || data.time
+      if (this.url === 'getInsuranceRate') {
+        name = data.time
+      }
       var myChart6 = echarts.init(document.getElementById('main1'))
+      myChart6.clear()
       myChart6.setOption({
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
@@ -376,7 +412,7 @@ export default {
         },
         yAxis: {
           show: true,
-          name: '金额(￥)',
+          name: this.yName,
           type: 'value',
           splitLine: {
             show: true
@@ -389,6 +425,88 @@ export default {
           }
         },
         series: seriesData
+      }, true)
+    },
+    getEchartZhe1 (data, nameData) { // 折线图
+      let seriesData1 = []
+      let name = data.time
+      data.value.forEach((m, n) => {
+        if (m.name.length - 5 === nameData.length && m.name.indexOf(nameData) > -1) {
+          seriesData1.push({
+            name: m.name,
+            type: 'line',
+            stack: m.name,
+            data: m.price || m.value,
+            symbol: 'circle',
+            symbolSize: '4'
+          })
+        }
+      })
+      var myChart6 = echarts.init(document.getElementById('main1'))
+      myChart6.clear()
+      myChart6.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          }
+        },
+        legend: {
+          type: 'plain',
+          // data: name,
+          show: true
+          // orient: 'vertical'
+        },
+        grid: {
+          top: '20%',
+          left: '18%',
+          height: '60%',
+          width: '64%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 10
+          }
+        ],
+        xAxis: {
+          show: true,
+          name: '时间',
+          type: 'category',
+          boundaryGap: false,
+          splitLine: {
+            show: true
+          },
+          data: name,
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          show: true,
+          name: this.yName,
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        series: seriesData1
       }, true)
     },
     totalEchartDb () { // 分期+渠道， 双柱状图
@@ -405,7 +523,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a0}: {c0}%<br/>{a1}: {c1}'
+          formatter: '{a0}: {c0}元<br/>{a1}: {c1}元'
         },
         grid: {
           left: '3%',
@@ -416,6 +534,8 @@ export default {
         legend: {
           show: true,
           orient: 'vertical',
+          // orient: 'horizontal',
+          right: 'auto',
           // x: 'right',
           data: name
         },
@@ -436,6 +556,7 @@ export default {
         yAxis: [
           {
             type: 'value',
+            show: true,
             name: this.yName,
             nameTextStyle: {
               color: '#666666'
@@ -462,14 +583,14 @@ export default {
         ],
         series: [
           {
-            name: '交强险',
+            name: '分期总金额',
             type: 'bar',
             barWidth: '30%',
             data: this.chartAndTable.doubleColumn.value.stagePrice,
             label: label
           },
           {
-            name: '商业险',
+            name: '还款总金额',
             type: 'bar',
             barWidth: '30%',
             data: this.chartAndTable.doubleColumn.value.repaymentAmount,
@@ -477,10 +598,11 @@ export default {
           }
         ]
       })
+      myChart1.off('click')
       // 点击事件
       myChart1.on('click', (params) => {
         const name = params.name
-        this.channelList.forEach(v => {
+        this.channelList.forEach((v, n) => {
           if (v.channelName.indexOf(name) > -1) {
             this.ziqudao = v.channelId
             this.selectData.channelName = v.channelId
@@ -500,12 +622,13 @@ export default {
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          show: false
         },
         legend: {
-          show: true,
-          orient: 'vertical',
-          x: 'left'
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
           // data: name
         },
         xAxis: [
@@ -521,16 +644,49 @@ export default {
         series: [
           {
             type: 'pie',
-            avoidLabelOverlap: false,
+            // avoidLabelOverlap: false,
             label: {
               normal: {
-                show: true
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
+                formatter: '{b}: {c}元  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    padding: [2, 4],
+                    borderRadius: 2,
+                    fontSize: 20
+                  }
                 }
               }
             },
@@ -538,6 +694,7 @@ export default {
           }
         ]
       }, true)
+      myChart.off('click')
       // 点击事件
       myChart.on('click', (params) => {
         const name = params.name
@@ -559,7 +716,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a}<br/>{b}: {c}'
+          formatter: '还款率<br/>{b}: {c}%'
         },
         legend: {
           show: false
@@ -622,6 +779,7 @@ export default {
           }
         ]
       }, true)
+      myChart.off('click')
       // 点击事件
       myChart.on('click', (params) => {
         const name = params.name
@@ -640,12 +798,13 @@ export default {
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          show: false
         },
         legend: {
-          show: true,
-          orient: 'vertical',
-          x: 'left'
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
           // data: this.tablePie.name
         },
         xAxis: [
@@ -664,13 +823,46 @@ export default {
             avoidLabelOverlap: false,
             label: {
               normal: {
-                show: true
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
+                formatter: '{b}: {c}元  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
                 }
               }
             },
@@ -688,7 +880,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a}<br/>{b}: {c}'
+          formatter: '逾期率<br/>{b}: {c}辆'
         },
         legend: {
           show: false
@@ -751,6 +943,7 @@ export default {
           }
         ]
       }, true)
+      myChart.off('click')
       // 点击事件
       myChart.on('click', (params) => {
         const name = params.name
@@ -769,12 +962,13 @@ export default {
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          show: false
         },
         legend: {
-          show: true,
-          orient: 'vertical',
-          x: 'left'
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
         },
         xAxis: [
           {
@@ -792,13 +986,46 @@ export default {
             avoidLabelOverlap: false,
             label: {
               normal: {
-                show: true
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
+                formatter: '{b}: {c}辆  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
                 }
               }
             },
@@ -807,7 +1034,7 @@ export default {
         ]
       }, true)
     },
-    SurrenderEchart () { // 主渠道，逾期率，柱状图
+    SurrenderEchart () { // 主渠道，退保率，柱状图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         color: ['#3398DB', '#D53A35'],
@@ -816,7 +1043,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a}<br/>{b}: {c}'
+          formatter: '退保率<br/>{b}: {c}辆'
         },
         legend: {
           show: false
@@ -879,6 +1106,7 @@ export default {
           }
         ]
       }, true)
+      myChart.off('click')
       // 点击事件
       myChart.on('click', (params) => {
         const name = params.name
@@ -891,18 +1119,19 @@ export default {
         })
       })
     },
-    SurrenderEchartPie () { // 子渠道，逾期率，饼图
+    SurrenderEchartPie () { // 子渠道，退保率，饼图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          show: false
         },
         legend: {
-          show: true,
-          orient: 'vertical',
-          x: 'left'
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
         },
         xAxis: [
           {
@@ -920,13 +1149,46 @@ export default {
             avoidLabelOverlap: false,
             label: {
               normal: {
-                show: true
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
+                formatter: '{b}:  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
                 }
               }
             },
@@ -949,7 +1211,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a0}: {c0}%<br/>{a1}: {c1}%'
+          formatter: '{a0}: {c0}辆<br/>{a1}: {c1}辆'
         },
         grid: {
           left: '3%',
@@ -1021,6 +1283,7 @@ export default {
           }
         ]
       }, true)
+      myChart1.off('click')
       // 点击事件
       myChart1.on('click', (params) => {
         const name = params.name
@@ -1032,6 +1295,9 @@ export default {
           }
         })
       })
+    },
+    changeChannel (item) {
+      this.getEchartZhe1(this.chartAndTable.line, item)
     }
   },
   components: {
@@ -1041,6 +1307,8 @@ export default {
     name (val) {
       if (this.name === '分期总金额' || this.name === '还款总金额') {
         this.yName = '金额'
+      } else if (this.name === '退保率' || this.name === '逾期率' || this.name === '险种占比') {
+        this.yName = '辆'
       } else {
         this.yName = '%'
       }

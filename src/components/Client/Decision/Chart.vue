@@ -12,6 +12,14 @@
         >
           {{btn.name}}
         </button>
+        <el-select v-model="channel" placeholder="请选择" v-if="url === 'getInsuranceRate' && num1 === 2" @change="changeChannel">
+          <el-option
+            v-for="item in channelList1"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
       </div>
 
       <div class="change">
@@ -155,6 +163,7 @@ require('echarts/lib/chart/line')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 require('echarts/lib/component/legend')
+// import 'echarts/lib/component/legendScroll'
 require('echarts/lib/component/dataZoom')
 export default {
   name: 'Chart',
@@ -197,7 +206,9 @@ export default {
       name: '分期总金额',
       yName: '金额',
       ziqudao: 0,
-      chartAndTable: []
+      chartAndTable: [],
+      channel: '',
+      channelList1: ''
     }
   },
   mounted () {
@@ -251,11 +262,19 @@ export default {
       this.chartAndTable = []
       this.$post(`/user/report/${data}`, this.selectData).then(res => {
         if (res.code === 0) {
-          console.log(res)
+          // console.log(res)
           this.chartAndTable = res.data
           // this.chartData = res.data
           if (res.data.line.value) {
-            this.getEchartZhe()
+            if (data === 'getInsuranceRate') {
+              this.getEchartZhe1(res.data.line.name[0]) // 险种占比，双柱状图
+              this.channelList1 = res.data.line.name // 险种占比，双柱状图
+              this.channel = res.data.line.name[0]
+            } else {
+              this.getEchartZhe()
+            }
+          } else {
+            // this.$message.info('暂无数据')
           }
           if (data === 'getAllPrice') {
             this.totalEchartDb() // 分期+渠道， 双柱状图
@@ -278,6 +297,8 @@ export default {
           if (data === 'getInsuranceRate') {
             this.CoverageEchartDb() // 险种占比，双柱状图
           }
+        } else {
+          this.$message.error(res.msg)
         }
       })
     },
@@ -293,8 +314,99 @@ export default {
           symbolSize: '4'
         })
       })
+      let selected = [this.chartAndTable.line.value[0].name, this.chartAndTable.line.value[1].name]
       let name = this.chartAndTable.line.name || this.chartAndTable.line.time
       var myChart6 = echarts.init(document.getElementById('main1'))
+      myChart6.clear()
+      myChart6.setOption({
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          }
+        },
+        legend: {
+          // type: 'scroll',
+          // data:['Step Start', 'Step Middle', 'Step End'],
+          orient: 'horizontal',
+          align: 'left',
+          height: '100px',
+          selected: selected
+          // left: 10,
+          // top: 20,
+          // bottom: 20
+        },
+        grid: {
+          top: '20%',
+          left: '18%',
+          height: '60%',
+          width: '64%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            start: 10
+          }
+        ],
+        xAxis: {
+          show: true,
+          name: '时间',
+          type: 'category',
+          boundaryGap: false,
+          splitLine: {
+            show: true
+          },
+          data: name,
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          show: true,
+          name: this.yName,
+          type: 'value',
+          splitLine: {
+            show: true
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        series: seriesData
+      }, true)
+    },
+    getEchartZhe1 (nameData) { // 折线图
+      let seriesData1 = []
+      let name = this.chartAndTable.line.time
+      // console.log(nameData)
+      this.chartAndTable.line.value.forEach((m, n) => {
+        if (m.name.length - 5 === nameData.length && m.name.indexOf(nameData) > -1) {
+          seriesData1.push({
+            name: m.name,
+            type: 'line',
+            stack: m.name,
+            data: m.price || m.value,
+            symbol: 'circle',
+            symbolSize: '4'
+          })
+        }
+      })
+      // console.log(seriesData1)
+      var myChart6 = echarts.init(document.getElementById('main1'))
+      myChart6.clear()
       myChart6.setOption({
         color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
@@ -345,7 +457,7 @@ export default {
         },
         yAxis: {
           show: true,
-          name: '金额(￥)',
+          name: this.yName,
           type: 'value',
           splitLine: {
             show: true
@@ -357,7 +469,7 @@ export default {
             show: false
           }
         },
-        series: seriesData
+        series: seriesData1
       }, true)
     },
     totalEchartDb () { // 分期+渠道， 双柱状图
@@ -374,7 +486,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a0}: {c0}%<br/>{a1}: {c1}'
+          formatter: '{a0}: {c0}元<br/>{a1}: {c1}元'
         },
         grid: {
           left: '3%',
@@ -384,8 +496,9 @@ export default {
         },
         legend: {
           show: true,
-          orient: 'vertical',
+          orient: 'horizontal',
           // x: 'right',
+          // right: '50%',
           data: name
         },
         xAxis: [
@@ -421,6 +534,7 @@ export default {
             axisLabel: {
               color: '#666666'
             },
+            show: true,
             splitLine: {
               show: true,
               lineStyle: {
@@ -431,14 +545,14 @@ export default {
         ],
         series: [
           {
-            name: '交强险',
+            name: '分期总金额',
             type: 'bar',
             barWidth: '30%',
             data: this.chartAndTable.doubleColumn.value.stagePrice,
             label: label
           },
           {
-            name: '商业险',
+            name: '还款总金额',
             type: 'bar',
             barWidth: '30%',
             data: this.chartAndTable.doubleColumn.value.repaymentAmount,
@@ -447,16 +561,16 @@ export default {
         ]
       })
       // 点击事件
-      myChart1.on('click', (params) => {
-        const name = params.name
-        this.channelList.forEach(v => {
-          if (v.channelName.indexOf(name) > -1) {
-            this.ziqudao = v.channelId
-            this.selectData.channelName = v.channelId
-            this.getData(this.url, this.num)
-          }
-        })
-      })
+      // myChart1.on('click', (params) => {
+      //   const name = params.name
+      //   this.channelList.forEach(v => {
+      //     if (v.channelName.indexOf(name) > -1) {
+      //       this.ziqudao = v.channelId
+      //       this.selectData.channelName = v.channelId
+      //       this.getData(this.url, this.num)
+      //     }
+      //   })
+      // })
     },
     // ChannelsEchartPie () { // 渠道占比，饼图
     //   // let name = []
@@ -522,72 +636,78 @@ export default {
     RepaymentEchart () { // 主渠道，还款率，柱状图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#3398DB', '#D53A35'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{a}<br/>{b}: {c}'
-        },
-        legend: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
           show: false
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+        legend: {
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
+          // data: this.tablePie.name
         },
         xAxis: [
           {
-            show: true,
-            type: 'category',
-            data: this.chartAndTable.column.name,
-            axisTick: {
-              alignWithLabel: true,
-              interval: 0
-            },
-            axisLabel: {
-              show: true,
-              interval: 0
-            }
+            show: false
           }
         ],
         yAxis: [
           {
-            show: true,
-            type: 'value',
-            name: this.yName,
-            nameTextStyle: {
-              color: '#666666'
-            },
-            nameGap: 24,
-            axisLine: {
-              lineStyle: {
-                color: '#C6C8C9'
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#666666'
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                type: 'dotted'
-              }
-            }
+            show: false
           }
         ],
         series: [
           {
-            name: this.chartAndTable.column.name,
-            type: 'bar',
-            barWidth: '30%',
-            data: this.chartAndTable.column.value
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                formatter: '{b}: {c}元  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
+                }
+              }
+            },
+            data: this.chartAndTable.pie
           }
         ]
       }, true)
@@ -595,72 +715,78 @@ export default {
     OverdueEchart () { // 主渠道，逾期率，柱状图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#3398DB', '#D53A35'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{a}<br/>{b}: {c}'
-        },
-        legend: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
           show: false
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+        legend: {
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
+          // data: this.tablePie.name
         },
         xAxis: [
           {
-            show: true,
-            type: 'category',
-            data: this.chartAndTable.column.name,
-            axisTick: {
-              alignWithLabel: true,
-              interval: 0
-            },
-            axisLabel: {
-              show: true,
-              interval: 0
-            }
+            show: false
           }
         ],
         yAxis: [
           {
-            show: true,
-            type: 'value',
-            name: this.yName,
-            nameTextStyle: {
-              color: '#666666'
-            },
-            nameGap: 24,
-            axisLine: {
-              lineStyle: {
-                color: '#C6C8C9'
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#666666'
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                type: 'dotted'
-              }
-            }
+            show: false
           }
         ],
         series: [
           {
-            name: this.name,
-            type: 'bar',
-            barWidth: '30%',
-            data: this.chartAndTable.column.value
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                formatter: '{b}: {c}辆  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
+                }
+              }
+            },
+            data: this.chartAndTable.pie
           }
         ]
       }, true)
@@ -668,72 +794,78 @@ export default {
     SurrenderEchart () { // 主渠道，逾期率，柱状图
       let myChart = echarts.init(document.getElementById('main'))
       myChart.setOption({
-        color: ['#3398DB', '#D53A35'],
+        color: ['#FF7CBD', '#FF7F50', '#87CEFA', '#D970D5', '#6394EB', '#FE69B3'],
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          },
-          formatter: '{a}<br/>{b}: {c}'
-        },
-        legend: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
           show: false
         },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+        legend: {
+          show: false,
+          orient: 'vertical'
+          // x: 'left'
+          // data: this.tablePie.name
         },
         xAxis: [
           {
-            show: true,
-            type: 'category',
-            data: this.chartAndTable.column.name,
-            axisTick: {
-              alignWithLabel: true,
-              interval: 0
-            },
-            axisLabel: {
-              show: true,
-              interval: 0
-            }
+            show: false
           }
         ],
         yAxis: [
           {
-            show: true,
-            type: 'value',
-            name: this.yName,
-            nameTextStyle: {
-              color: '#666666'
-            },
-            nameGap: 24,
-            axisLine: {
-              lineStyle: {
-                color: '#C6C8C9'
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#666666'
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                type: 'dotted'
-              }
-            }
+            show: false
           }
         ],
         series: [
           {
-            name: this.name,
-            type: 'bar',
-            barWidth: '30%',
-            data: this.chartAndTable.column.value
+            type: 'pie',
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                formatter: '{b}:  {per|{d}%}  ',
+                // backgroundColor: '#eee',
+                // borderColor: '#aaa',
+                // borderWidth: 1,
+                // borderRadius: 4,
+                // shadowBlur:3,
+                // shadowOffsetX: 2,
+                // shadowOffsetY: 2,
+                // shadowColor: '#999',
+                // padding: [0, 7],
+                rich: {
+                  a: {
+                    color: '#999',
+                    lineHeight: 22,
+                    align: 'center'
+                  },
+                  // abg: {
+                  //     backgroundColor: '#333',
+                  //     width: '100%',
+                  //     align: 'right',
+                  //     height: 22,
+                  //     borderRadius: [4, 4, 0, 0]
+                  // },
+                  hr: {
+                    borderColor: '#aaa',
+                    width: '100%',
+                    borderWidth: 0.5,
+                    height: 0
+                  },
+                  b: {
+                    fontSize: 16,
+                    lineHeight: 33
+                  },
+                  per: {
+                    // color: '#eee',
+                    // backgroundColor: '#000000',
+                    fontSize: 20,
+                    padding: [2, 4],
+                    borderRadius: 2
+                  }
+                }
+              }
+            },
+            data: this.chartAndTable.pie
           }
         ]
       }, true)
@@ -752,7 +884,7 @@ export default {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: '{a0}: {c0}%<br/>{a1}: {c1}%'
+          formatter: '{a0}: {c0}辆<br/>{a1}: {c1}辆'
         },
         grid: {
           left: '3%',
@@ -762,7 +894,7 @@ export default {
         },
         legend: {
           show: true,
-          orient: 'vertical',
+          orient: 'horizontal',
           // x: 'right',
           data: name
         },
@@ -835,6 +967,9 @@ export default {
           }
         })
       })
+    },
+    changeChannel (item) {
+      this.getEchartZhe1(item)
     }
   },
   components: {
@@ -844,6 +979,8 @@ export default {
     name (val) {
       if (this.name === '分期总金额' || this.name === '还款总金额') {
         this.yName = '金额'
+      } else if (this.name === '退保率' || this.name === '逾期率' || this.name === '险种占比') {
+        this.yName = '辆'
       } else {
         this.yName = '%'
       }

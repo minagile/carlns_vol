@@ -281,7 +281,6 @@ export default {
       default: true
     },
     ziqudao: {
-      type: Number,
       default: 0
     },
     isUser: {
